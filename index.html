@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HostelRadar | Ajanta Hostel No. 3</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0f172a;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
+  header{background:#1e293b;border-bottom:1px solid #334155;padding:0 16px;position:sticky;top:0;z-index:100;}
+  .header-inner{max-width:600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .logo{display:flex;align-items:center;gap:8px;}
+  .logo-icon{width:32px;height:32px;background:#f97316;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#0f172a;}
+  .logo-text{font-size:16px;font-weight:700;color:#f97316;}
+  .logo-sub{font-size:11px;color:#94a3b8;margin-top:1px;}
+  .header-actions{display:flex;gap:8px;align-items:center;}
+  .btn-icon{background:transparent;border:1px solid #334155;border-radius:8px;padding:6px 10px;color:#94a3b8;cursor:pointer;font-size:13px;text-decoration:none;display:flex;align-items:center;gap:4px;}
+  .btn-icon:hover{border-color:#f97316;color:#f97316;}
+  .main{max-width:600px;margin:0 auto;padding:16px;}
+  .filter-bar{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;}
+  .filter-bar::-webkit-scrollbar{display:none;}
+  .filter-btn{background:#1e293b;border:1px solid #334155;border-radius:20px;padding:6px 14px;color:#94a3b8;cursor:pointer;font-size:13px;white-space:nowrap;transition:all 0.2s;}
+  .filter-btn.active{background:#f97316;border-color:#f97316;color:#0f172a;font-weight:600;}
+  .filter-btn:hover{border-color:#f97316;color:#f97316;}
+  .stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;}
+  .stat-card{background:#1e293b;border-radius:12px;padding:12px;text-align:center;border:1px solid #334155;}
+  .stat-num{font-size:22px;font-weight:700;color:#f97316;}
+  .stat-label{font-size:11px;color:#64748b;margin-top:2px;}
+  .section-title{font-size:13px;color:#64748b;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em;}
+  .item-card{background:#1e293b;border-radius:14px;border:1px solid #334155;padding:14px;margin-bottom:12px;transition:border-color 0.2s;}
+  .item-card:hover{border-color:#f97316;}
+  .item-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+  .item-left{display:flex;gap:10px;align-items:flex-start;}
+  .item-img{width:56px;height:56px;border-radius:10px;background:#334155;object-fit:cover;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;}
+  .item-info{flex:1;}
+  .item-name{font-size:15px;font-weight:600;color:#f1f5f9;margin-bottom:3px;}
+  .item-desc{font-size:13px;color:#94a3b8;margin-bottom:6px;}
+  .tag{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;}
+  .tag-lost{background:#7f1d1d;color:#fca5a5;}
+  .tag-found{background:#14532d;color:#86efac;}
+  .tag-resolved{background:#334155;color:#94a3b8;}
+  .item-meta{display:flex;gap:12px;font-size:12px;color:#64748b;flex-wrap:wrap;margin-top:8px;}
+  .item-meta span{display:flex;align-items:center;gap:3px;}
+  .item-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid #334155;}
+  .poster-info{display:flex;align-items:center;gap:8px;}
+  .poster-avatar{width:28px;height:28px;border-radius:50%;background:#f97316;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#0f172a;}
+  .poster-name{font-size:12px;color:#94a3b8;}
+  .poster-time{font-size:11px;color:#475569;}
+  .contact-btn{background:#f97316;border:none;border-radius:8px;padding:6px 14px;color:#0f172a;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;}
+  .contact-btn:hover{background:#ea6b00;}
+  .fab{position:fixed;bottom:24px;right:24px;background:#f97316;border:none;border-radius:50%;width:56px;height:56px;font-size:24px;color:#0f172a;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(249,115,22,0.4);text-decoration:none;font-weight:700;}
+  .fab:hover{background:#ea6b00;}
+  .empty-state{text-align:center;padding:48px 16px;color:#475569;}
+  .empty-icon{font-size:48px;margin-bottom:12px;}
+  .empty-text{font-size:15px;color:#64748b;}
+  .loading{text-align:center;padding:32px;color:#64748b;}
+  .search-bar{display:flex;gap:8px;margin-bottom:14px;}
+  .search-input{flex:1;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:10px 14px;color:#f1f5f9;font-size:14px;outline:none;}
+  .search-input:focus{border-color:#f97316;}
+  .search-input::placeholder{color:#475569;}
+  .notify-banner{background:#1e293b;border:1px solid #f97316;border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .notify-text{font-size:13px;color:#94a3b8;}
+  .notify-text strong{color:#f97316;}
+  .notify-btn{background:#f97316;border:none;border-radius:8px;padding:6px 12px;color:#0f172a;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+  .nav-bottom{display:none;}
+  @media(max-width:600px){
+    .nav-bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:1px solid #334155;padding:8px 0 20px;justify-content:space-around;z-index:100;}
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;color:#64748b;text-decoration:none;font-size:10px;}
+    .nav-item.active{color:#f97316;}
+    .nav-icon{font-size:20px;}
+    .fab{bottom:80px;}
+    body{padding-bottom:80px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">HR</div>
+      <div>
+        <div class="logo-text">HostelRadar</div>
+        <div class="logo-sub">Ajanta Hostel No. 3</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="login.html" class="btn-icon" id="auth-btn">Login</a>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="notify-banner" id="notify-banner" style="display:none;">
+    <div class="notify-text"><strong>🔔 Stay updated!</strong> Get notified when someone posts a lost or found item.</div>
+    <button class="notify-btn" onclick="requestNotification()">Allow</button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-total">0</div>
+      <div class="stat-label">Total Posts</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-lost" style="color:#fca5a5;">0</div>
+      <div class="stat-label">Lost Items</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-found" style="color:#86efac;">0</div>
+      <div class="stat-label">Found Items</div>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <input class="search-input" id="search-input" placeholder="🔍  Search items..." oninput="filterItems()"/>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('lost',this)">🔴 Lost</button>
+    <button class="filter-btn" onclick="setFilter('found',this)">🟢 Found</button>
+    <button class="filter-btn" onclick="setFilter('resolved',this)">✅ Resolved</button>
+  </div>
+
+  <div class="section-title">Recent Posts</div>
+  <div id="feed" class="loading">Loading posts...</div>
+
+</div>
+
+<a href="post.html" class="fab" id="post-fab" style="display:none;">+</a>
+
+<nav class="nav-bottom">
+  <a href="index.html" class="nav-item active">
+    <span class="nav-icon">🏠</span>Feed
+  </a>
+  <a href="post.html" class="nav-item" id="nav-post" style="display:none;">
+    <span class="nav-icon">➕</span>Post
+  </a>
+  <a href="profile.html" class="nav-item" id="nav-profile" style="display:none;">
+    <span class="nav-icon">👤</span>Profile
+  </a>
+  <a href="login.html" class="nav-item" id="nav-login">
+    <span class="nav-icon">🔑</span>Login
+  </a>
+</nav>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let allPosts = [];
+let currentFilter = 'all';
+
+onAuthStateChanged(auth, user => {
+  if(user){
+    document.getElementById('auth-btn').textContent = 'Logout';
+    document.getElementById('auth-btn').href = '#';
+    document.getElementById('auth-btn').onclick = () => { auth.signOut(); location.reload(); };
+    document.getElementById('post-fab').style.display = 'flex';
+    document.getElementById('nav-post').style.display = 'flex';
+    document.getElementById('nav-profile').style.display = 'flex';
+    document.getElementById('nav-login').style.display = 'none';
+  } else {
+    document.getElementById('notify-banner').style.display = 'flex';
+  }
+});
+
+const q = query(collection(db,'posts'), orderBy('createdAt','desc'));
+onSnapshot(q, snap => {
+  allPosts = snap.docs.map(d => ({id:d.id,...d.data()}));
+  updateStats();
+  renderFeed();
+});
+
+function updateStats(){
+  document.getElementById('stat-total').textContent = allPosts.length;
+  document.getElementById('stat-lost').textContent = allPosts.filter(p=>p.type==='lost').length;
+  document.getElementById('stat-found').textContent = allPosts.filter(p=>p.type==='found').length;
+}
+
+window.setFilter = function(f, btn){
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFeed();
+}
+
+window.filterItems = function(){
+  renderFeed();
+}
+
+function renderFeed(){
+  const search = document.getElementById('search-input').value.toLowerCase();
+  let posts = allPosts;
+  if(currentFilter !== 'all') posts = posts.filter(p => p.status === currentFilter || p.type === currentFilter);
+  if(search) posts = posts.filter(p =>
+    p.itemName?.toLowerCase().includes(search) ||
+    p.description?.toLowerCase().includes(search) ||
+    p.location?.toLowerCase().includes(search)
+  );
+  const feed = document.getElementById('feed');
+  if(posts.length === 0){
+    feed.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No posts yet. Be the first to post!</div></div>`;
+    return;
+  }
+  feed.innerHTML = posts.map(p => {
+    const time = p.createdAt ? new Date(p.createdAt.seconds*1000).toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : 'Just now';
+    const imgHtml = p.imageUrl ? `<img src="${p.imageUrl}" class="item-img" alt="item"/>` : `<div class="item-img">${p.type==='lost'?'🔴':'🟢'}</div>`;
+    const status = p.status || p.type;
+    return `
+    <div class="item-card">
+      <div class="item-card-top">
+        <div class="item-left">
+          ${imgHtml}
+          <div class="item-info">
+            <div class="item-name">${p.itemName || 'Unknown Item'}</div>
+            <div class="item-desc">${p.description || ''}</div>
+            <span class="tag tag-${status}">${status.charAt(0).toUpperCase()+status.slice(1)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="item-meta">
+        <span>📍 ${p.location || 'Unknown location'}</span>
+        ${p.roomNo ? `<span>🚪 Room ${p.roomNo}</span>` : ''}
+      </div>
+      <div class="item-footer">
+        <div class="poster-info">
+          <div class="poster-avatar">${(p.posterName||'?')[0].toUpperCase()}</div>
+          <div>
+            <div class="poster-name">${p.posterName || 'Anonymous'}</div>
+            <div class="poster-time">${time}</div>
+          </div>
+        </div>
+        <a href="https://wa.me/91${p.posterPhone}?text=Hi%20${encodeURIComponent(p.posterName)}%2C%20I%20saw%20your%20post%20on%20HostelRadar%20about%20${encodeURIComponent(p.itemName)}" target="_blank" class="contact-btn">💬 WhatsApp</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.requestNotification = function(){
+  if('Notification' in window){
+    Notification.requestPermission().then(p => {
+      if(p === 'granted'){
+        document.getElementById('notify-banner').style.display = 'none';
+        alert('✅ You will now get notified when someone posts!');
+      }
+    });
+  }
+}
+</script>
+</body>
+</html>

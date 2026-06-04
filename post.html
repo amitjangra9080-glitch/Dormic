@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Post Item | HostelRadar</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0f172a;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
+  .top-bar{background:#1e293b;border-bottom:1px solid #334155;padding:0 16px;height:52px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+  .back-btn{color:#94a3b8;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;}
+  .back-btn:hover{color:#f97316;}
+  .top-title{font-size:15px;font-weight:600;color:#f1f5f9;}
+  .main{max-width:500px;margin:0 auto;padding:20px 16px 40px;}
+  .type-toggle{display:flex;background:#1e293b;border-radius:12px;padding:4px;margin-bottom:20px;border:1px solid #334155;}
+  .type-btn{flex:1;padding:10px;text-align:center;border-radius:9px;cursor:pointer;font-size:14px;font-weight:600;border:none;background:transparent;transition:all 0.2s;}
+  .type-btn.lost{color:#fca5a5;}
+  .type-btn.lost.active{background:#7f1d1d;color:#fca5a5;}
+  .type-btn.found{color:#86efac;}
+  .type-btn.found.active{background:#14532d;color:#86efac;}
+  .form-group{margin-bottom:16px;}
+  label{display:block;font-size:12px;color:#94a3b8;margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:0.03em;}
+  .required{color:#f97316;}
+  input,select,textarea{width:100%;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:11px 14px;color:#f1f5f9;font-size:14px;outline:none;transition:border-color 0.2s;font-family:inherit;}
+  input:focus,select:focus,textarea:focus{border-color:#f97316;}
+  input::placeholder,textarea::placeholder{color:#475569;}
+  select option{background:#1e293b;}
+  textarea{resize:vertical;min-height:80px;}
+  .hint{font-size:11px;color:#475569;margin-top:4px;}
+  .photo-upload{background:#1e293b;border:2px dashed #334155;border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:border-color 0.2s;}
+  .photo-upload:hover{border-color:#f97316;}
+  .photo-upload-icon{font-size:32px;margin-bottom:8px;}
+  .photo-upload-text{font-size:13px;color:#64748b;}
+  .photo-upload-sub{font-size:11px;color:#475569;margin-top:4px;}
+  .photo-preview{width:100%;border-radius:10px;margin-top:10px;max-height:200px;object-fit:cover;display:none;}
+  #photo-input{display:none;}
+  .room-input{display:none;margin-top:8px;}
+  .submit-btn{width:100%;background:#f97316;border:none;border-radius:12px;padding:14px;color:#0f172a;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;transition:background 0.2s;}
+  .submit-btn:hover{background:#ea6b00;}
+  .submit-btn:disabled{background:#334155;color:#64748b;cursor:not-allowed;}
+  .msg{padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
+  .msg.error{background:#7f1d1d;color:#fca5a5;display:block;}
+  .msg.success{background:#14532d;color:#86efac;display:block;}
+  .section-divider{font-size:11px;color:#f97316;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid #334155;}
+  .not-logged{text-align:center;padding:48px 16px;}
+  .not-logged-icon{font-size:48px;margin-bottom:12px;}
+  .not-logged-text{font-size:15px;color:#64748b;margin-bottom:16px;}
+  .login-link{background:#f97316;border:none;border-radius:10px;padding:10px 24px;color:#0f172a;font-size:14px;font-weight:600;text-decoration:none;display:inline-block;}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="index.html" class="back-btn">← Back</a>
+  <span class="top-title">Post an Item</span>
+</div>
+
+<div class="main" id="main-content" style="display:none;">
+
+  <div class="type-toggle">
+    <button class="type-btn lost active" id="btn-lost" onclick="setType('lost')">🔴 I Lost This</button>
+    <button class="type-btn found" id="btn-found" onclick="setType('found')">🟢 I Found This</button>
+  </div>
+
+  <div class="msg" id="post-msg"></div>
+
+  <div class="section-divider">Item Details</div>
+
+  <div class="form-group">
+    <label>Item Name <span class="required">*</span></label>
+    <input type="text" id="item-name" placeholder="e.g. Water Bottle, Charger, ID Card"/>
+  </div>
+
+  <div class="form-group">
+    <label>Description <span class="required">*</span></label>
+    <textarea id="item-desc" placeholder="Brand, color, size, any identifying marks..."></textarea>
+    <div class="hint">More details = better chance of finding/returning</div>
+  </div>
+
+  <div class="form-group">
+    <label>Photo <span style="color:#475569;font-size:11px;">(Optional)</span></label>
+    <div class="photo-upload" onclick="document.getElementById('photo-input').click()">
+      <div class="photo-upload-icon">📷</div>
+      <div class="photo-upload-text">Tap to upload a photo</div>
+      <div class="photo-upload-sub">JPG, PNG up to 5MB</div>
+    </div>
+    <input type="file" id="photo-input" accept="image/*" onchange="previewPhoto(this)"/>
+    <img id="photo-preview" class="photo-preview" alt="preview"/>
+  </div>
+
+  <div class="section-divider">Location</div>
+
+  <div class="form-group">
+    <label>Where was it lost/found? <span class="required">*</span></label>
+    <select id="location" onchange="handleLocationChange()">
+      <option value="">Select location</option>
+      <option value="Ground Floor — Gallery / Corridor">Ground Floor — Gallery / Corridor</option>
+      <option value="Ground Floor — Near Room No.">Ground Floor — Near Room No.</option>
+      <option value="First Floor — Gallery / Corridor">First Floor — Gallery / Corridor</option>
+      <option value="First Floor — Near Room No.">First Floor — Near Room No.</option>
+      <option value="Second Floor — Gallery / Corridor">Second Floor — Gallery / Corridor</option>
+      <option value="Second Floor — Near Room No.">Second Floor — Near Room No.</option>
+      <option value="From My Room">From My Room</option>
+      <option value="Mess Area">Mess Area</option>
+      <option value="Parking Area">Parking Area</option>
+      <option value="Main Gate">Main Gate</option>
+      <option value="Common Room">Common Room</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+  <div class="form-group room-input" id="room-input-group">
+    <label>Room Number <span class="required">*</span></label>
+    <input type="text" id="room-no" placeholder="e.g. 12, 24B"/>
+  </div>
+
+  <button class="submit-btn" id="submit-btn" onclick="submitPost()">Post Item</button>
+
+</div>
+
+<div class="not-logged" id="not-logged" style="display:none;">
+  <div class="not-logged-icon">🔒</div>
+  <div class="not-logged-text">Please login to post a lost or found item</div>
+  <a href="login.html" class="login-link">Login / Register</a>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+let currentUser = null;
+let currentType = 'lost';
+let photoBase64 = null;
+
+onAuthStateChanged(auth, async user => {
+  if(user){
+    currentUser = user;
+    document.getElementById('main-content').style.display = 'block';
+  } else {
+    document.getElementById('not-logged').style.display = 'block';
+  }
+});
+
+window.setType = function(type){
+  currentType = type;
+  document.getElementById('btn-lost').classList.toggle('active', type==='lost');
+  document.getElementById('btn-found').classList.toggle('active', type==='found');
+}
+
+window.handleLocationChange = function(){
+  const val = document.getElementById('location').value;
+  const needsRoom = val.includes('Near Room No.') || val === 'From My Room';
+  document.getElementById('room-input-group').style.display = needsRoom ? 'block' : 'none';
+}
+
+window.previewPhoto = function(input){
+  const file = input.files[0];
+  if(!file) return;
+  if(file.size > 5*1024*1024){ alert('Photo must be under 5MB'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    photoBase64 = e.target.result;
+    const preview = document.getElementById('photo-preview');
+    preview.src = photoBase64;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+window.submitPost = async function(){
+  const itemName = document.getElementById('item-name').value.trim();
+  const desc = document.getElementById('item-desc').value.trim();
+  const location = document.getElementById('location').value;
+  const roomNo = document.getElementById('room-no').value.trim();
+  const msg = document.getElementById('post-msg');
+  msg.className='msg'; msg.textContent='';
+
+  if(!itemName){ msg.className='msg error'; msg.textContent='❌ Please enter item name.'; return; }
+  if(!desc){ msg.className='msg error'; msg.textContent='❌ Please enter a description.'; return; }
+  if(!location){ msg.className='msg error'; msg.textContent='❌ Please select a location.'; return; }
+  if((location.includes('Near Room No.') || location === 'From My Room') && !roomNo){
+    msg.className='msg error'; msg.textContent='❌ Please enter the room number.'; return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled=true; btn.textContent='Posting...';
+
+  try {
+    const userDoc = await getDoc(doc(db,'users',currentUser.uid));
+    const userData = userDoc.data();
+    await addDoc(collection(db,'posts'),{
+      type: currentType,
+      itemName, description: desc,
+      location, roomNo: roomNo || null,
+      imageUrl: photoBase64 || null,
+      posterName: userData.name,
+      posterPhone: userData.phone,
+      posterAdmission: userData.admissionNo,
+      posterUid: currentUser.uid,
+      status: currentType,
+      createdAt: serverTimestamp(),
+      hostel: 'Ajanta Hostel No. 3'
+    });
+    msg.className='msg success'; msg.textContent='✅ Posted successfully! Redirecting...';
+    setTimeout(()=>{ location.href='index.html'; },1500);
+  } catch(e){
+    msg.className='msg error'; msg.textContent='❌ Error: ' + e.message;
+    btn.disabled=false; btn.textContent='Post Item';
+  }
+}
+</script>
+</body>
+</html>

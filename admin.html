@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Panel | Ajanta Hostel No. 3</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0f172a;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
+  .top-bar{background:#1e293b;border-bottom:1px solid #334155;padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+  .top-title{font-size:15px;font-weight:600;color:#f97316;}
+  .top-sub{font-size:11px;color:#64748b;}
+  .logout-btn{background:transparent;border:1px solid #334155;border-radius:8px;padding:5px 12px;color:#94a3b8;cursor:pointer;font-size:12px;}
+  .logout-btn:hover{border-color:#f97316;color:#f97316;}
+  .main{max-width:700px;margin:0 auto;padding:20px 16px 40px;}
+  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+  .stat-card{background:#1e293b;border-radius:12px;padding:14px;text-align:center;border:1px solid #334155;}
+  .stat-num{font-size:24px;font-weight:700;color:#f97316;}
+  .stat-label{font-size:11px;color:#64748b;margin-top:2px;}
+  .tabs{display:flex;background:#1e293b;border-radius:10px;padding:4px;margin-bottom:16px;border:1px solid #334155;}
+  .tab{flex:1;padding:8px;text-align:center;border-radius:7px;cursor:pointer;font-size:13px;font-weight:500;color:#64748b;border:none;background:transparent;}
+  .tab.active{background:#f97316;color:#0f172a;}
+  .card{background:#1e293b;border-radius:12px;border:1px solid #334155;padding:14px;margin-bottom:10px;}
+  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+  .card-info{flex:1;}
+  .card-name{font-size:14px;font-weight:600;color:#f1f5f9;margin-bottom:3px;}
+  .card-sub{font-size:12px;color:#94a3b8;margin-bottom:6px;}
+  .card-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:#64748b;}
+  .tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;margin-right:4px;}
+  .tag-lost{background:#7f1d1d;color:#fca5a5;}
+  .tag-found{background:#14532d;color:#86efac;}
+  .tag-msc{background:#1e3a5f;color:#93c5fd;}
+  .tag-phd{background:#3b1f6e;color:#c4b5fd;}
+  .delete-btn{background:#7f1d1d;border:none;border-radius:8px;padding:6px 12px;color:#fca5a5;font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+  .delete-btn:hover{background:#991b1b;}
+  .empty{text-align:center;padding:32px;color:#475569;font-size:14px;}
+  .section-title{font-size:12px;color:#f97316;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:12px;}
+  .login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
+  .login-card{background:#1e293b;border-radius:20px;border:1px solid #334155;padding:32px 24px;width:100%;max-width:360px;text-align:center;}
+  .login-icon{font-size:40px;margin-bottom:12px;}
+  .login-title{font-size:18px;font-weight:700;color:#f97316;margin-bottom:4px;}
+  .login-sub{font-size:12px;color:#64748b;margin-bottom:24px;}
+  .login-input{width:100%;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:11px 14px;color:#f1f5f9;font-size:14px;outline:none;margin-bottom:12px;}
+  .login-input:focus{border-color:#f97316;}
+  .login-btn{width:100%;background:#f97316;border:none;border-radius:10px;padding:12px;color:#0f172a;font-size:15px;font-weight:700;cursor:pointer;}
+  .login-btn:hover{background:#ea6b00;}
+  .err{color:#fca5a5;font-size:12px;margin-bottom:10px;display:none;}
+  #admin-panel{display:none;}
+  #login-screen{display:block;}
+  .post-img{width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0;}
+  .resolve-btn{background:#14532d;border:none;border-radius:8px;padding:6px 10px;color:#86efac;font-size:11px;cursor:pointer;white-space:nowrap;}
+  .resolve-btn:hover{background:#166534;}
+</style>
+</head>
+<body>
+
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <div class="login-icon">🔐</div>
+    <div class="login-title">Admin Panel</div>
+    <div class="login-sub">Ajanta Hostel No. 3 — Admin Access Only</div>
+    <div class="err" id="admin-err">❌ Wrong password</div>
+    <input type="password" class="login-input" id="admin-pass" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')checkAdmin()"/>
+    <button class="login-btn" onclick="checkAdmin()">Access Admin Panel</button>
+  </div>
+</div>
+
+<div id="admin-panel">
+  <div class="top-bar">
+    <div>
+      <div class="top-title">Admin Panel</div>
+      <div class="top-sub">Ajanta Hostel No. 3</div>
+    </div>
+    <button class="logout-btn" onclick="adminLogout()">Logout</button>
+  </div>
+
+  <div class="main">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="a-total-users">0</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="a-total-posts" style="color:#fca5a5;">0</div>
+        <div class="stat-label">Total Posts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="a-resolved" style="color:#86efac;">0</div>
+        <div class="stat-label">Resolved</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('posts',this)">📋 All Posts</button>
+      <button class="tab" onclick="switchTab('users',this)">👥 All Users</button>
+    </div>
+
+    <div id="posts-section">
+      <div class="section-title">All Posts</div>
+      <div id="posts-list" class="empty">Loading...</div>
+    </div>
+
+    <div id="users-section" style="display:none;">
+      <div class="section-title">Registered Users</div>
+      <div id="users-list" class="empty">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, deleteDoc, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const ADMIN_PASSWORD = "HostelRadar@Admin2024";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+let allPosts = [];
+let allUsers = [];
+
+window.checkAdmin = function(){
+  const pass = document.getElementById('admin-pass').value;
+  if(pass === ADMIN_PASSWORD){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    loadData();
+  } else {
+    document.getElementById('admin-err').style.display='block';
+  }
+}
+
+window.adminLogout = function(){
+  document.getElementById('login-screen').style.display='block';
+  document.getElementById('admin-panel').style.display='none';
+  document.getElementById('admin-pass').value='';
+}
+
+function loadData(){
+  const pq = query(collection(db,'posts'), orderBy('createdAt','desc'));
+  onSnapshot(pq, snap => {
+    allPosts = snap.docs.map(d=>({id:d.id,...d.data()}));
+    document.getElementById('a-total-posts').textContent = allPosts.length;
+    document.getElementById('a-resolved').textContent = allPosts.filter(p=>p.status==='resolved').length;
+    renderPosts();
+  });
+  onSnapshot(collection(db,'users'), snap => {
+    allUsers = snap.docs.map(d=>({id:d.id,...d.data()}));
+    document.getElementById('a-total-users').textContent = allUsers.length;
+    renderUsers();
+  });
+}
+
+window.switchTab = function(tab, btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('posts-section').style.display = tab==='posts'?'block':'none';
+  document.getElementById('users-section').style.display = tab==='users'?'block':'none';
+}
+
+function renderPosts(){
+  const el = document.getElementById('posts-list');
+  if(!allPosts.length){ el.innerHTML='<div class="empty">No posts yet</div>'; return; }
+  el.innerHTML = allPosts.map(p => {
+    const time = p.createdAt ? new Date(p.createdAt.seconds*1000).toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
+    const imgHtml = p.imageUrl ? `<img src="${p.imageUrl}" class="post-img" alt="item"/>` : '';
+    return `<div class="card">
+      <div class="card-top">
+        ${imgHtml}
+        <div class="card-info">
+          <div class="card-name">${p.itemName||'Unknown'} <span class="tag tag-${p.type}">${p.type}</span></div>
+          <div class="card-sub">${p.description||''}</div>
+          <div class="card-meta">
+            <span>📍 ${p.location||''}${p.roomNo?' — Room '+p.roomNo:''}</span>
+            <span>👤 ${p.posterName||''} (${p.posterAdmission||''})</span>
+            <span>📱 ${p.posterPhone||''}</span>
+            <span>🕐 ${time}</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+          ${p.status!=='resolved'?`<button class="resolve-btn" onclick="resolvePost('${p.id}')">✅ Resolve</button>`:''}
+          <button class="delete-btn" onclick="deletePost('${p.id}')">🗑 Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderUsers(){
+  const el = document.getElementById('users-list');
+  if(!allUsers.length){ el.innerHTML='<div class="empty">No users yet</div>'; return; }
+  el.innerHTML = allUsers.map(u => `
+    <div class="card">
+      <div class="card-top">
+        <div class="card-info">
+          <div class="card-name">${u.name||'Unknown'} <span class="tag ${u.degree==='PhD'?'tag-phd':'tag-msc'}">${u.degree||''}</span></div>
+          <div class="card-sub">${u.admissionNo||''} — ${u.department||''}</div>
+          <div class="card-meta">
+            <span>🏫 ${u.college||''}</span>
+            <span>🚪 Room ${u.roomNo||''}</span>
+            <span>📱 ${u.phone||''}</span>
+          </div>
+        </div>
+        <button class="delete-btn" onclick="deleteUserAccount('${u.id}')">🗑 Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+window.deletePost = async function(id){
+  if(!confirm('Delete this post?')) return;
+  await deleteDoc(doc(db,'posts',id));
+}
+
+window.resolvePost = async function(id){
+  await updateDoc(doc(db,'posts',id),{status:'resolved'});
+}
+
+window.deleteUserAccount = async function(id){
+  if(!confirm('Delete this user? This cannot be undone.')) return;
+  await deleteDoc(doc(db,'users',id));
+  alert('User removed from database. Note: Ask them to contact you to fully remove login access.');
+}
+</script>
+</body>
+</html>
