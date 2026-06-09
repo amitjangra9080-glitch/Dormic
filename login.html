@@ -3,145 +3,127 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Login | HostelRadar — Ajanta Hostel No. 3</title>
+<title>Login — Dormic</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon.png"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:#0f172a;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;}
-  .top-bar{background:#1e293b;border-bottom:1px solid #334155;padding:0 16px;height:52px;display:flex;align-items:center;gap:10px;}
-  .back-btn{color:#94a3b8;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;}
-  .back-btn:hover{color:#f97316;}
-  .top-title{font-size:15px;font-weight:600;color:#f1f5f9;}
-  .container{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px;}
-  .card{background:#1e293b;border-radius:20px;border:1px solid #334155;padding:28px 24px;width:100%;max-width:420px;}
-  .logo-area{text-align:center;margin-bottom:24px;}
-  .logo-icon{width:56px;height:56px;background:#f97316;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#0f172a;margin-bottom:10px;}
-  .logo-name{font-size:20px;font-weight:700;color:#f97316;}
-  .logo-hostel{font-size:12px;color:#64748b;margin-top:3px;}
-  .tabs{display:flex;background:#0f172a;border-radius:10px;padding:4px;margin-bottom:24px;}
-  .tab{flex:1;padding:8px;text-align:center;border-radius:7px;cursor:pointer;font-size:14px;font-weight:500;color:#64748b;border:none;background:transparent;transition:all 0.2s;}
-  .tab.active{background:#f97316;color:#0f172a;}
-  .form-group{margin-bottom:14px;}
-  label{display:block;font-size:12px;color:#94a3b8;margin-bottom:5px;font-weight:500;}
-  .required{color:#f97316;}
-  input,select{width:100%;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:10px 14px;color:#f1f5f9;font-size:14px;outline:none;transition:border-color 0.2s;}
-  input:focus,select:focus{border-color:#f97316;}
-  input::placeholder{color:#475569;}
-  select option{background:#0f172a;}
-  .hint{font-size:11px;color:#475569;margin-top:4px;}
-  .hint.error{color:#fca5a5;}
-  .hint.success{color:#86efac;}
-  .submit-btn{width:100%;background:#f97316;border:none;border-radius:10px;padding:12px;color:#0f172a;font-size:15px;font-weight:700;cursor:pointer;margin-top:6px;transition:background 0.2s;}
-  .submit-btn:hover{background:#ea6b00;}
-  .submit-btn:disabled{background:#334155;color:#64748b;cursor:not-allowed;}
-  .divider{text-align:center;color:#475569;font-size:12px;margin:14px 0;position:relative;}
-  .divider::before,.divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:#334155;}
-  .divider::before{left:0;}
-  .divider::after{right:0;}
-  .google-btn{width:100%;background:transparent;border:1px solid #334155;border-radius:10px;padding:11px;color:#f1f5f9;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:border-color 0.2s;}
-  .google-btn:hover{border-color:#f97316;}
-  .restriction-note{background:#0f172a;border:1px solid #334155;border-radius:10px;padding:10px 12px;margin-bottom:16px;font-size:12px;color:#64748b;text-align:center;line-height:1.5;}
-  .restriction-note strong{color:#f97316;}
-  #login-form,#register-form{display:none;}
-  #login-form.active,#register-form.active{display:block;}
-  .msg{padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
-  .msg.error{background:#7f1d1d;color:#fca5a5;display:block;}
-  .msg.success{background:#14532d;color:#86efac;display:block;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
+.page{max-width:420px;margin:0 auto;padding:0 0 40px;}
+.illustration{width:100%;background:#fff;padding:0;overflow:hidden;}
+.illustration img{width:100%;display:block;max-height:200px;object-fit:cover;object-position:center 30%;}
+.card{background:#fff;border-radius:0 0 24px 24px;padding:20px 20px 24px;margin-bottom:0;}
+.logo{text-align:center;font-size:26px;font-weight:700;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.3px;margin-bottom:2px;}
+.sub{text-align:center;font-size:12px;color:#8e8e8e;margin-bottom:18px;}
+.tabs{display:flex;background:#f7f7f7;border-radius:10px;padding:3px;margin-bottom:16px;}
+.tab{flex:1;text-align:center;font-size:13px;padding:8px;border-radius:8px;color:#aaa;cursor:pointer;font-weight:500;}
+.tab.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;}
+.lab{font-size:11px;color:#8e8e8e;margin:0 0 5px 2px;display:block;}
+.inp{width:100%;height:42px;border:0.5px solid #e5e5e5;border-radius:10px;background:#f9f9f9;font-size:14px;color:#262626;padding:0 13px;margin-bottom:12px;outline:none;font-family:inherit;}
+.inp:focus{border-color:#6C3BE8;background:#fff;}
+.inp::placeholder{color:#bbb;}
+select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:14px;}
+.row{display:flex;gap:10px;}
+.row > div{flex:1;}
+.btn{width:100%;height:44px;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px;}
+.btn:active{opacity:0.9;}
+.forgot{text-align:center;font-size:13px;color:#6C3BE8;margin-top:13px;cursor:pointer;}
+.note{text-align:center;font-size:11px;color:#aaa;margin-top:10px;}
+.msg{padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
+.msg.error{background:#fee2e2;color:#a32d2d;display:block;}
+.msg.success{background:#eaf3de;color:#3b6d11;display:block;}
+.hint{font-size:11px;margin-top:-8px;margin-bottom:10px;}
+.hint.ok{color:#3b6d11;}
+.hint.err{color:#a32d2d;}
 </style>
 </head>
 <body>
-
-<div class="top-bar">
-  <a href="index.html" class="back-btn">← Back</a>
-  <span class="top-title">HostelRadar</span>
-</div>
-
-<div class="container">
+<div class="page">
+  <div class="illustration">
+    <img src="ajanta-illustration.png" alt="Ajanta Hostel No. 3"/>
+  </div>
   <div class="card">
-
-    <div class="logo-area">
-      <div class="logo-icon">HR</div>
-      <div class="logo-name">HostelRadar</div>
-      <div class="logo-hostel">Ajanta Hostel No. 3 · CCSHAU, Hisar</div>
-    </div>
-
+    <div class="logo">Dormic</div>
+    <div class="sub">Ajanta Hostel No. 3 · CCSHAU, Hisar</div>
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('login')">Login</button>
-      <button class="tab" onclick="switchTab('register')">Register</button>
+      <div class="tab on" id="tab-login" onclick="switchTab('login')">Log in</div>
+      <div class="tab" id="tab-signup" onclick="switchTab('signup')">Sign up</div>
     </div>
 
-    <div id="login-form" class="active">
+    <!-- LOGIN -->
+    <div id="login-form">
       <div class="msg" id="login-msg"></div>
-      <div class="form-group">
-        <label>Admission Number <span class="required">*</span></label>
-        <input type="text" id="login-admission" placeholder="e.g. 2024A59M" autocomplete="off"/>
-      </div>
-      <div class="form-group">
-        <label>Password <span class="required">*</span></label>
-        <input type="password" id="login-password" placeholder="Enter your password"/>
-      </div>
-      <button class="submit-btn" onclick="loginUser()">Login to HostelRadar</button>
+      <label class="lab">Admission number</label>
+      <input class="inp" id="l-admission" type="text" placeholder="Your admission number" autocomplete="off"/>
+      <label class="lab">Password</label>
+      <input class="inp" id="l-password" type="password" placeholder="Password"/>
+      <button class="btn" onclick="loginUser()">Log in</button>
+      <div class="forgot" onclick="forgotPassword()">Forgot password?</div>
     </div>
 
-    <div id="register-form">
-      <div class="restriction-note">
-        🏠 This app is exclusively for <strong>Ajanta Hostel No. 3</strong> residents of CCSHAU, Hisar.<br/>
-        Only MSc (M) and PhD (D) students can register.
+    <!-- SIGNUP -->
+    <div id="signup-form" style="display:none;">
+      <div class="msg" id="signup-msg"></div>
+      <label class="lab">Full name</label>
+      <input class="inp" id="s-name" type="text" placeholder="Your name"/>
+      <label class="lab">Admission number</label>
+      <input class="inp" id="s-admission" type="text" placeholder="Your admission number" oninput="validateAdmission()" autocomplete="off"/>
+      <div class="hint" id="admission-hint"></div>
+      <label class="lab">Email</label>
+      <input class="inp" id="s-email" type="email" placeholder="name@email.com"/>
+      <label class="lab">Department</label>
+      <input class="inp" id="s-dept" type="text" placeholder="e.g. Agronomy, Seed Science and Technology..."/>
+      <label class="lab">College</label>
+      <select class="inp" id="s-college">
+        <option value="">Select your college</option>
+        <option>College of Agriculture</option>
+        <option>College of Basic Sciences</option>
+        <option>College of Fisheries Sciences</option>
+        <option>College of Biotechnology</option>
+        <option value="other">Other</option>
+      </select>
+      <div id="other-college-wrap" style="display:none;">
+        <label class="lab">Specify college</label>
+        <input class="inp" id="s-other-college" type="text" placeholder="Enter your college name"/>
       </div>
-      <div class="msg" id="reg-msg"></div>
-      <div class="form-group">
-        <label>Full Name <span class="required">*</span></label>
-        <input type="text" id="reg-name" placeholder="As per university records"/>
+      <div class="row">
+        <div>
+          <label class="lab">WhatsApp number</label>
+          <input class="inp" id="s-phone" type="tel" placeholder="10-digit number" maxlength="10"/>
+        </div>
+        <div>
+          <label class="lab">Room number</label>
+          <input class="inp" id="s-room" type="text" placeholder="e.g. 112"/>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Admission Number <span class="required">*</span></label>
-        <input type="text" id="reg-admission" placeholder="e.g. 2024A59M or 2022A10D" oninput="validateAdmission()"/>
-        <div class="hint" id="admission-hint">Must end with M (MSc) or D (PhD)</div>
+      <div class="row">
+        <div>
+          <label class="lab">Blood group</label>
+          <select class="inp" id="s-blood">
+            <option value="">Select</option>
+            <option>A+</option><option>A−</option>
+            <option>B+</option><option>B−</option>
+            <option>O+</option><option>O−</option>
+            <option>AB+</option><option>AB−</option>
+          </select>
+        </div>
+        <div>
+          <label class="lab">Password</label>
+          <input class="inp" id="s-password" type="password" placeholder="Min 6 characters"/>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Department <span class="required">*</span></label>
-        <input type="text" id="reg-dept" placeholder="e.g. Agronomy, Plant Breeding..."/>
-      </div>
-      <div class="form-group">
-        <label>College <span class="required">*</span></label>
-        <select id="reg-college">
-          <option value="">Select your college</option>
-          <option>College of Agriculture</option>
-          <option>College of Basic Sciences</option>
-          <option>College of Fisheries Sciences</option>
-          <option>College of Biotechnology</option>
-          <option value="other">Other (specify below)</option>
-        </select>
-      </div>
-      <div class="form-group" id="other-college-group" style="display:none;">
-        <label>Specify College <span class="required">*</span></label>
-        <input type="text" id="reg-other-college" placeholder="Enter your college name"/>
-      </div>
-      <div class="form-group">
-        <label>WhatsApp Number <span class="required">*</span></label>
-        <input type="tel" id="reg-phone" placeholder="10-digit number (as on WhatsApp)" maxlength="10"/>
-        <div class="hint">This number will be shown to contact you about your posts</div>
-      </div>
-      <div class="form-group">
-        <label>Room Number <span class="required">*</span></label>
-        <input type="text" id="reg-room" placeholder="e.g. 12, 24B"/>
-      </div>
-      <div class="form-group">
-        <label>Password <span class="required">*</span></label>
-        <input type="password" id="reg-password" placeholder="Min 6 characters"/>
-      </div>
-      <div class="form-group">
-        <label>Confirm Password <span class="required">*</span></label>
-        <input type="password" id="reg-confirm-password" placeholder="Re-enter password"/>
-      </div>
-      <button class="submit-btn" id="reg-btn" onclick="registerUser()">Register as Ajanta Hostel No. 3 Resident</button>
+      <label class="lab">Confirm password</label>
+      <input class="inp" id="s-confirm" type="password" placeholder="Re-enter password"/>
+      <button class="btn" id="signup-btn" onclick="registerUser()">Create account</button>
+      <div class="note">For Ajanta Hostel No. 3 residents only</div>
     </div>
-
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
@@ -149,101 +131,124 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-window.switchTab = function(tab){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.tab')[tab==='login'?0:1].classList.add('active');
-  document.getElementById('login-form').classList.toggle('active', tab==='login');
-  document.getElementById('register-form').classList.toggle('active', tab==='register');
-}
-
-document.getElementById('reg-college').addEventListener('change', function(){
-  document.getElementById('other-college-group').style.display = this.value === 'other' ? 'block' : 'none';
+// Redirect if already logged in
+onAuthStateChanged(auth, user => {
+  if(user) window.location.href = 'index.html';
 });
 
-window.validateAdmission = function(){
-  const val = document.getElementById('reg-admission').value.trim().toUpperCase();
+// College other toggle
+document.getElementById('s-college').addEventListener('change', function() {
+  document.getElementById('other-college-wrap').style.display = this.value === 'other' ? 'block' : 'none';
+});
+
+window.switchTab = function(tab) {
+  document.getElementById('tab-login').classList.toggle('on', tab === 'login');
+  document.getElementById('tab-signup').classList.toggle('on', tab === 'signup');
+  document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+};
+
+window.validateAdmission = function() {
+  const val = document.getElementById('s-admission').value.trim().toUpperCase();
   const hint = document.getElementById('admission-hint');
-  if(!val){ hint.className='hint'; hint.textContent='Must end with M (MSc) or D (PhD)'; return false; }
-  if(val.endsWith('M')){ hint.className='hint success'; hint.textContent='✅ Valid — MSc student'; return true; }
-  if(val.endsWith('D')){ hint.className='hint success'; hint.textContent='✅ Valid — PhD student'; return true; }
-  hint.className='hint error'; hint.textContent='❌ Invalid — Admission number must end with M or D';
+  if(!val) { hint.textContent = ''; return false; }
+  if(val.endsWith('M')) { hint.className = 'hint ok'; hint.textContent = 'MSc student'; return true; }
+  if(val.endsWith('D')) { hint.className = 'hint ok'; hint.textContent = 'PhD student'; return true; }
+  hint.className = 'hint err'; hint.textContent = 'Invalid admission number';
   return false;
-}
+};
 
-window.registerUser = async function(){
-  const name = document.getElementById('reg-name').value.trim();
-  const admission = document.getElementById('reg-admission').value.trim().toUpperCase();
-  const dept = document.getElementById('reg-dept').value.trim();
-  const collegeSelect = document.getElementById('reg-college').value;
-  const college = collegeSelect === 'other' ? document.getElementById('reg-other-college').value.trim() : collegeSelect;
-  const phone = document.getElementById('reg-phone').value.trim();
-  const room = document.getElementById('reg-room').value.trim();
-  const password = document.getElementById('reg-password').value;
-  const confirm = document.getElementById('reg-confirm-password').value;
-  const msg = document.getElementById('reg-msg');
+window.loginUser = async function() {
+  const admission = document.getElementById('l-admission').value.trim().toUpperCase();
+  const password = document.getElementById('l-password').value;
+  const msg = document.getElementById('login-msg');
+  msg.className = 'msg';
+  if(!admission || !password) { msg.className = 'msg error'; msg.textContent = 'Please enter your admission number and password.'; return; }
+  if(!admission.endsWith('M') && !admission.endsWith('D')) { msg.className = 'msg error'; msg.textContent = 'Invalid admission number.'; return; }
+  try {
+    const email = admission.toLowerCase() + '@dormic.ccshau';
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = 'index.html';
+  } catch(e) {
+    msg.className = 'msg error'; msg.textContent = 'Wrong admission number or password.';
+  }
+};
 
-  msg.className='msg'; msg.textContent='';
+window.registerUser = async function() {
+  const name = document.getElementById('s-name').value.trim();
+  const admission = document.getElementById('s-admission').value.trim().toUpperCase();
+  const email = document.getElementById('s-email').value.trim();
+  const dept = document.getElementById('s-dept').value.trim();
+  const collegeSelect = document.getElementById('s-college').value;
+  const college = collegeSelect === 'other' ? document.getElementById('s-other-college').value.trim() : collegeSelect;
+  const phone = document.getElementById('s-phone').value.trim();
+  const room = document.getElementById('s-room').value.trim();
+  const blood = document.getElementById('s-blood').value;
+  const password = document.getElementById('s-password').value;
+  const confirm = document.getElementById('s-confirm').value;
+  const msg = document.getElementById('signup-msg');
+  msg.className = 'msg';
 
-  if(!name||!admission||!dept||!college||!phone||!room||!password){
-    msg.className='msg error'; msg.textContent='❌ Please fill all required fields.'; return;
+  if(!name || !admission || !email || !dept || !college || !phone || !room || !blood || !password) {
+    msg.className = 'msg error'; msg.textContent = 'Please fill all fields.'; return;
   }
-  if(!admission.endsWith('M') && !admission.endsWith('D')){
-    msg.className='msg error'; msg.textContent='❌ Invalid admission number. Must end with M (MSc) or D (PhD).'; return;
+  if(!admission.endsWith('M') && !admission.endsWith('D')) {
+    msg.className = 'msg error'; msg.textContent = 'Invalid admission number.'; return;
   }
-  if(phone.length !== 10 || !/^\d+$/.test(phone)){
-    msg.className='msg error'; msg.textContent='❌ Enter a valid 10-digit WhatsApp number.'; return;
+  if(phone.length !== 10 || !/^\d+$/.test(phone)) {
+    msg.className = 'msg error'; msg.textContent = 'Enter a valid 10-digit WhatsApp number.'; return;
   }
-  if(password.length < 6){
-    msg.className='msg error'; msg.textContent='❌ Password must be at least 6 characters.'; return;
+  if(password.length < 6) {
+    msg.className = 'msg error'; msg.textContent = 'Password must be at least 6 characters.'; return;
   }
-  if(password !== confirm){
-    msg.className='msg error'; msg.textContent='❌ Passwords do not match.'; return;
+  if(password !== confirm) {
+    msg.className = 'msg error'; msg.textContent = 'Passwords do not match.'; return;
   }
 
+  // Check duplicate admission number
   const q = query(collection(db,'users'), where('admissionNo','==',admission));
   const existing = await getDocs(q);
-  if(!existing.empty){
-    msg.className='msg error'; msg.textContent='❌ This admission number is already registered.'; return;
-  }
+  if(!existing.empty) { msg.className = 'msg error'; msg.textContent = 'This admission number is already registered.'; return; }
 
-  const btn = document.getElementById('reg-btn');
+  const btn = document.getElementById('signup-btn');
   btn.disabled = true; btn.textContent = 'Creating account...';
 
   try {
-    const email = admission.toLowerCase() + '@hostelradar.ccshau';
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const firebaseEmail = admission.toLowerCase() + '@dormic.ccshau';
+    const cred = await createUserWithEmailAndPassword(auth, firebaseEmail, password);
     await updateProfile(cred.user, { displayName: name });
     await setDoc(doc(db,'users', cred.user.uid), {
-      name, admissionNo: admission, department: dept,
-      college, phone, roomNo: room,
+      name, admissionNo: admission, email,
+      department: dept, college, phone,
+      roomNo: room, bloodGroup: blood,
       degree: admission.endsWith('M') ? 'MSc' : 'PhD',
-      createdAt: new Date(), hostel: 'Ajanta Hostel No. 3'
+      isDonor: false,
+      hostel: 'Ajanta Hostel No. 3',
+      createdAt: new Date()
     });
-    msg.className='msg success'; msg.textContent='✅ Account created! Redirecting...';
-    setTimeout(()=>{ location.href='index.html'; }, 1500);
-  } catch(e){
-    msg.className='msg error'; msg.textContent='❌ ' + e.message;
-    btn.disabled=false; btn.textContent='Register as Ajanta Hostel No. 3 Resident';
+    window.location.href = 'index.html';
+  } catch(e) {
+    msg.className = 'msg error'; msg.textContent = e.message;
+    btn.disabled = false; btn.textContent = 'Create account';
   }
-}
+};
 
-window.loginUser = async function(){
-  const admission = document.getElementById('login-admission').value.trim().toUpperCase();
-  const password = document.getElementById('login-password').value;
+window.forgotPassword = async function() {
+  const admission = document.getElementById('l-admission').value.trim().toUpperCase();
   const msg = document.getElementById('login-msg');
-  msg.className='msg'; msg.textContent='';
-
-  if(!admission||!password){ msg.className='msg error'; msg.textContent='❌ Please enter admission number and password.'; return; }
-  if(!admission.endsWith('M') && !admission.endsWith('D')){ msg.className='msg error'; msg.textContent='❌ Invalid admission number.'; return; }
-
+  if(!admission) { msg.className = 'msg error'; msg.textContent = 'Enter your admission number first.'; return; }
   try {
-    const email = admission.toLowerCase() + '@hostelradar.ccshau';
-    await signInWithEmailAndPassword(auth, email, password);
-    location.href='index.html';
-  } catch(e){
-    msg.className='msg error'; msg.textContent='❌ Wrong admission number or password.';
+    // Get email from firestore
+    const q = query(collection(db,'users'), where('admissionNo','==',admission));
+    const snap = await getDocs(q);
+    if(snap.empty) { msg.className = 'msg error'; msg.textContent = 'No account found with this admission number.'; return; }
+    const userEmail = snap.docs[0].data().email;
+    await sendPasswordResetEmail(auth, userEmail);
+    msg.className = 'msg success'; msg.textContent = 'Password reset email sent. Check your inbox.';
+  } catch(e) {
+    msg.className = 'msg error'; msg.textContent = 'Could not send reset email. Try again.';
   }
-}
+};
 </script>
 </body>
 </html>

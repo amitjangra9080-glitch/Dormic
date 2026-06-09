@@ -1,0 +1,22 @@
+{
+  "name": "Dormic",
+  "short_name": "Dormic",
+  "description": "Ajanta Hostel No. 3 — Community app",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6C3BE8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -3,96 +3,95 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Post Item | HostelRadar</title>
+<title>New Post — Dormic</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:#0f172a;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
-  .top-bar{background:#1e293b;border-bottom:1px solid #334155;padding:0 16px;height:52px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
-  .back-btn{color:#94a3b8;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;}
-  .back-btn:hover{color:#f97316;}
-  .top-title{font-size:15px;font-weight:600;color:#f1f5f9;}
-  .main{max-width:500px;margin:0 auto;padding:20px 16px 40px;}
-  .type-toggle{display:flex;background:#1e293b;border-radius:12px;padding:4px;margin-bottom:20px;border:1px solid #334155;}
-  .type-btn{flex:1;padding:10px;text-align:center;border-radius:9px;cursor:pointer;font-size:14px;font-weight:600;border:none;background:transparent;transition:all 0.2s;}
-  .type-btn.lost{color:#fca5a5;}
-  .type-btn.lost.active{background:#7f1d1d;color:#fca5a5;}
-  .type-btn.found{color:#86efac;}
-  .type-btn.found.active{background:#14532d;color:#86efac;}
-  .form-group{margin-bottom:16px;}
-  label{display:block;font-size:12px;color:#94a3b8;margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:0.03em;}
-  .required{color:#f97316;}
-  input,select,textarea{width:100%;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:11px 14px;color:#f1f5f9;font-size:14px;outline:none;transition:border-color 0.2s;font-family:inherit;}
-  input:focus,select:focus,textarea:focus{border-color:#f97316;}
-  input::placeholder,textarea::placeholder{color:#475569;}
-  select option{background:#1e293b;}
-  textarea{resize:vertical;min-height:80px;}
-  .hint{font-size:11px;color:#475569;margin-top:4px;}
-  .photo-upload{background:#1e293b;border:2px dashed #334155;border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:border-color 0.2s;}
-  .photo-upload:hover{border-color:#f97316;}
-  .photo-upload-icon{font-size:32px;margin-bottom:8px;}
-  .photo-upload-text{font-size:13px;color:#64748b;}
-  .photo-upload-sub{font-size:11px;color:#475569;margin-top:4px;}
-  .photo-preview{width:100%;border-radius:10px;margin-top:10px;max-height:200px;object-fit:cover;display:none;}
-  #photo-input{display:none;}
-  .room-input{display:none;margin-top:8px;}
-  .submit-btn{width:100%;background:#f97316;border:none;border-radius:12px;padding:14px;color:#0f172a;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;transition:background 0.2s;}
-  .submit-btn:hover{background:#ea6b00;}
-  .submit-btn:disabled{background:#334155;color:#64748b;cursor:not-allowed;}
-  .msg{padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
-  .msg.error{background:#7f1d1d;color:#fca5a5;display:block;}
-  .msg.success{background:#14532d;color:#86efac;display:block;}
-  .section-divider{font-size:11px;color:#f97316;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid #334155;}
-  .not-logged{text-align:center;padding:48px 16px;}
-  .not-logged-icon{font-size:48px;margin-bottom:12px;}
-  .not-logged-text{font-size:15px;color:#64748b;margin-bottom:16px;}
-  .login-link{background:#f97316;border:none;border-radius:10px;padding:10px 24px;color:#0f172a;font-size:14px;font-weight:600;text-decoration:none;display:inline-block;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:40px;}
+.top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;}
+.back-btn{font-size:22px;color:#262626;text-decoration:none;}
+.top-title{font-size:15px;font-weight:500;color:#262626;}
+.share-btn{font-size:14px;font-weight:600;background:linear-gradient(90deg,#6C3BE8,#E8398A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;cursor:pointer;border:none;background-color:transparent;}
+.main{max-width:500px;margin:0 auto;padding:16px 16px 32px;}
+.lab{font-size:11px;color:#8e8e8e;margin:0 0 6px 2px;display:block;text-transform:uppercase;letter-spacing:0.3px;}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;}
+.chip{font-size:12px;padding:7px 14px;border-radius:20px;background:#fff;border:0.5px solid #e0e0e0;color:#262626;cursor:pointer;font-weight:500;transition:all 0.15s;}
+.chip.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;}
+.inp{width:100%;border:0.5px solid #e5e5e5;border-radius:10px;background:#fff;font-size:14px;color:#262626;padding:11px 13px;margin-bottom:14px;outline:none;font-family:inherit;}
+.inp:focus{border-color:#6C3BE8;}
+.inp::placeholder{color:#bbb;}
+select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;background-color:#fff;}
+textarea.inp{min-height:80px;resize:none;}
+.row{display:flex;gap:10px;}
+.row > div{flex:1;}
+.photo-box{border:1.5px dashed #e0e0e0;border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:14px;background:#fff;}
+.photo-box-icon{font-size:28px;color:#ccc;margin-bottom:6px;}
+.photo-box-txt{font-size:13px;color:#aaa;}
+.photo-box-opt{font-size:11px;color:#ccc;}
+#photo-input{display:none;}
+#photo-preview{width:100%;border-radius:10px;margin-top:10px;max-height:200px;object-fit:cover;display:none;}
+.btn{width:100%;height:46px;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn:disabled{background:#e5e5e5;color:#aaa;cursor:not-allowed;}
+.msg{padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
+.msg.error{background:#fee2e2;color:#a32d2d;display:block;}
+.msg.success{background:#eaf3de;color:#3b6d11;display:block;}
+.section-div{font-size:11px;color:#6C3BE8;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin:20px 0 12px;padding-bottom:6px;border-bottom:0.5px solid #ede9fe;}
+.room-group{display:none;}
+#travel-fields{display:none;}
+#standard-fields{display:block;}
 </style>
 </head>
 <body>
-
 <div class="top-bar">
-  <a href="index.html" class="back-btn">← Back</a>
-  <span class="top-title">Post an Item</span>
+  <a href="index.html" class="back-btn"><i class="ti ti-x"></i></a>
+  <span class="top-title">New post</span>
+  <button class="share-btn" onclick="submitPost()">Share</button>
 </div>
-
-<div class="main" id="main-content" style="display:none;">
-
-  <div class="type-toggle">
-    <button class="type-btn lost active" id="btn-lost" onclick="setType('lost')">🔴 I Lost This</button>
-    <button class="type-btn found" id="btn-found" onclick="setType('found')">🟢 I Found This</button>
-  </div>
-
+<div class="main">
   <div class="msg" id="post-msg"></div>
 
-  <div class="section-divider">Item Details</div>
-
-  <div class="form-group">
-    <label>Item Name <span class="required">*</span></label>
-    <input type="text" id="item-name" placeholder="e.g. Water Bottle, Charger, ID Card"/>
+  <label class="lab">Category</label>
+  <div class="chips" id="category-chips">
+    <span class="chip on" data-cat="lost">Lost</span>
+    <span class="chip" data-cat="found">Found</span>
+    <span class="chip" data-cat="have">Have</span>
+    <span class="chip" data-cat="need">Need</span>
+    <span class="chip" data-cat="sell">Sell</span>
+    <span class="chip" data-cat="buy">Buy</span>
+    <span class="chip" data-cat="travel">Travel</span>
   </div>
 
-  <div class="form-group">
-    <label>Description <span class="required">*</span></label>
-    <textarea id="item-desc" placeholder="Brand, color, size, any identifying marks..."></textarea>
-    <div class="hint">More details = better chance of finding/returning</div>
-  </div>
-
-  <div class="form-group">
-    <label>Photo <span style="color:#475569;font-size:11px;">(Optional)</span></label>
-    <div class="photo-upload" onclick="document.getElementById('photo-input').click()">
-      <div class="photo-upload-icon">📷</div>
-      <div class="photo-upload-text">Tap to upload a photo</div>
-      <div class="photo-upload-sub">JPG, PNG up to 5MB</div>
+  <!-- STANDARD FIELDS -->
+  <div id="standard-fields">
+    <div class="section-div">Item details</div>
+    <label class="lab">Item type</label>
+    <select class="inp" id="item-type">
+      <option value="">Select type</option>
+      <option>Charger / Cable</option>
+      <option>Phone / Device</option>
+      <option>ID Card / Documents</option>
+      <option>Books / Notes</option>
+      <option>Clothing / Accessories</option>
+      <option>Electronics</option>
+      <option>Cycle / Scooty</option>
+      <option>Furniture / Room Items</option>
+      <option>Keys</option>
+      <option>Wallet / Money</option>
+      <option>Other</option>
+    </select>
+    <label class="lab">Item name</label>
+    <input class="inp" id="item-name" type="text" placeholder="Describe the item briefly"/>
+    <label class="lab">Description</label>
+    <textarea class="inp" id="item-desc" placeholder="Brand, colour, identifying marks..."></textarea>
+    <div class="photo-box" onclick="document.getElementById('photo-input').click()">
+      <div class="photo-box-icon"><i class="ti ti-camera"></i></div>
+      <div class="photo-box-txt">Add a photo <span class="photo-box-opt">— optional</span></div>
     </div>
     <input type="file" id="photo-input" accept="image/*" onchange="previewPhoto(this)"/>
-    <img id="photo-preview" class="photo-preview" alt="preview"/>
-  </div>
-
-  <div class="section-divider">Location</div>
-
-  <div class="form-group">
-    <label>Where was it lost/found? <span class="required">*</span></label>
-    <select id="location" onchange="handleLocationChange()">
+    <img id="photo-preview" alt="preview"/>
+    <div class="section-div">Location</div>
+    <label class="lab">Where was it lost / found?</label>
+    <select class="inp" id="location" onchange="handleLocation()">
       <option value="">Select location</option>
       <option value="Ground Floor — Gallery / Corridor">Ground Floor — Gallery / Corridor</option>
       <option value="Ground Floor — Near Room No.">Ground Floor — Near Room No.</option>
@@ -107,21 +106,51 @@
       <option value="Common Room">Common Room</option>
       <option value="Other">Other</option>
     </select>
+    <div class="room-group" id="room-group">
+      <label class="lab">Room number</label>
+      <input class="inp" id="room-no" type="text" placeholder="e.g. 112"/>
+    </div>
   </div>
 
-  <div class="form-group room-input" id="room-input-group">
-    <label>Room Number <span class="required">*</span></label>
-    <input type="text" id="room-no" placeholder="e.g. 12, 24B"/>
+  <!-- TRAVEL FIELDS -->
+  <div id="travel-fields">
+    <div class="section-div">Travel details</div>
+    <label class="lab">I am</label>
+    <div class="chips" id="travel-type-chips">
+      <span class="chip on" data-tt="going">Going somewhere</span>
+      <span class="chip" data-tt="need">Need someone going</span>
+    </div>
+    <div class="row">
+      <div>
+        <label class="lab">From</label>
+        <input class="inp" id="travel-from" type="text" placeholder="e.g. Hisar"/>
+      </div>
+      <div>
+        <label class="lab">To</label>
+        <input class="inp" id="travel-to" type="text" placeholder="Destination"/>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label class="lab">Date</label>
+        <input class="inp" id="travel-date" type="date"/>
+      </div>
+      <div>
+        <label class="lab">Approx. time</label>
+        <input class="inp" id="travel-time" type="time"/>
+      </div>
+    </div>
+    <label class="lab">Purpose</label>
+    <div class="chips" id="purpose-chips">
+      <span class="chip on" data-purpose="seat">Seat available</span>
+      <span class="chip" data-purpose="document">Document handover</span>
+      <span class="chip" data-purpose="parcel">Parcel</span>
+    </div>
+    <label class="lab">Details</label>
+    <textarea class="inp" id="travel-desc" placeholder="Any extra info..."></textarea>
   </div>
 
-  <button class="submit-btn" id="submit-btn" onclick="submitPost()">Post Item</button>
-
-</div>
-
-<div class="not-logged" id="not-logged" style="display:none;">
-  <div class="not-logged-icon">🔒</div>
-  <div class="not-logged-text">Please login to post a lost or found item</div>
-  <a href="login.html" class="login-link">Login / Register</a>
+  <button class="btn" id="submit-btn">Post</button>
 </div>
 
 <script type="module">
@@ -134,85 +163,126 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 let currentUser = null;
-let currentType = 'lost';
+let currentCat = 'lost';
+let currentTT = 'going';
+let currentPurpose = 'seat';
 let photoBase64 = null;
 
-onAuthStateChanged(auth, async user => {
-  if(user){
-    currentUser = user;
-    document.getElementById('main-content').style.display = 'block';
-  } else {
-    document.getElementById('not-logged').style.display = 'block';
-  }
+onAuthStateChanged(auth, user => {
+  if(!user) window.location.href = 'login.html';
+  else currentUser = user;
 });
 
-window.setType = function(type){
-  currentType = type;
-  document.getElementById('btn-lost').classList.toggle('active', type==='lost');
-  document.getElementById('btn-found').classList.toggle('active', type==='found');
-}
+// Category chips
+document.getElementById('category-chips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  document.querySelectorAll('#category-chips .chip').forEach(c => c.classList.remove('on'));
+  chip.classList.add('on');
+  currentCat = chip.dataset.cat;
+  document.getElementById('travel-fields').style.display = currentCat === 'travel' ? 'block' : 'none';
+  document.getElementById('standard-fields').style.display = currentCat === 'travel' ? 'none' : 'block';
+});
 
-window.handleLocationChange = function(){
+// Travel type chips
+document.getElementById('travel-type-chips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  document.querySelectorAll('#travel-type-chips .chip').forEach(c => c.classList.remove('on'));
+  chip.classList.add('on');
+  currentTT = chip.dataset.tt;
+});
+
+// Purpose chips (multi-select)
+document.getElementById('purpose-chips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  chip.classList.toggle('on');
+});
+
+window.handleLocation = function() {
   const val = document.getElementById('location').value;
   const needsRoom = val.includes('Near Room No.') || val === 'From My Room';
-  document.getElementById('room-input-group').style.display = needsRoom ? 'block' : 'none';
-}
+  document.getElementById('room-group').style.display = needsRoom ? 'block' : 'none';
+};
 
-window.previewPhoto = function(input){
+window.previewPhoto = function(input) {
   const file = input.files[0];
   if(!file) return;
-  if(file.size > 5*1024*1024){ alert('Photo must be under 5MB'); return; }
+  // Compress before storing
   const reader = new FileReader();
   reader.onload = e => {
-    photoBase64 = e.target.result;
-    const preview = document.getElementById('photo-preview');
-    preview.src = photoBase64;
-    preview.style.display = 'block';
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const max = 800;
+      let w = img.width, h = img.height;
+      if(w > max) { h = h * max / w; w = max; }
+      if(h > max) { w = w * max / h; h = max; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      photoBase64 = canvas.toDataURL('image/jpeg', 0.7);
+      const preview = document.getElementById('photo-preview');
+      preview.src = photoBase64;
+      preview.style.display = 'block';
+    };
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
-}
+};
 
-window.submitPost = async function(){
-  const itemName = document.getElementById('item-name').value.trim();
-  const desc = document.getElementById('item-desc').value.trim();
-  const location = document.getElementById('location').value;
-  const roomNo = document.getElementById('room-no').value.trim();
+window.submitPost = async function() {
   const msg = document.getElementById('post-msg');
-  msg.className='msg'; msg.textContent='';
-
-  if(!itemName){ msg.className='msg error'; msg.textContent='❌ Please enter item name.'; return; }
-  if(!desc){ msg.className='msg error'; msg.textContent='❌ Please enter a description.'; return; }
-  if(!location){ msg.className='msg error'; msg.textContent='❌ Please select a location.'; return; }
-  if((location.includes('Near Room No.') || location === 'From My Room') && !roomNo){
-    msg.className='msg error'; msg.textContent='❌ Please enter the room number.'; return;
-  }
-
+  msg.className = 'msg';
   const btn = document.getElementById('submit-btn');
-  btn.disabled=true; btn.textContent='Posting...';
 
   try {
-    const userDoc = await getDoc(doc(db,'users',currentUser.uid));
-    const userData = userDoc.data();
-    await addDoc(collection(db,'posts'),{
-      type: currentType,
-      itemName, description: desc,
-      location, roomNo: roomNo || null,
-      imageUrl: photoBase64 || null,
-      posterName: userData.name,
-      posterPhone: userData.phone,
-      posterAdmission: userData.admissionNo,
-      posterUid: currentUser.uid,
-      status: currentType,
-      createdAt: serverTimestamp(),
-      hostel: 'Ajanta Hostel No. 3'
-    });
-    msg.className='msg success'; msg.textContent='✅ Posted successfully! Redirecting...';
-    setTimeout(()=>{ location.href='index.html'; },1500);
-  } catch(e){
-    msg.className='msg error'; msg.textContent='❌ Error: ' + e.message;
-    btn.disabled=false; btn.textContent='Post Item';
+    const userDoc = await getDoc(doc(db,'users', currentUser.uid));
+    const u = userDoc.data();
+
+    if(currentCat === 'travel') {
+      const from = document.getElementById('travel-from').value.trim();
+      const to = document.getElementById('travel-to').value.trim();
+      const date = document.getElementById('travel-date').value;
+      const time = document.getElementById('travel-time').value;
+      const desc = document.getElementById('travel-desc').value.trim();
+      const purposes = Array.from(document.querySelectorAll('#purpose-chips .chip.on')).map(c => c.dataset.purpose);
+      if(!from || !to || !date) { msg.className = 'msg error'; msg.textContent = 'Please fill From, To, and Date.'; return; }
+      btn.disabled = true; btn.textContent = 'Posting...';
+      await addDoc(collection(db,'posts'), {
+        type: 'travel', travelType: currentTT,
+        from, to, travelDate: date, travelTime: time,
+        purposes, itemDesc: desc,
+        posterName: u.name, posterPhone: u.phone,
+        posterRoom: u.roomNo, posterUid: currentUser.uid,
+        status: 'active', hostel: 'Ajanta Hostel No. 3',
+        createdAt: serverTimestamp()
+      });
+    } else {
+      const itemType = document.getElementById('item-type').value;
+      const itemName = document.getElementById('item-name').value.trim();
+      const itemDesc = document.getElementById('item-desc').value.trim();
+      const location = document.getElementById('location').value;
+      const roomNo = document.getElementById('room-no').value.trim();
+      if(!itemName || !itemDesc || !location) { msg.className = 'msg error'; msg.textContent = 'Please fill item name, description, and location.'; return; }
+      btn.disabled = true; btn.textContent = 'Posting...';
+      await addDoc(collection(db,'posts'), {
+        type: currentCat, itemType, itemName,
+        description: itemDesc, location,
+        roomNo: roomNo || null,
+        imageUrl: photoBase64 || null,
+        posterName: u.name, posterPhone: u.phone,
+        posterAdmission: u.admissionNo, posterUid: currentUser.uid,
+        status: currentCat, hostel: 'Ajanta Hostel No. 3',
+        createdAt: serverTimestamp()
+      });
+    }
+    window.location.href = 'index.html';
+  } catch(e) {
+    msg.className = 'msg error'; msg.textContent = 'Error: ' + e.message;
+    btn.disabled = false; btn.textContent = 'Post';
   }
-}
+};
 </script>
 </body>
 </html>

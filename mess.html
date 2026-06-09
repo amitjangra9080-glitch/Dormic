@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mess — Dormic</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:40px;}
+.top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:52px;display:flex;align-items:center;gap:10px;padding:0 16px;position:sticky;top:0;z-index:100;}
+.back{font-size:22px;color:#262626;text-decoration:none;}
+.top-title{font-size:15px;font-weight:500;color:#262626;}
+.seg{display:flex;background:#fff;border-bottom:0.5px solid #f0f0f0;}
+.sg{flex:1;text-align:center;padding:12px 0;font-size:13px;font-weight:500;color:#aaa;border-bottom:2px solid transparent;cursor:pointer;}
+.sg.on{color:#6C3BE8;border-bottom-color:#6C3BE8;}
+.main{max-width:500px;margin:0 auto;}
+/* MENU TAB */
+.days-row{display:flex;gap:7px;padding:12px 14px;overflow-x:auto;background:#fff;border-bottom:0.5px solid #f0f0f0;}
+.days-row::-webkit-scrollbar{display:none;}
+.day{font-size:12px;padding:6px 13px;border-radius:20px;background:#f7f7f7;border:0.5px solid #e8e8e8;color:#666;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:all 0.15s;}
+.day.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;}
+.meals-wrap{padding:4px 14px 16px;background:#fff;}
+.meal{padding:14px 0;border-bottom:0.5px solid #f7f7f7;}
+.meal:last-child{border-bottom:none;}
+.meal-head{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.meal-ic{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;flex-shrink:0;}
+.meal-name{font-size:14px;font-weight:500;color:#262626;}
+.meal-time{font-size:11px;color:#aaa;margin-left:auto;}
+.meal-items{font-size:13px;color:#555;line-height:1.55;padding-left:39px;}
+.stars{display:flex;gap:4px;padding-left:39px;margin-top:7px;}
+.star{font-size:20px;color:#e0e0e0;cursor:pointer;transition:color 0.1s;}
+.star.on{color:#F97316;}
+/* TRACKER TAB */
+.cal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;background:#fff;}
+.cal-month{font-size:14px;font-weight:500;color:#262626;}
+.cal-nav{display:flex;gap:10px;font-size:20px;color:#aaa;}
+.cal-strip{display:flex;gap:5px;padding:4px 12px 12px;overflow-x:auto;background:#fff;border-bottom:0.5px solid #f0f0f0;}
+.cal-strip::-webkit-scrollbar{display:none;}
+.cday{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:28px;}
+.cday-lbl{font-size:10px;color:#aaa;font-weight:500;}
+.cdot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;}
+.cdot-full{background:#eaf3de;color:#3b6d11;}
+.cdot-part{background:#fce7f3;color:#9d174d;}
+.cdot-miss{background:#fee2e2;color:#a32d2d;}
+.cdot-none{background:#f7f7f7;color:#ccc;border:0.5px solid #eee;}
+.cdot-today{outline:2px solid #6C3BE8;outline-offset:1px;}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:12px 14px;background:#fff;border-bottom:0.5px solid #f0f0f0;}
+.scard{background:#f7f7f7;border-radius:10px;padding:9px 4px;text-align:center;}
+.snum{font-size:15px;font-weight:600;}
+.slbl{font-size:9px;color:#aaa;margin-top:2px;}
+.today-label{font-size:11px;color:#6C3BE8;padding:12px 14px 8px;text-transform:uppercase;letter-spacing:0.3px;background:#fff;font-weight:600;}
+.tracker-meals{padding:0 0 8px;background:#fff;}
+.tmeal{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:10px;padding:13px 14px;border-bottom:0.5px solid #f7f7f7;}
+.tmeal:last-child{border-bottom:none;}
+.tmic{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;flex-shrink:0;}
+.tmeal-name{font-size:13px;font-weight:500;color:#262626;}
+.tmeal-time{font-size:11px;color:#aaa;}
+.tright{display:flex;flex-direction:column;align-items:flex-end;gap:7px;}
+.tog{display:flex;border:0.5px solid #e0e0e0;border-radius:20px;overflow:hidden;}
+.tp{font-size:11px;padding:6px 12px;cursor:pointer;color:#aaa;background:#fff;transition:all 0.15s;}
+.ta{font-size:11px;padding:6px 12px;cursor:pointer;color:#aaa;background:#fff;transition:all 0.15s;}
+.tp.on{background:#eaf3de;color:#3b6d11;font-weight:600;}
+.ta.on{background:#fee2e2;color:#a32d2d;font-weight:600;}
+.guest-row{display:flex;align-items:center;gap:7px;}
+.guest-lbl{font-size:10px;color:#aaa;}
+.cbtn{width:22px;height:22px;border-radius:50%;border:0.5px solid #e0e0e0;background:#f7f7f7;display:flex;align-items:center;justify-content:center;font-size:14px;color:#aaa;cursor:pointer;}
+.cnum{font-size:12px;font-weight:600;color:#262626;min-width:16px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="more.html" class="back"><i class="ti ti-arrow-left"></i></a>
+  <span class="top-title">Mess</span>
+</div>
+<div class="seg">
+  <div class="sg on" id="sg0" onclick="showTab(0)">Menu</div>
+  <div class="sg" id="sg1" onclick="showTab(1)">My Tracker</div>
+</div>
+
+<!-- MENU TAB -->
+<div id="tab-menu" class="main">
+  <div class="days-row" id="days-row"></div>
+  <div class="meals-wrap" id="meals-content"></div>
+</div>
+
+<!-- TRACKER TAB -->
+<div id="tab-tracker" class="main" style="display:none;">
+  <div class="cal-head">
+    <span class="cal-month" id="cal-month">June 2026</span>
+    <span class="cal-nav">
+      <i class="ti ti-chevron-left" style="cursor:pointer;"></i>
+      <i class="ti ti-chevron-right" style="cursor:pointer;"></i>
+    </span>
+  </div>
+  <div class="cal-strip" id="cal-strip"></div>
+  <div class="summary">
+    <div class="scard"><div class="snum" style="color:#3b6d11;" id="s-meals">0</div><div class="slbl">Meals</div></div>
+    <div class="scard"><div class="snum" style="color:#a32d2d;" id="s-absent">0</div><div class="slbl">Absent</div></div>
+    <div class="scard"><div class="snum" style="color:#9d174d;" id="s-guests">0</div><div class="slbl">Guests</div></div>
+    <div class="scard"><div class="snum" style="color:#6C3BE8;" id="s-month">Jun</div><div class="slbl">Month</div></div>
+  </div>
+  <div class="today-label">Today</div>
+  <div class="tracker-meals">
+    <div class="tmeal">
+      <span class="tmic" style="background:#e8a445;"><i class="ti ti-coffee"></i></span>
+      <div><div class="tmeal-name">Breakfast</div><div class="tmeal-time">8:00 – 9:00 AM</div></div>
+      <div class="tright">
+        <div class="tog"><span class="tp" id="bp" onclick="setP('b')">Present</span><span class="ta" id="ba" onclick="setA('b')">Absent</span></div>
+        <div class="guest-row"><span class="guest-lbl">Guest</span><span class="cbtn" onclick="dc('bg')">−</span><span class="cnum" id="bg">0</span><span class="cbtn" onclick="ic('bg')">+</span></div>
+      </div>
+    </div>
+    <div class="tmeal">
+      <span class="tmic" style="background:#4c9c5e;"><i class="ti ti-tools-kitchen-2"></i></span>
+      <div><div class="tmeal-name">Lunch</div><div class="tmeal-time">1:00 – 2:00 PM</div></div>
+      <div class="tright">
+        <div class="tog"><span class="tp" id="lp" onclick="setP('l')">Present</span><span class="ta" id="la" onclick="setA('l')">Absent</span></div>
+        <div class="guest-row"><span class="guest-lbl">Guest</span><span class="cbtn" onclick="dc('lg')">−</span><span class="cnum" id="lg">0</span><span class="cbtn" onclick="ic('lg')">+</span></div>
+      </div>
+    </div>
+    <div class="tmeal">
+      <span class="tmic" style="background:#6C3BE8;"><i class="ti ti-moon"></i></span>
+      <div><div class="tmeal-name">Dinner</div><div class="tmeal-time">8:00 – 9:00 PM</div></div>
+      <div class="tright">
+        <div class="tog"><span class="tp" id="dp" onclick="setP('d')">Present</span><span class="ta" id="da" onclick="setA('d')">Absent</span></div>
+        <div class="guest-row"><span class="guest-lbl">Guest</span><span class="cbtn" onclick="dc('dg')">−</span><span class="cnum" id="dg">0</span><span class="cbtn" onclick="ic('dg')">+</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const menu = {
+  Mon:{B:'Potato Sabzi with Parathas',L:'Classic Rajma with Rice',D:'Mixed Vegetable with Dal'},
+  Tue:{B:'Light & Savoury Poha',L:'Potato & Peas with Fried Rice',D:'Dal Makhani with Custard'},
+  Wed:{B:'Potato-Onion Stuffed Parathas',L:'Kabuli Chickpeas',D:'Paneer'},
+  Thu:{B:'Paneer Stuffed Parathas',L:'Kadhi Pakora',D:'Seasonal Vegetable with Dal'},
+  Fri:{B:'Desi Chickpeas with Parathas',L:'Dal with Fried Rice',D:'Sev Bhaji'},
+  Sat:{B:'Potato-Onion Parathas',L:'Desi Chickpeas with Potato',D:'Dal'},
+  Sun:{B:'Chole Kulche / Pav Bhaji',L:'Chole Puri',D:'Seasonal Vegetable with Dal'}
+};
+const dayKeys = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const today = new Date();
+const todayKey = dayKeys[today.getDay() === 0 ? 6 : today.getDay()-1];
+let activeDay = todayKey;
+
+// Build day pills
+const daysRow = document.getElementById('days-row');
+dayKeys.forEach(d => {
+  const el = document.createElement('span');
+  el.className = 'day' + (d === activeDay ? ' on' : '');
+  el.textContent = d;
+  el.onclick = () => { activeDay = d; renderMenu(); document.querySelectorAll('.day').forEach(x => x.classList.remove('on')); el.classList.add('on'); };
+  daysRow.appendChild(el);
+});
+
+const mealData = [
+  {key:'B', name:'Breakfast', time:'8:00 – 9:00 AM', color:'#e8a445', icon:'ti-coffee', ratingKey:'b'},
+  {key:'L', name:'Lunch', time:'1:00 – 2:00 PM', color:'#4c9c5e', icon:'ti-tools-kitchen-2', ratingKey:'l'},
+  {key:'D', name:'Dinner', time:'8:00 – 9:00 PM', color:'#6C3BE8', icon:'ti-moon', ratingKey:'d'}
+];
+
+const ratings = {b:0, l:0, d:0};
+
+function renderMenu() {
+  const m = menu[activeDay];
+  document.getElementById('meals-content').innerHTML = mealData.map(meal => `
+    <div class="meal">
+      <div class="meal-head">
+        <span class="meal-ic" style="background:${meal.color};"><i class="ti ${meal.icon}"></i></span>
+        <span class="meal-name">${meal.name}</span>
+        <span class="meal-time">${meal.time}</span>
+      </div>
+      <div class="meal-items">${m[meal.key]}</div>
+      ${activeDay === todayKey ? `
+      <div class="stars" id="stars-${meal.ratingKey}">
+        ${[1,2,3,4,5].map(n => `<span class="star${ratings[meal.ratingKey]>=n?' on':''}" onclick="rate('${meal.ratingKey}',${n})">★</span>`).join('')}
+      </div>` : ''}
+    </div>
+  `).join('');
+}
+
+window.rate = function(meal, n) {
+  ratings[meal] = n;
+  const stars = document.querySelectorAll(`#stars-${meal} .star`);
+  stars.forEach((s,i) => s.classList.toggle('on', i < n));
+};
+
+renderMenu();
+
+// Build calendar strip
+const calStrip = document.getElementById('cal-strip');
+const daysInMonth = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate();
+for(let i=1; i<=daysInMonth; i++) {
+  const isToday = i === today.getDate();
+  const isPast = i < today.getDate();
+  const dotClass = isToday ? 'cdot cdot-part cdot-today' : (isPast ? (Math.random()>0.3 ? 'cdot cdot-full' : 'cdot cdot-miss') : 'cdot cdot-none');
+  const dotTxt = isToday ? '1' : (isPast ? (Math.random()>0.3 ? '3' : '0') : '');
+  calStrip.innerHTML += `<div class="cday"><span class="cday-lbl">${i}</span><span class="${dotClass}">${dotTxt}</span></div>`;
+}
+
+// Tracker counters
+const counts = {bg:0,lg:0,dg:0};
+window.ic = id => { counts[id]++; document.getElementById(id).textContent = counts[id]; };
+window.dc = id => { if(counts[id]>0){counts[id]--; document.getElementById(id).textContent = counts[id];} };
+window.setP = m => { document.getElementById(m+'p').className='tp on'; document.getElementById(m+'a').className='ta'; };
+window.setA = m => { document.getElementById(m+'a').className='ta on'; document.getElementById(m+'p').className='tp'; };
+
+function showTab(i) {
+  document.getElementById('sg0').classList.toggle('on',i===0);
+  document.getElementById('sg1').classList.toggle('on',i===1);
+  document.getElementById('tab-menu').style.display=i===0?'block':'none';
+  document.getElementById('tab-tracker').style.display=i===1?'block':'none';
+}
+</script>
+</body>
+</html>

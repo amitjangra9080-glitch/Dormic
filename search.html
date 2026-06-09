@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Search — Dormic</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:70px;}
+.top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:52px;display:flex;align-items:center;padding:0 14px;gap:10px;position:sticky;top:0;z-index:100;}
+.search-wrap{flex:1;display:flex;align-items:center;background:#f7f7f7;border-radius:10px;padding:0 12px;height:36px;gap:8px;}
+.search-ic{font-size:17px;color:#aaa;}
+.search-inp{border:none;background:transparent;font-size:14px;color:#262626;outline:none;flex:1;font-family:inherit;}
+.search-inp::placeholder{color:#bbb;}
+.main{max-width:500px;margin:0 auto;padding:12px 0;}
+.gap{height:8px;}
+.card{background:#fff;padding-bottom:4px;}
+.card-head{display:flex;align-items:center;gap:10px;padding:12px 14px 8px;}
+.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600;flex-shrink:0;}
+.uname{font-size:13px;font-weight:500;color:#262626;}
+.uloc{font-size:11px;color:#8e8e8e;}
+.badge{margin-left:auto;font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.b-lost{background:#fee2e2;color:#a32d2d;}
+.b-found{background:#eaf3de;color:#3b6d11;}
+.b-have{background:#ede9fe;color:#5b21b6;}
+.b-sell{background:#fef3c7;color:#92400e;}
+.card-body{padding:0 14px 6px;}
+.cat{font-size:11px;color:#8e8e8e;display:flex;align-items:center;gap:4px;margin-bottom:3px;}
+.iname{font-size:15px;font-weight:500;color:#262626;margin-bottom:3px;}
+.desc{font-size:13px;color:#555;}
+.card-actions{display:flex;align-items:center;justify-content:flex-end;padding:9px 14px 4px;border-top:0.5px solid #f7f7f7;margin-top:6px;}
+.wa-btn{font-size:13px;font-weight:500;color:#25D366;display:flex;align-items:center;gap:5px;text-decoration:none;}
+.time{padding:3px 14px 10px;font-size:10px;color:#bbb;}
+.empty{text-align:center;padding:48px 24px;color:#aaa;font-size:14px;}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-around;height:60px;z-index:100;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ccc;font-size:22px;}
+.nav-item span{font-size:10px;color:#ccc;}
+.nav-item.on{color:#6C3BE8;}
+.nav-item.on span{color:#6C3BE8;}
+.nav-fab{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="search-wrap">
+    <span class="search-ic"><i class="ti ti-search"></i></span>
+    <input class="search-inp" id="search-inp" placeholder="Search items, posts..." oninput="doSearch()"/>
+  </div>
+</div>
+<div class="main" id="results">
+  <div class="empty">Type to search posts</div>
+</div>
+<nav class="nav-bar">
+  <a href="index.html" class="nav-item"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="search.html" class="nav-item on"><i class="ti ti-search"></i><span>Search</span></a>
+  <a href="post.html" class="nav-fab"><i class="ti ti-plus"></i></a>
+  <a href="more.html" class="nav-item"><i class="ti ti-layout-grid"></i><span>More</span></a>
+  <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
+</nav>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+let allPosts = [];
+onAuthStateChanged(auth, user => { if(!user) window.location.href = 'login.html'; });
+const q = query(collection(db,'posts'), orderBy('createdAt','desc'));
+onSnapshot(q, snap => { allPosts = snap.docs.map(d => ({id:d.id,...d.data()})); });
+window.doSearch = function() {
+  const term = document.getElementById('search-inp').value.trim().toLowerCase();
+  const el = document.getElementById('results');
+  if(!term) { el.innerHTML = '<div class="empty">Type to search posts</div>'; return; }
+  const found = allPosts.filter(p =>
+    p.itemName?.toLowerCase().includes(term) ||
+    p.description?.toLowerCase().includes(term) ||
+    p.location?.toLowerCase().includes(term) ||
+    p.from?.toLowerCase().includes(term) ||
+    p.to?.toLowerCase().includes(term)
+  );
+  if(!found.length) { el.innerHTML = '<div class="empty">No results for "' + term + '"</div>'; return; }
+  const icons = {lost:'ti-search-off',found:'ti-search',have:'ti-package',need:'ti-package-import',sell:'ti-tag',buy:'ti-shopping-cart',travel:'ti-bus'};
+  el.innerHTML = found.map(p => `
+    <div class="gap"></div>
+    <div class="card">
+      <div class="card-head">
+        <div class="av">${(p.posterName||'?')[0].toUpperCase()}</div>
+        <div><div class="uname">${p.posterName||''}</div><div class="uloc">${p.location||p.from||''}</div></div>
+        <span class="badge b-${p.type}">${p.type.charAt(0).toUpperCase()+p.type.slice(1)}</span>
+      </div>
+      <div class="card-body">
+        <div class="cat"><i class="ti ${icons[p.type]||'ti-circle'}"></i> ${p.itemType||p.type}</div>
+        <div class="iname">${p.itemName||p.from+' → '+p.to||''}</div>
+        <div class="desc">${p.description||p.itemDesc||''}</div>
+      </div>
+      <div class="card-actions">
+        <a href="https://wa.me/91${p.posterPhone}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a>
+      </div>
+      <div class="time">${p.createdAt ? new Date(p.createdAt.seconds*1000).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : ''}</div>
+    </div>`).join('');
+};
+</script>
+</body>
+</html>

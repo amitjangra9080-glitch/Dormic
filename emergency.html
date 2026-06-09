@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Emergency & Blood — Dormic</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:40px;}
+.top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:52px;display:flex;align-items:center;gap:10px;padding:0 16px;position:sticky;top:0;z-index:100;}
+.back{font-size:22px;color:#262626;text-decoration:none;}
+.top-title{font-size:15px;font-weight:500;color:#262626;}
+.main{max-width:500px;margin:0 auto;padding:16px 14px;}
+.sos-card{background:#fff5f5;border:0.5px solid #fecaca;border-radius:14px;padding:16px;margin-bottom:18px;}
+.sos-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.sos-ic{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#E8398A,#F97316);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;}
+.sos-title{font-size:14px;font-weight:600;color:#a32d2d;}
+.sos-desc{font-size:12px;color:#a32d2d;line-height:1.5;margin-bottom:13px;padding-left:46px;}
+.sos-btn{width:100%;height:42px;background:linear-gradient(90deg,#E8398A,#F97316);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;}
+.sec-lab{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:10px;}
+.blood-groups{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.bg-btn{font-size:13px;font-weight:600;padding:7px 14px;border-radius:20px;background:#fff;border:0.5px solid #e0e0e0;color:#262626;cursor:pointer;transition:all 0.15s;}
+.bg-btn.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;}
+.donors-list{background:#fff;border-radius:12px;overflow:hidden;}
+.donor{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:0.5px solid #f7f7f7;}
+.donor:last-child{border-bottom:none;}
+.av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:600;flex-shrink:0;}
+.dn{font-size:13px;font-weight:500;color:#262626;}
+.ds{font-size:11px;color:#aaa;}
+.dtag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:#fee2e2;color:#a32d2d;margin-left:auto;flex-shrink:0;}
+.wa-ic{font-size:22px;color:#25D366;margin-left:8px;text-decoration:none;}
+.opt-card{background:#fff;border-radius:12px;padding:13px 14px;margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.opt-txt{font-size:13px;font-weight:500;color:#262626;}
+.opt-sub{font-size:11px;color:#aaa;margin-top:2px;}
+.toggle{width:44px;height:24px;border-radius:20px;position:relative;cursor:pointer;flex-shrink:0;transition:background 0.2s;}
+.toggle.off{background:#e0e0e0;}
+.toggle.on-state{background:linear-gradient(90deg,#6C3BE8,#E8398A);}
+.toggle::after{content:'';position:absolute;top:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
+.toggle.off::after{left:2px;}
+.toggle.on-state::after{left:22px;}
+.empty-donors{text-align:center;padding:24px;color:#aaa;font-size:13px;}
+.loading{text-align:center;padding:20px;color:#aaa;font-size:13px;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="more.html" class="back"><i class="ti ti-arrow-left"></i></a>
+  <span class="top-title">Emergency & Blood</span>
+</div>
+<div class="main">
+  <div class="sos-card">
+    <div class="sos-head">
+      <div class="sos-ic"><i class="ti ti-urgent"></i></div>
+      <div class="sos-title">Need blood urgently?</div>
+    </div>
+    <p class="sos-desc">Sends an instant alert to all residents who have notifications turned on.</p>
+    <button class="sos-btn" onclick="sendAlert()">
+      <i class="ti ti-bell-ringing"></i> Send urgent alert to all residents
+    </button>
+  </div>
+
+  <div class="sec-lab">Find donors by blood group</div>
+  <div class="blood-groups" id="bg-btns">
+    <span class="bg-btn on" data-bg="B+">B+</span>
+    <span class="bg-btn" data-bg="A+">A+</span>
+    <span class="bg-btn" data-bg="O+">O+</span>
+    <span class="bg-btn" data-bg="AB+">AB+</span>
+    <span class="bg-btn" data-bg="A−">A−</span>
+    <span class="bg-btn" data-bg="B−">B−</span>
+    <span class="bg-btn" data-bg="O−">O−</span>
+    <span class="bg-btn" data-bg="AB−">AB−</span>
+  </div>
+  <div class="donors-list" id="donors-list">
+    <div class="loading">Loading donors...</div>
+  </div>
+
+  <div class="opt-card">
+    <div>
+      <div class="opt-txt">List me as a willing donor</div>
+      <div class="opt-sub">Your blood group will be visible to other residents</div>
+    </div>
+    <div class="toggle off" id="donor-toggle" onclick="toggleDonor()"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+let currentUser = null;
+let currentBG = 'B+';
+let isDonor = false;
+
+onAuthStateChanged(auth, async user => {
+  if(!user) { window.location.href = 'login.html'; return; }
+  currentUser = user;
+  const snap = await getDoc(doc(db,'users', user.uid));
+  const u = snap.data();
+  isDonor = u.isDonor || false;
+  const toggle = document.getElementById('donor-toggle');
+  toggle.className = 'toggle ' + (isDonor ? 'on-state' : 'off');
+  loadDonors('B+');
+});
+
+// Blood group filter
+document.getElementById('bg-btns').addEventListener('click', e => {
+  const btn = e.target.closest('.bg-btn');
+  if(!btn) return;
+  document.querySelectorAll('.bg-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  currentBG = btn.dataset.bg;
+  loadDonors(currentBG);
+});
+
+async function loadDonors(bg) {
+  const el = document.getElementById('donors-list');
+  el.innerHTML = '<div class="loading">Loading...</div>';
+  try {
+    const q = query(collection(db,'users'), where('bloodGroup','==',bg), where('isDonor','==',true));
+    const snap = await getDocs(q);
+    if(snap.empty) { el.innerHTML = '<div class="empty-donors">No donors listed for ' + bg + '</div>'; return; }
+    const grads = ['linear-gradient(135deg,#6C3BE8,#E8398A)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#4c9c5e,#6C3BE8)'];
+    el.innerHTML = snap.docs.map((d,i) => {
+      const u = d.data();
+      return `<div class="donor">
+        <div class="av" style="background:${grads[i%3]}">${(u.name||'?')[0].toUpperCase()}</div>
+        <div><div class="dn">${u.name}</div><div class="ds">Room ${u.roomNo} · ${u.degree}</div></div>
+        <span class="dtag">${u.bloodGroup}</span>
+        <a href="https://wa.me/91${u.phone}" target="_blank" class="wa-ic"><i class="ti ti-brand-whatsapp"></i></a>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    el.innerHTML = '<div class="empty-donors">Could not load donors.</div>';
+  }
+}
+
+window.toggleDonor = async function() {
+  if(!currentUser) return;
+  isDonor = !isDonor;
+  const toggle = document.getElementById('donor-toggle');
+  toggle.className = 'toggle ' + (isDonor ? 'on-state' : 'off');
+  await updateDoc(doc(db,'users',currentUser.uid), {isDonor});
+  loadDonors(currentBG);
+};
+
+window.sendAlert = function() {
+  if('Notification' in window && Notification.permission === 'granted') {
+    new Notification('Dormic — Urgent Blood Alert', {
+      body: 'Someone in Ajanta Hostel No. 3 urgently needs blood. Check the app.',
+      icon: 'icon.png'
+    });
+    alert('Alert sent to residents with notifications enabled.');
+  } else {
+    Notification.requestPermission().then(p => {
+      if(p === 'granted') alert('Notifications enabled. Alert sent.');
+      else alert('Please enable notifications to send alerts. Go to Settings > Notifications > Dormic.');
+    });
+  }
+};
+</script>
+</body>
+</html>
