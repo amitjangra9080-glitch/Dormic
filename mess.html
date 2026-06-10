@@ -32,9 +32,16 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .meal-name{font-size:15px;font-weight:500;color:#262626;}
 .meal-time{font-size:13px;color:#aaa;margin-left:auto;}
 .meal-items{font-size:15px;color:#555;line-height:1.55;padding-left:42px;}
-.stars{display:flex;gap:5px;padding-left:42px;margin-top:8px;}
-.star{font-size:22px;color:#e0e0e0;cursor:pointer;}
+.stars{display:flex;gap:5px;padding-left:42px;margin-top:10px;}
+.star{font-size:24px;color:#e0e0e0;cursor:pointer;transition:color 0.1s;}
 .star.on{color:#F97316;}
+.rating-note{font-size:12px;color:#aaa;padding-left:42px;margin-top:5px;font-style:italic;}
+.complaint-box{margin:10px 14px 0 42px;display:flex;flex-direction:column;gap:8px;}
+.c-select{width:100%;border:0.5px solid #e5e5e5;border-radius:9px;background:#f9f9f9;font-size:14px;color:#262626;padding:10px 12px;outline:none;font-family:inherit;appearance:none;}
+.c-text{width:100%;border:0.5px solid #e5e5e5;border-radius:9px;background:#f9f9f9;font-size:14px;color:#262626;padding:10px 12px;outline:none;font-family:inherit;resize:none;}
+.submit-rating-btn{margin:10px 14px 4px 42px;height:40px;background:linear-gradient(90deg,#6C3BE8,#E8398A);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.submit-rating-btn:disabled{background:#e0e0e0;color:#aaa;}
+.submitted-badge{display:flex;align-items:center;gap:6px;font-size:13px;color:#3b6d11;background:#eaf3de;padding:8px 14px 8px 42px;margin-top:8px;}
 /* TRACKER */
 .cal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;background:#fff;}
 .cal-month{font-size:16px;font-weight:500;color:#262626;}
@@ -139,7 +146,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
@@ -326,22 +333,89 @@ const mealData=[
   {key:'D',name:'Dinner',time:'8:00 – 9:00 PM',color:'#6C3BE8',icon:'ti-moon',rk:'d'}
 ];
 const ratings={b:0,l:0,d:0};
+const submitted={b:false,l:false,d:false};
+
+function getMenuItems(mealKey){
+  const m=menu[activeDay];
+  // Split menu items by comma for dropdown
+  const items = m[mealKey].split(',').map(i=>i.trim());
+  items.push('Milk / Tea','Other');
+  return items;
+}
 
 function renderMenu(){
   const m=menu[activeDay];
+  const isToday=activeDay===todayKey;
   document.getElementById('meals-content').innerHTML=mealData.map(meal=>`
-    <div class="meal">
+    <div class="meal" id="meal-wrap-${meal.rk}">
       <div class="meal-head">
         <span class="meal-ic" style="background:${meal.color};"><i class="ti ${meal.icon}"></i></span>
         <span class="meal-name">${meal.name}</span>
         <span class="meal-time">${meal.time}</span>
       </div>
       <div class="meal-items">${m[meal.key]}</div>
-      ${activeDay===todayKey?`<div class="stars" id="stars-${meal.rk}">${[1,2,3,4,5].map(n=>`<span class="star${ratings[meal.rk]>=n?' on':''}" onclick="rate('${meal.rk}',${n})">★</span>`).join('')}</div>`:''}
+      ${isToday ? `
+        <div class="rating-section" id="rating-${meal.rk}">
+          <div class="stars" id="stars-${meal.rk}">
+            ${[1,2,3,4,5].map(n=>`<span class="star" onclick="rate('${meal.rk}',${n})">★</span>`).join('')}
+          </div>
+          <div class="rating-note"><i class="ti ti-lock" style="font-size:12px;"></i> Your ratings are anonymous — only the mess president sees a weekly summary, never your name</div>
+          <div class="complaint-box" id="complaint-${meal.rk}" style="display:none;">
+            <select class="c-select" id="item-${meal.rk}">
+              <option value="">Which item had an issue? (optional)</option>
+              ${getMenuItems(meal.key).map(i=>`<option value="${i}">${i}</option>`).join('')}
+            </select>
+            <select class="c-select" id="issue-${meal.rk}">
+              <option value="">What was wrong? (optional)</option>
+              <option>Quantity was less</option>
+              <option>Quality was poor</option>
+              <option>Was cold / not fresh</option>
+              <option>Item was missing from menu</option>
+              <option>Other</option>
+            </select>
+            <textarea class="c-text" id="note-${meal.rk}" placeholder="Any other feedback... (optional)" rows="2"></textarea>
+          </div>
+          <button class="submit-rating-btn" id="submit-rating-${meal.rk}" onclick="submitRating('${meal.rk}')" style="display:none;">Submit rating</button>
+        </div>
+        <div class="submitted-badge" id="done-${meal.rk}" style="display:none;"><i class="ti ti-check"></i> Feedback submitted — thank you</div>
+      ` : ''}
     </div>`).join('');
 }
 
-window.rate=function(meal,n){ratings[meal]=n;document.querySelectorAll(`#stars-${meal} .star`).forEach((s,i)=>s.classList.toggle('on',i<n));};
+window.rate=function(meal,n){
+  if(submitted[meal])return;
+  ratings[meal]=n;
+  document.querySelectorAll(`#stars-${meal} .star`).forEach((s,i)=>s.classList.toggle('on',i<n));
+  // Show complaint box and submit button after rating
+  document.getElementById(`complaint-${meal}`).style.display='block';
+  document.getElementById(`submit-rating-${meal}`).style.display='block';
+};
+
+window.submitRating=async function(meal){
+  if(submitted[meal])return;
+  const n=ratings[meal];
+  if(n===0){alert('Please select a star rating first.');return;}
+  const item=document.getElementById(`item-${meal}`)?.value||'';
+  const issue=document.getElementById(`issue-${meal}`)?.value||'';
+  const note=document.getElementById(`note-${meal}`)?.value||'';
+  const btn=document.getElementById(`submit-rating-${meal}`);
+  btn.disabled=true;btn.textContent='Submitting...';
+  try {
+    await addDoc(collection(db,'ratings'),{
+      meal,date:todayStr,day:activeDay,
+      rating:n,item,issue,note,
+      hostel:'Ajanta Hostel No. 3',
+      createdAt:serverTimestamp()
+    });
+    submitted[meal]=true;
+    document.getElementById(`rating-${meal}`).style.display='none';
+    const done=document.getElementById(`done-${meal}`);
+    done.style.display='flex';
+  } catch(e){
+    btn.disabled=false;btn.textContent='Submit rating';
+    alert('Error submitting: '+e.message);
+  }
+};
 
 renderMenu();
 
