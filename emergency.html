@@ -132,11 +132,12 @@ async function loadDonors(bg) {
     const grads = ['linear-gradient(135deg,#6C3BE8,#E8398A)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#4c9c5e,#6C3BE8)'];
     el.innerHTML = snap.docs.map((d,i) => {
       const u = d.data();
+      const isOwn = currentUser && d.id === currentUser.uid;
       return `<div class="donor">
         <div class="av" style="background:${grads[i%3]}">${(u.name||'?')[0].toUpperCase()}</div>
         <div><div class="dn">${u.name}</div><div class="ds">Room ${u.roomNo} · ${u.degree}</div></div>
         <span class="dtag">${u.bloodGroup}</span>
-        <a href="https://wa.me/91${u.phone}" target="_blank" class="wa-ic"><i class="ti ti-brand-whatsapp"></i></a>
+        ${isOwn ? '' : `<a href="https://wa.me/91${u.phone}" target="_blank" class="wa-ic"><i class="ti ti-brand-whatsapp"></i></a>`}
       </div>`;
     }).join('');
   } catch(e) {

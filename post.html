@@ -3,46 +3,48 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>New Post — Dormic</title>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon.png"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="Dormic"/>
-<title>New Post — Dormic</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:40px;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:40px;font-size:16px;}
 .top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;}
 .back-btn{font-size:22px;color:#262626;text-decoration:none;}
 .top-title{font-size:15px;font-weight:500;color:#262626;}
-.share-btn{font-size:14px;font-weight:600;background:linear-gradient(90deg,#6C3BE8,#E8398A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;cursor:pointer;border:none;background-color:transparent;}
 .main{max-width:500px;margin:0 auto;padding:16px 16px 32px;}
-.lab{font-size:11px;color:#8e8e8e;margin:0 0 6px 2px;display:block;text-transform:uppercase;letter-spacing:0.3px;}
-.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;}
-.chip{font-size:14px;padding:8px 15px;border-radius:20px;background:#fff;border:0.5px solid #e0e0e0;color:#262626;cursor:pointer;font-weight:500;transition:all 0.15s;}
-.chip.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;}
+.lab{font-size:13px;color:#8e8e8e;margin:0 0 6px 2px;display:block;text-transform:uppercase;letter-spacing:0.3px;font-weight:500;}
+/* GROUP CHIPS */
+.group-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.group-chip{font-size:14px;padding:8px 16px;border-radius:20px;background:#fff;border:0.5px solid #e0e0e0;color:#262626;cursor:pointer;font-weight:500;transition:all 0.15s;}
+.group-chip.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;}
+/* SUB CHIPS */
+.sub-chips{display:flex;gap:8px;margin-bottom:10px;}
+.sub-chip{font-size:14px;padding:7px 16px;border-radius:20px;background:#f7f7f7;border:0.5px solid #e0e0e0;color:#666;cursor:pointer;font-weight:500;}
+.sub-chip.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;}
+/* DESCRIPTION */
+.cat-desc{font-size:13px;color:#6C3BE8;background:#ede9fe;border-radius:10px;padding:10px 13px;margin-bottom:16px;line-height:1.5;display:none;}
+.cat-desc.show{display:block;}
 .inp{width:100%;border:0.5px solid #e5e5e5;border-radius:10px;background:#fff;font-size:15px;color:#262626;padding:12px 14px;margin-bottom:14px;outline:none;font-family:inherit;}
 .inp:focus{border-color:#6C3BE8;}
 .inp::placeholder{color:#bbb;}
-select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;background-color:#fff;}
+.inp.error{border-color:#e53935 !important;}
+select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-color:#fff;}
 textarea.inp{min-height:80px;resize:none;}
 .row{display:flex;gap:10px;}
-.row > div{flex:1;}
+.row>div{flex:1;}
 .photo-box{border:1.5px dashed #e0e0e0;border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:14px;background:#fff;}
 .photo-box-icon{font-size:28px;color:#ccc;margin-bottom:6px;}
-.photo-box-txt{font-size:13px;color:#aaa;}
-.photo-box-opt{font-size:11px;color:#ccc;}
-#photo-input{display:none;}
-#photo-preview{width:100%;border-radius:10px;margin-top:10px;max-height:200px;object-fit:cover;display:none;}
-.btn{width:100%;height:46px;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;}
+.photo-box-txt{font-size:14px;color:#aaa;}
+.photo-box-opt{font-size:12px;color:#ccc;}
+.btn{width:100%;height:48px;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
 .btn:disabled{background:#e5e5e5;color:#aaa;cursor:not-allowed;}
-.msg{padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
+.msg{padding:11px 14px;border-radius:10px;font-size:14px;margin-bottom:14px;display:none;}
 .msg.error{background:#fee2e2;color:#a32d2d;display:block;}
-.msg.success{background:#eaf3de;color:#3b6d11;display:block;}
-.section-div{font-size:11px;color:#6C3BE8;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin:20px 0 12px;padding-bottom:6px;border-bottom:0.5px solid #ede9fe;}
-.room-group{display:none;}
-#travel-fields{display:none;}
-#standard-fields{display:block;}
+.section-div{font-size:11px;color:#6C3BE8;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin:16px 0 12px;padding-bottom:6px;border-bottom:0.5px solid #ede9fe;}
 </style>
 </head>
 <body>
@@ -55,33 +57,21 @@ textarea.inp{min-height:80px;resize:none;}
   <div class="msg" id="post-msg"></div>
 
   <label class="lab">Category</label>
-  <div class="chips" id="category-chips">
-    <span class="chip on" data-cat="lost">Lost</span>
-    <span class="chip" data-cat="found">Found</span>
-    <span class="chip" data-cat="have">Have</span>
-    <span class="chip" data-cat="need">Need</span>
-    <span class="chip" data-cat="sell">Sell</span>
-    <span class="chip" data-cat="buy">Buy</span>
-    <span class="chip" data-cat="travel">Travel</span>
+  <div class="group-chips">
+    <span class="group-chip" data-group="lost-found" onclick="selectGroup(this)">Lost / Found</span>
+    <span class="group-chip" data-group="sell-buy" onclick="selectGroup(this)">Sell / Buy</span>
+    <span class="group-chip" data-group="donate-need" onclick="selectGroup(this)">Donate / Need</span>
+    <span class="group-chip" data-group="travel" onclick="selectGroup(this)">Travel</span>
   </div>
+  <div class="sub-chips" id="sub-chips" style="display:none;"></div>
+  <div class="cat-desc" id="cat-desc"></div>
 
   <!-- STANDARD FIELDS -->
-  <div id="standard-fields">
+  <div id="standard-fields" style="display:none;">
     <div class="section-div">Item details</div>
     <label class="lab">Item type</label>
     <select class="inp" id="item-type">
       <option value="">Select type</option>
-      <option>Charger / Cable</option>
-      <option>Phone / Device</option>
-      <option>ID Card / Documents</option>
-      <option>Books / Notes</option>
-      <option>Clothing / Accessories</option>
-      <option>Electronics</option>
-      <option>Cycle / Scooty</option>
-      <option>Furniture / Room Items</option>
-      <option>Keys</option>
-      <option>Wallet / Money</option>
-      <option>Other</option>
     </select>
     <label class="lab">Item name</label>
     <input class="inp" id="item-name" type="text" placeholder="Describe the item briefly"/>
@@ -91,7 +81,7 @@ textarea.inp{min-height:80px;resize:none;}
       <div class="photo-box-icon"><i class="ti ti-camera"></i></div>
       <div class="photo-box-txt">Add a photo <span class="photo-box-opt">— optional</span></div>
     </div>
-    <input type="file" id="photo-input" accept="image/*" onchange="previewPhoto(this)"/>
+    <input type="file" id="photo-input" accept="image/*" onchange="previewPhoto(this)" style="display:none;"/>
     <div id="photo-preview-wrap" style="display:none;position:relative;margin-bottom:14px;">
       <img id="photo-preview" alt="preview" style="width:100%;border-radius:10px;max-height:200px;object-fit:cover;display:block;"/>
       <button onclick="removePhoto()" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);border:none;border-radius:20px;color:#fff;font-size:13px;padding:5px 12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;"><i class="ti ti-x"></i> Remove</button>
@@ -101,20 +91,20 @@ textarea.inp{min-height:80px;resize:none;}
       <label class="lab">Where was it lost / found?</label>
       <select class="inp" id="location" onchange="handleLocation()">
         <option value="">Select location</option>
-        <option value="Ground Floor — Gallery / Corridor">Ground Floor — Gallery / Corridor</option>
-        <option value="Ground Floor — Near Room No.">Ground Floor — Near Room No.</option>
-        <option value="First Floor — Gallery / Corridor">First Floor — Gallery / Corridor</option>
-        <option value="First Floor — Near Room No.">First Floor — Near Room No.</option>
-        <option value="Second Floor — Gallery / Corridor">Second Floor — Gallery / Corridor</option>
-        <option value="Second Floor — Near Room No.">Second Floor — Near Room No.</option>
-        <option value="From My Room">From My Room</option>
-        <option value="Mess Area">Mess Area</option>
-        <option value="Parking Area">Parking Area</option>
-        <option value="Main Gate">Main Gate</option>
-        <option value="Common Room">Common Room</option>
-        <option value="Other">Other</option>
+        <option>Ground Floor — Gallery / Corridor</option>
+        <option>Ground Floor — Near Room No.</option>
+        <option>First Floor — Gallery / Corridor</option>
+        <option>First Floor — Near Room No.</option>
+        <option>Second Floor — Gallery / Corridor</option>
+        <option>Second Floor — Near Room No.</option>
+        <option>From My Room</option>
+        <option>Mess Area</option>
+        <option>Parking Area</option>
+        <option>Main Gate</option>
+        <option>Common Room</option>
+        <option>Other</option>
       </select>
-      <div class="room-group" id="room-group">
+      <div id="room-group" style="display:none;">
         <label class="lab">Room number</label>
         <input class="inp" id="room-no" type="text" placeholder="e.g. 112"/>
       </div>
@@ -122,12 +112,11 @@ textarea.inp{min-height:80px;resize:none;}
   </div>
 
   <!-- TRAVEL FIELDS -->
-  <div id="travel-fields">
+  <div id="travel-fields" style="display:none;">
     <div class="section-div">Travel details</div>
-    <label class="lab">I am</label>
-    <div class="chips" id="travel-type-chips">
-      <span class="chip on" data-tt="going">Going somewhere</span>
-      <span class="chip" data-tt="need">Need someone going</span>
+    <div class="sub-chips" id="travel-type-chips">
+      <span class="sub-chip on" data-tt="going" onclick="selTT(this)">Going on this route</span>
+      <span class="sub-chip" data-tt="need" onclick="selTT(this)">Need someone on this route</span>
     </div>
     <div class="row">
       <div>
@@ -172,17 +161,11 @@ textarea.inp{min-height:80px;resize:none;}
         </div>
       </div>
     </div>
-    <label class="lab">Purpose</label>
-    <div class="chips" id="purpose-chips">
-      <span class="chip on" data-purpose="seat">Seat available</span>
-      <span class="chip" data-purpose="document">Document handover</span>
-      <span class="chip" data-purpose="parcel">Parcel</span>
-    </div>
     <label class="lab">Details</label>
-    <textarea class="inp" id="travel-desc" placeholder="Any extra info..."></textarea>
+    <textarea class="inp" id="travel-desc" placeholder="Any extra info — seats, documents, parcels..."></textarea>
   </div>
 
-  <button class="btn" id="submit-btn" onclick="submitPost()">Post</button>
+  <button class="btn" id="submit-btn" onclick="submitPost()" style="display:none;">Post</button>
 </div>
 
 <script type="module">
@@ -195,9 +178,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 let currentUser = null;
-let currentCat = 'lost';
+let currentCat = null;
 let currentTT = 'going';
-let currentPurpose = 'seat';
 let photoBase64 = null;
 
 onAuthStateChanged(auth, user => {
@@ -205,38 +187,99 @@ onAuthStateChanged(auth, user => {
   else currentUser = user;
 });
 
-// Category chips
-document.getElementById('category-chips').addEventListener('click', e => {
-  const chip = e.target.closest('.chip');
-  if(!chip) return;
-  document.querySelectorAll('#category-chips .chip').forEach(c => c.classList.remove('on'));
-  chip.classList.add('on');
-  currentCat = chip.dataset.cat;
-  document.getElementById('travel-fields').style.display = currentCat === 'travel' ? 'block' : 'none';
-  document.getElementById('standard-fields').style.display = currentCat === 'travel' ? 'none' : 'block';
-  // Hide location for have/need/sell/buy
-  const noLocation = ['have','need','sell','buy'];
-  const locSection = document.getElementById('location-section');
-  if(locSection) locSection.style.display = noLocation.includes(currentCat) ? 'none' : 'block';
-  if(currentCat === 'travel') setMinDateTime();
-});
+const catDescriptions = {
+  lost: 'Lost something? Drop it here before it becomes hostel folklore.',
+  found: 'Found something? Be the hero, not the mystery holder.',
+  buy: 'Need something? Find it from your hostel mates before Amazon arrives.',
+  sell: 'Turn your extra stuff into extra cash. Hostel economy starts here.',
+  donate: 'Have something useful but don\'t need it? Pass it on, good karma included.',
+  need: 'Need help, notes, charger, bucket, or backup? Ask the hostel squad.',
+  travel: 'Sending documents? Going the same way? Match, carry, travel, done.'
+};
 
-// Travel type chips
-document.getElementById('travel-type-chips').addEventListener('click', e => {
-  const chip = e.target.closest('.chip');
-  if(!chip) return;
-  document.querySelectorAll('#travel-type-chips .chip').forEach(c => c.classList.remove('on'));
-  chip.classList.add('on');
-  currentTT = chip.dataset.tt;
-});
+const itemTypes = {
+  'lost-found': ['Charger / Cable','Phone / Device','ID Card / Documents','Books / Notes','Clothing / Accessories','Electronics','Cycle / Scooty','Furniture / Room Items','Keys','Wallet / Money','Other'],
+  'sell-buy': ['Charger / Cable','Phone / Device','Books / Notes','Electronics','Cycle / Scooty','Cooler','Water Pipe','Subscription','Other'],
+  'donate-need': ['Charger / Cable','Phone / Device','Books / Notes','Clothing / Accessories','Electronics','Cycle / Scooty','Cooler','Pipe','Mattress','Subscription','Other']
+};
+
+const subOptions = {
+  'lost-found': [{val:'lost',label:'Lost'},{val:'found',label:'Found'}],
+  'sell-buy': [{val:'sell',label:'Sell'},{val:'buy',label:'Buy'}],
+  'donate-need': [{val:'donate',label:'Donate'},{val:'need',label:'Need'}]
+};
+
+window.selectGroup = function(el){
+  document.querySelectorAll('.group-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  const group = el.dataset.group;
+
+  // Sub chips
+  const subWrap = document.getElementById('sub-chips');
+  if(group === 'travel'){
+    subWrap.style.display = 'none';
+    document.getElementById('travel-fields').style.display = 'block';
+    document.getElementById('standard-fields').style.display = 'none';
+    currentCat = 'travel';
+    showDesc('travel');
+    setMinDateTime();
+  } else {
+    const opts = subOptions[group];
+    subWrap.innerHTML = opts.map((o,i)=>`<span class="sub-chip${i===0?' on':''}" data-cat="${o.val}" onclick="selectSub(this)">${o.label}</span>`).join('');
+    subWrap.style.display = 'flex';
+    document.getElementById('travel-fields').style.display = 'none';
+    document.getElementById('standard-fields').style.display = 'block';
+    currentCat = opts[0].val;
+    showDesc(currentCat);
+    // Update item type dropdown
+    updateItemTypes(group);
+    // Show/hide location
+    const noLoc = ['sell','buy','donate','need'];
+    document.getElementById('location-section').style.display = noLoc.includes(currentCat) ? 'none' : 'block';
+  }
+  document.getElementById('submit-btn').style.display = 'block';
+  // Remove error borders
+  document.querySelectorAll('.inp.error').forEach(el=>el.classList.remove('error'));
+};
+
+window.selectSub = function(el){
+  document.querySelectorAll('#sub-chips .sub-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  currentCat = el.dataset.cat;
+  showDesc(currentCat);
+  const noLoc = ['sell','buy','donate','need'];
+  document.getElementById('location-section').style.display = noLoc.includes(currentCat) ? 'none' : 'block';
+};
+
+function showDesc(cat){
+  const desc = document.getElementById('cat-desc');
+  desc.textContent = catDescriptions[cat] || '';
+  desc.className = 'cat-desc' + (catDescriptions[cat] ? ' show' : '');
+}
+
+function updateItemTypes(group){
+  const sel = document.getElementById('item-type');
+  const items = itemTypes[group] || itemTypes['lost-found'];
+  sel.innerHTML = '<option value="">Select type</option>' + items.map(i=>`<option>${i}</option>`).join('');
+}
+
+window.selTT = function(el){
+  document.querySelectorAll('#travel-type-chips .sub-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  currentTT = el.dataset.tt;
+};
+
+window.handleLocation = function(){
+  const val = document.getElementById('location').value;
+  const needsRoom = val.includes('Near Room No.') || val === 'From My Room';
+  document.getElementById('room-group').style.display = needsRoom ? 'block' : 'none';
+};
 
 function setMinDateTime(){
   const now = new Date();
-  // Min date = today
   const todayStr = now.toISOString().split('T')[0];
   const dateInput = document.getElementById('travel-date');
   dateInput.min = todayStr;
-  // If no date selected yet, default to today
   if(!dateInput.value) dateInput.value = todayStr;
   updateMinTime();
 }
@@ -249,48 +292,28 @@ window.updateMinTime = function(){
   const minSel = document.getElementById('travel-min');
   const currentHour = now.getHours();
   const currentMin = now.getMinutes();
-
   if(dateInput.value === todayStr){
-    // Disable past hours
-    Array.from(hourSel.options).forEach(opt => {
-      if(opt.value === '') return;
+    Array.from(hourSel.options).forEach(opt=>{
+      if(opt.value==='')return;
       opt.disabled = parseInt(opt.value) < currentHour;
     });
-    // If selected hour is in the past, reset
-    if(hourSel.value && parseInt(hourSel.value) < currentHour){
-      hourSel.value = ''; minSel.value = '';
-    }
-    // If selected hour equals current hour, disable past minutes
+    if(hourSel.value && parseInt(hourSel.value) < currentHour){hourSel.value='';minSel.value='';}
     if(hourSel.value && parseInt(hourSel.value) === currentHour){
-      Array.from(minSel.options).forEach(opt => {
-        if(opt.value === '') return;
+      Array.from(minSel.options).forEach(opt=>{
+        if(opt.value==='')return;
         opt.disabled = parseInt(opt.value) < currentMin;
       });
-      if(minSel.value && parseInt(minSel.value) < currentMin) minSel.value = '';
+      if(minSel.value && parseInt(minSel.value) < currentMin) minSel.value='';
     } else {
-      Array.from(minSel.options).forEach(opt => opt.disabled = false);
+      Array.from(minSel.options).forEach(opt=>opt.disabled=false);
     }
   } else {
-    // Future date — enable all
-    Array.from(hourSel.options).forEach(opt => opt.disabled = false);
-    Array.from(minSel.options).forEach(opt => opt.disabled = false);
+    Array.from(hourSel.options).forEach(opt=>opt.disabled=false);
+    Array.from(minSel.options).forEach(opt=>opt.disabled=false);
   }
 };
 
-// Purpose chips (multi-select)
-document.getElementById('purpose-chips').addEventListener('click', e => {
-  const chip = e.target.closest('.chip');
-  if(!chip) return;
-  chip.classList.toggle('on');
-});
-
-window.handleLocation = function() {
-  const val = document.getElementById('location').value;
-  const needsRoom = val.includes('Near Room No.') || val === 'From My Room';
-  document.getElementById('room-group').style.display = needsRoom ? 'block' : 'none';
-};
-
-window.previewPhoto = function(input) {
+window.previewPhoto = function(input){
   const file = input.files[0];
   if(!file) return;
   const reader = new FileReader();
@@ -299,12 +322,12 @@ window.previewPhoto = function(input) {
     img.onload = () => {
       const canvas = document.createElement('canvas');
       const max = 800;
-      let w = img.width, h = img.height;
-      if(w > max) { h = h * max / w; w = max; }
-      if(h > max) { w = w * max / h; h = max; }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      photoBase64 = canvas.toDataURL('image/jpeg', 0.7);
+      let w=img.width,h=img.height;
+      if(w>max){h=h*max/w;w=max;}
+      if(h>max){w=w*max/h;h=max;}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      photoBase64 = canvas.toDataURL('image/jpeg',0.7);
       document.getElementById('photo-preview').src = photoBase64;
       document.getElementById('photo-preview-wrap').style.display = 'block';
       document.getElementById('photo-box').style.display = 'none';
@@ -314,24 +337,33 @@ window.previewPhoto = function(input) {
   reader.readAsDataURL(file);
 };
 
-window.removePhoto = function() {
-  photoBase64 = null;
-  document.getElementById('photo-preview').src = '';
-  document.getElementById('photo-preview-wrap').style.display = 'none';
-  document.getElementById('photo-box').style.display = 'block';
-  document.getElementById('photo-input').value = '';
+window.removePhoto = function(){
+  photoBase64=null;
+  document.getElementById('photo-preview').src='';
+  document.getElementById('photo-preview-wrap').style.display='none';
+  document.getElementById('photo-box').style.display='block';
+  document.getElementById('photo-input').value='';
 };
 
-window.submitPost = async function() {
+function markError(id){
+  const el = document.getElementById(id);
+  if(el) el.classList.add('error');
+}
+function clearErrors(){
+  document.querySelectorAll('.inp.error').forEach(el=>el.classList.remove('error'));
+}
+
+window.submitPost = async function(){
   const msg = document.getElementById('post-msg');
-  msg.className = 'msg';
   const btn = document.getElementById('submit-btn');
+  msg.className='msg';
+  clearErrors();
 
   try {
-    const userDoc = await getDoc(doc(db,'users', currentUser.uid));
+    const userDoc = await getDoc(doc(db,'users',currentUser.uid));
     const u = userDoc.data();
 
-    if(currentCat === 'travel') {
+    if(currentCat === 'travel'){
       const from = document.getElementById('travel-from').value.trim();
       const to = document.getElementById('travel-to').value.trim();
       const date = document.getElementById('travel-date').value;
@@ -339,43 +371,52 @@ window.submitPost = async function() {
       const min = document.getElementById('travel-min').value;
       const time = (hour && min) ? `${hour}:${min}` : '';
       const desc = document.getElementById('travel-desc').value.trim();
-      const purposes = Array.from(document.querySelectorAll('#purpose-chips .chip.on')).map(c => c.dataset.purpose);
-      if(!from || !to || !date) { msg.className = 'msg error'; msg.textContent = 'Please fill From, To, and Date.'; return; }
-      btn.disabled = true; btn.textContent = 'Posting...';
-      await addDoc(collection(db,'posts'), {
-        type: 'travel', travelType: currentTT,
-        from, to, travelDate: date, travelTime: time,
-        purposes, itemDesc: desc,
-        posterName: u.name, posterPhone: u.phone,
-        posterRoom: u.roomNo, posterUid: currentUser.uid,
-        posterAvatarId: u.avatarId || 1,
-        status: 'active', hostel: 'Ajanta Hostel No. 3',
-        createdAt: serverTimestamp()
+      let hasError = false;
+      if(!from){markError('travel-from');hasError=true;}
+      if(!to){markError('travel-to');hasError=true;}
+      if(!date){markError('travel-date');hasError=true;}
+      if(hasError){msg.className='msg error';msg.textContent='Please fill the highlighted fields.';return;}
+      btn.disabled=true;btn.textContent='Posting...';
+      await addDoc(collection(db,'posts'),{
+        type:'travel',travelType:currentTT,
+        from,to,travelDate:date,travelTime:time,
+        itemDesc:desc,
+        posterName:u.name,posterPhone:u.phone,
+        posterRoom:u.roomNo,posterUid:currentUser.uid,
+        posterAvatarId:u.avatarId||1,
+        status:'active',hostel:'Ajanta Hostel No. 3',
+        createdAt:serverTimestamp()
       });
     } else {
       const itemType = document.getElementById('item-type').value;
       const itemName = document.getElementById('item-name').value.trim();
       const itemDesc = document.getElementById('item-desc').value.trim();
-      const location = document.getElementById('location').value;
-      const roomNo = document.getElementById('room-no').value.trim();
-      if(!itemName || !itemDesc || !location) { msg.className = 'msg error'; msg.textContent = 'Please fill item name, description, and location.'; return; }
-      btn.disabled = true; btn.textContent = 'Posting...';
-      await addDoc(collection(db,'posts'), {
-        type: currentCat, itemType, itemName,
-        description: itemDesc, location,
-        roomNo: roomNo || null,
-        imageUrl: photoBase64 || null,
-        posterName: u.name, posterPhone: u.phone,
-        posterAdmission: u.admissionNo, posterUid: currentUser.uid,
-        posterAvatarId: u.avatarId || 1,
-        status: currentCat, hostel: 'Ajanta Hostel No. 3',
-        createdAt: serverTimestamp()
+      const noLoc = ['sell','buy','donate','need'];
+      const location = noLoc.includes(currentCat) ? '' : document.getElementById('location').value;
+      let hasError = false;
+      if(!itemName){markError('item-name');hasError=true;}
+      if(!itemDesc){markError('item-desc');hasError=true;}
+      if(!noLoc.includes(currentCat) && !location){markError('location');hasError=true;}
+      if(hasError){msg.className='msg error';msg.textContent='Please fill the highlighted fields.';return;}
+      btn.disabled=true;btn.textContent='Posting...';
+      const roomNo = document.getElementById('room-no')?.value.trim()||null;
+      await addDoc(collection(db,'posts'),{
+        type:currentCat,itemType:itemType||'',itemName,
+        description:itemDesc,
+        location:location||'',
+        roomNo,
+        imageUrl:photoBase64||null,
+        posterName:u.name,posterPhone:u.phone,
+        posterAdmission:u.admissionNo,posterUid:currentUser.uid,
+        posterAvatarId:u.avatarId||1,
+        status:currentCat,hostel:'Ajanta Hostel No. 3',
+        createdAt:serverTimestamp()
       });
     }
-    window.location.href = 'index.html';
-  } catch(e) {
-    msg.className = "msg error"; msg.textContent = "Error posting: " + e.message; console.error(e);
-    btn.disabled = false; btn.textContent = 'Post';
+    window.location.href='index.html';
+  }catch(e){
+    msg.className='msg error';msg.textContent='Error: '+e.message;
+    btn.disabled=false;btn.textContent='Post';
   }
 };
 </script>
