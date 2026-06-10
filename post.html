@@ -147,7 +147,7 @@ textarea.inp{min-height:80px;resize:none;}
       <div>
         <label class="lab">Approx. time (24-hr)</label>
         <div style="display:flex;gap:6px;">
-          <select class="inp" id="travel-hour" style="flex:1;margin-bottom:0;">
+          <select class="inp" id="travel-hour" onchange="updateMinTime()" style="flex:1;margin-bottom:0;">
             <option value="">HH</option>
             <option value="00">00</option><option value="01">01</option>
             <option value="02">02</option><option value="03">03</option>
@@ -245,16 +245,35 @@ window.updateMinTime = function(){
   const now = new Date();
   const todayStr = now.toISOString().split('T')[0];
   const dateInput = document.getElementById('travel-date');
-  const timeInput = document.getElementById('travel-time');
+  const hourSel = document.getElementById('travel-hour');
+  const minSel = document.getElementById('travel-min');
+  const currentHour = now.getHours();
+  const currentMin = now.getMinutes();
+
   if(dateInput.value === todayStr){
-    // Only restrict time if date is today
-    const hh = String(now.getHours()).padStart(2,'0');
-    const mm = String(now.getMinutes()).padStart(2,'0');
-    // Clear hour if it's in the past
-    const hourSel = document.getElementById('travel-hour');
-    if(hourSel && hourSel.value && hourSel.value < hh) hourSel.value = '';
+    // Disable past hours
+    Array.from(hourSel.options).forEach(opt => {
+      if(opt.value === '') return;
+      opt.disabled = parseInt(opt.value) < currentHour;
+    });
+    // If selected hour is in the past, reset
+    if(hourSel.value && parseInt(hourSel.value) < currentHour){
+      hourSel.value = ''; minSel.value = '';
+    }
+    // If selected hour equals current hour, disable past minutes
+    if(hourSel.value && parseInt(hourSel.value) === currentHour){
+      Array.from(minSel.options).forEach(opt => {
+        if(opt.value === '') return;
+        opt.disabled = parseInt(opt.value) < currentMin;
+      });
+      if(minSel.value && parseInt(minSel.value) < currentMin) minSel.value = '';
+    } else {
+      Array.from(minSel.options).forEach(opt => opt.disabled = false);
+    }
   } else {
-    // Future date — no time restriction
+    // Future date — enable all
+    Array.from(hourSel.options).forEach(opt => opt.disabled = false);
+    Array.from(minSel.options).forEach(opt => opt.disabled = false);
   }
 };
 
