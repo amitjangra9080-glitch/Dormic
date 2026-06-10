@@ -133,7 +133,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc, collection, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
@@ -189,9 +189,10 @@ function renderProfile(){
 
 function loadPosts(){
   try {
-    const q = query(collection(db,'posts'),where('posterUid','==',currentUser.uid),orderBy('createdAt','desc'));
+    const q = query(collection(db,'posts'),where('posterUid','==',currentUser.uid));
     onSnapshot(q,snap=>{
-      const posts = snap.docs.map(d=>({id:d.id,...d.data()}));
+      const posts = snap.docs.map(d=>({id:d.id,...d.data()}))
+        .sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
       const el = document.getElementById('posts-list');
       if(!el)return;
       if(!posts.length){el.innerHTML='<div class="empty">No posts yet</div>';return;}

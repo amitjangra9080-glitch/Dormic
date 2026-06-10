@@ -176,12 +176,20 @@ function buildCard(p, isResolved) {
 
   let statusBtn = '';
   if(isOwner && !isResolved) {
-    const labels = {found:'Mark as claimed',sell:'Mark as sold',have:'Mark as done',travel:'Mark as full'};
+    const labels = {
+      lost:'Mark as found',
+      found:'Mark as claimed',
+      sell:'Mark as sold',
+      buy:'Mark as got it',
+      have:'Mark as done',
+      need:'Mark as fulfilled',
+      travel:'Mark as full'
+    };
     const label = labels[p.type];
     if(label) statusBtn = `<button class="status-btn" onclick="resolvePost('${p.id}')">${label}</button>`;
   } else if(isResolved) {
-    const doneLabels = {found:'Claimed',sell:'Sold',have:'Done',travel:'Full',lost:'Resolved',need:'Done',buy:'Done'};
-    statusBtn = `<span style="font-size:12px;color:#9ca3af;display:flex;align-items:center;gap:4px;"><i class="ti ti-check"></i> ${doneLabels[p.type]||'Resolved'}</span>`;
+    const doneLabels = {found:'Claimed',sell:'Sold',have:'Done',travel:'Full',lost:'Found',need:'Fulfilled',buy:'Got it'};
+    statusBtn = `<span style="font-size:13px;color:#9ca3af;display:flex;align-items:center;gap:4px;"><i class="ti ti-check"></i> ${doneLabels[p.type]||'Resolved'}</span>`;
   }
 
   if(p.type === 'travel') {
