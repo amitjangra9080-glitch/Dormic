@@ -19,9 +19,9 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .main{max-width:500px;margin:0 auto;padding:16px 16px 32px;}
 .lab{font-size:11px;color:#8e8e8e;margin:0 0 6px 2px;display:block;text-transform:uppercase;letter-spacing:0.3px;}
 .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;}
-.chip{font-size:12px;padding:7px 14px;border-radius:20px;background:#fff;border:0.5px solid #e0e0e0;color:#262626;cursor:pointer;font-weight:500;transition:all 0.15s;}
+.chip{font-size:14px;padding:8px 15px;border-radius:20px;background:#fff;border:0.5px solid #e0e0e0;color:#262626;cursor:pointer;font-weight:500;transition:all 0.15s;}
 .chip.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;}
-.inp{width:100%;border:0.5px solid #e5e5e5;border-radius:10px;background:#fff;font-size:14px;color:#262626;padding:11px 13px;margin-bottom:14px;outline:none;font-family:inherit;}
+.inp{width:100%;border:0.5px solid #e5e5e5;border-radius:10px;background:#fff;font-size:15px;color:#262626;padding:12px 14px;margin-bottom:14px;outline:none;font-family:inherit;}
 .inp:focus{border-color:#6C3BE8;}
 .inp::placeholder{color:#bbb;}
 select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;background-color:#fff;}
@@ -34,7 +34,7 @@ textarea.inp{min-height:80px;resize:none;}
 .photo-box-opt{font-size:11px;color:#ccc;}
 #photo-input{display:none;}
 #photo-preview{width:100%;border-radius:10px;margin-top:10px;max-height:200px;object-fit:cover;display:none;}
-.btn{width:100%;height:46px;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn{width:100%;height:46px;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;}
 .btn:disabled{background:#e5e5e5;color:#aaa;cursor:not-allowed;}
 .msg{padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
 .msg.error{background:#fee2e2;color:#a32d2d;display:block;}
@@ -259,6 +259,7 @@ window.submitPost = async function() {
         purposes, itemDesc: desc,
         posterName: u.name, posterPhone: u.phone,
         posterRoom: u.roomNo, posterUid: currentUser.uid,
+        posterAvatarId: u.avatarId || 1,
         status: 'active', hostel: 'Ajanta Hostel No. 3',
         createdAt: serverTimestamp()
       });
@@ -277,13 +278,14 @@ window.submitPost = async function() {
         imageUrl: photoBase64 || null,
         posterName: u.name, posterPhone: u.phone,
         posterAdmission: u.admissionNo, posterUid: currentUser.uid,
+        posterAvatarId: u.avatarId || 1,
         status: currentCat, hostel: 'Ajanta Hostel No. 3',
         createdAt: serverTimestamp()
       });
     }
     window.location.href = 'index.html';
   } catch(e) {
-    msg.className = 'msg error'; msg.textContent = 'Error: ' + e.message;
+    msg.className = "msg error"; msg.textContent = "Error posting: " + e.message; console.error(e);
     btn.disabled = false; btn.textContent = 'Post';
   }
 };
