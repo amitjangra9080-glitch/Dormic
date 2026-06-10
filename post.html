@@ -146,7 +146,19 @@ textarea.inp{min-height:80px;resize:none;}
       </div>
       <div>
         <label class="lab">Approx. time (24-hr)</label>
-        <input class="inp" id="travel-time" type="time" step="300" placeholder="HH:MM"/>
+        <div style="display:flex;gap:6px;">
+          <select class="inp" id="travel-hour" style="flex:1;margin-bottom:0;">
+            <option value="">HH</option>
+            ${Array.from({length:24},(_,i)=>`<option value="${String(i).padStart(2,'0')}">${String(i).padStart(2,'0')}</option>`).join('')}
+          </select>
+          <select class="inp" id="travel-min" style="flex:1;margin-bottom:0;">
+            <option value="">MM</option>
+            <option value="00">00</option>
+            <option value="15">15</option>
+            <option value="30">30</option>
+            <option value="45">45</option>
+          </select>
+        </div>
       </div>
     </div>
     <label class="lab">Purpose</label>
@@ -227,11 +239,11 @@ window.updateMinTime = function(){
     // Only restrict time if date is today
     const hh = String(now.getHours()).padStart(2,'0');
     const mm = String(now.getMinutes()).padStart(2,'0');
-    timeInput.min = `${hh}:${mm}`;
-    // Clear time if it's now in the past
-    if(timeInput.value && timeInput.value < `${hh}:${mm}`) timeInput.value = '';
+    // Clear hour if it's in the past
+    const hourSel = document.getElementById('travel-hour');
+    if(hourSel && hourSel.value && hourSel.value < hh) hourSel.value = '';
   } else {
-    timeInput.min = '';
+    // Future date — no time restriction
   }
 };
 
@@ -293,7 +305,9 @@ window.submitPost = async function() {
       const from = document.getElementById('travel-from').value.trim();
       const to = document.getElementById('travel-to').value.trim();
       const date = document.getElementById('travel-date').value;
-      const time = document.getElementById('travel-time').value;
+      const hour = document.getElementById('travel-hour').value;
+      const min = document.getElementById('travel-min').value;
+      const time = (hour && min) ? `${hour}:${min}` : '';
       const desc = document.getElementById('travel-desc').value.trim();
       const purposes = Array.from(document.querySelectorAll('#purpose-chips .chip.on')).map(c => c.dataset.purpose);
       if(!from || !to || !date) { msg.className = 'msg error'; msg.textContent = 'Please fill From, To, and Date.'; return; }
