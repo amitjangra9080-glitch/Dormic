@@ -87,32 +87,37 @@ textarea.inp{min-height:80px;resize:none;}
     <input class="inp" id="item-name" type="text" placeholder="Describe the item briefly"/>
     <label class="lab">Description</label>
     <textarea class="inp" id="item-desc" placeholder="Brand, colour, identifying marks..."></textarea>
-    <div class="photo-box" onclick="document.getElementById('photo-input').click()">
+    <div class="photo-box" id="photo-box" onclick="document.getElementById('photo-input').click()">
       <div class="photo-box-icon"><i class="ti ti-camera"></i></div>
       <div class="photo-box-txt">Add a photo <span class="photo-box-opt">— optional</span></div>
     </div>
     <input type="file" id="photo-input" accept="image/*" onchange="previewPhoto(this)"/>
-    <img id="photo-preview" alt="preview"/>
-    <div class="section-div">Location</div>
-    <label class="lab">Where was it lost / found?</label>
-    <select class="inp" id="location" onchange="handleLocation()">
-      <option value="">Select location</option>
-      <option value="Ground Floor — Gallery / Corridor">Ground Floor — Gallery / Corridor</option>
-      <option value="Ground Floor — Near Room No.">Ground Floor — Near Room No.</option>
-      <option value="First Floor — Gallery / Corridor">First Floor — Gallery / Corridor</option>
-      <option value="First Floor — Near Room No.">First Floor — Near Room No.</option>
-      <option value="Second Floor — Gallery / Corridor">Second Floor — Gallery / Corridor</option>
-      <option value="Second Floor — Near Room No.">Second Floor — Near Room No.</option>
-      <option value="From My Room">From My Room</option>
-      <option value="Mess Area">Mess Area</option>
-      <option value="Parking Area">Parking Area</option>
-      <option value="Main Gate">Main Gate</option>
-      <option value="Common Room">Common Room</option>
-      <option value="Other">Other</option>
-    </select>
-    <div class="room-group" id="room-group">
-      <label class="lab">Room number</label>
-      <input class="inp" id="room-no" type="text" placeholder="e.g. 112"/>
+    <div id="photo-preview-wrap" style="display:none;position:relative;margin-bottom:14px;">
+      <img id="photo-preview" alt="preview" style="width:100%;border-radius:10px;max-height:200px;object-fit:cover;display:block;"/>
+      <button onclick="removePhoto()" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);border:none;border-radius:20px;color:#fff;font-size:13px;padding:5px 12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;"><i class="ti ti-x"></i> Remove</button>
+    </div>
+    <div id="location-section">
+      <div class="section-div">Location</div>
+      <label class="lab">Where was it lost / found?</label>
+      <select class="inp" id="location" onchange="handleLocation()">
+        <option value="">Select location</option>
+        <option value="Ground Floor — Gallery / Corridor">Ground Floor — Gallery / Corridor</option>
+        <option value="Ground Floor — Near Room No.">Ground Floor — Near Room No.</option>
+        <option value="First Floor — Gallery / Corridor">First Floor — Gallery / Corridor</option>
+        <option value="First Floor — Near Room No.">First Floor — Near Room No.</option>
+        <option value="Second Floor — Gallery / Corridor">Second Floor — Gallery / Corridor</option>
+        <option value="Second Floor — Near Room No.">Second Floor — Near Room No.</option>
+        <option value="From My Room">From My Room</option>
+        <option value="Mess Area">Mess Area</option>
+        <option value="Parking Area">Parking Area</option>
+        <option value="Main Gate">Main Gate</option>
+        <option value="Common Room">Common Room</option>
+        <option value="Other">Other</option>
+      </select>
+      <div class="room-group" id="room-group">
+        <label class="lab">Room number</label>
+        <input class="inp" id="room-no" type="text" placeholder="e.g. 112"/>
+      </div>
     </div>
   </div>
 
@@ -137,7 +142,7 @@ textarea.inp{min-height:80px;resize:none;}
     <div class="row">
       <div>
         <label class="lab">Date</label>
-        <input class="inp" id="travel-date" type="date"/>
+        <input class="inp" id="travel-date" type="date" onchange="updateMinTime()"/>
       </div>
       <div>
         <label class="lab">Approx. time</label>
@@ -186,6 +191,11 @@ document.getElementById('category-chips').addEventListener('click', e => {
   currentCat = chip.dataset.cat;
   document.getElementById('travel-fields').style.display = currentCat === 'travel' ? 'block' : 'none';
   document.getElementById('standard-fields').style.display = currentCat === 'travel' ? 'none' : 'block';
+  // Hide location for have/need/sell/buy
+  const noLocation = ['have','need','sell','buy'];
+  const locSection = document.getElementById('location-section');
+  if(locSection) locSection.style.display = noLocation.includes(currentCat) ? 'none' : 'block';
+  if(currentCat === 'travel') setMinDateTime();
 });
 
 // Travel type chips
@@ -196,6 +206,34 @@ document.getElementById('travel-type-chips').addEventListener('click', e => {
   chip.classList.add('on');
   currentTT = chip.dataset.tt;
 });
+
+function setMinDateTime(){
+  const now = new Date();
+  // Min date = today
+  const todayStr = now.toISOString().split('T')[0];
+  const dateInput = document.getElementById('travel-date');
+  dateInput.min = todayStr;
+  // If no date selected yet, default to today
+  if(!dateInput.value) dateInput.value = todayStr;
+  updateMinTime();
+}
+
+window.updateMinTime = function(){
+  const now = new Date();
+  const todayStr = now.toISOString().split('T')[0];
+  const dateInput = document.getElementById('travel-date');
+  const timeInput = document.getElementById('travel-time');
+  if(dateInput.value === todayStr){
+    // Only restrict time if date is today
+    const hh = String(now.getHours()).padStart(2,'0');
+    const mm = String(now.getMinutes()).padStart(2,'0');
+    timeInput.min = `${hh}:${mm}`;
+    // Clear time if it's now in the past
+    if(timeInput.value && timeInput.value < `${hh}:${mm}`) timeInput.value = '';
+  } else {
+    timeInput.min = '';
+  }
+};
 
 // Purpose chips (multi-select)
 document.getElementById('purpose-chips').addEventListener('click', e => {
@@ -213,7 +251,6 @@ window.handleLocation = function() {
 window.previewPhoto = function(input) {
   const file = input.files[0];
   if(!file) return;
-  // Compress before storing
   const reader = new FileReader();
   reader.onload = e => {
     const img = new Image();
@@ -226,13 +263,21 @@ window.previewPhoto = function(input) {
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       photoBase64 = canvas.toDataURL('image/jpeg', 0.7);
-      const preview = document.getElementById('photo-preview');
-      preview.src = photoBase64;
-      preview.style.display = 'block';
+      document.getElementById('photo-preview').src = photoBase64;
+      document.getElementById('photo-preview-wrap').style.display = 'block';
+      document.getElementById('photo-box').style.display = 'none';
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
+};
+
+window.removePhoto = function() {
+  photoBase64 = null;
+  document.getElementById('photo-preview').src = '';
+  document.getElementById('photo-preview-wrap').style.display = 'none';
+  document.getElementById('photo-box').style.display = 'block';
+  document.getElementById('photo-input').value = '';
 };
 
 window.submitPost = async function() {
