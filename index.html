@@ -6,6 +6,8 @@
 <title>Dormic — Ajanta Hostel No. 3</title>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Dormic"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -21,11 +23,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .gap{height:8px;}
 .card{background:#fff;}
 .card-head{display:flex;align-items:center;gap:10px;padding:12px 14px 9px;}
-.av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:600;flex-shrink:0;}
-.av-grad-1{background:linear-gradient(135deg,#6C3BE8,#E8398A);}
-.av-grad-2{background:linear-gradient(135deg,#E8398A,#F97316);}
-.av-grad-3{background:linear-gradient(135deg,#6C3BE8,#F97316);}
-.av-grad-4{background:linear-gradient(135deg,#4c9c5e,#6C3BE8);}
+.av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600;flex-shrink:0;}
 .uname{font-size:13px;font-weight:500;color:#262626;line-height:1.2;}
 .uloc{font-size:11px;color:#8e8e8e;}
 .badge{margin-left:auto;font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;flex-shrink:0;}
@@ -37,7 +35,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .b-buy{background:#e0f2fe;color:#0369a1;}
 .b-going{background:#fff3e0;color:#b45309;}
 .b-need-travel{background:#f0fdf4;color:#166534;}
-.b-resolved{background:#f3f4f6;color:#6b7280;border:0.5px solid #e5e7eb;}
+.b-resolved{background:#f3f4f6;color:#6b7280;}
 .card-body{padding:0 14px 6px;}
 .cat-line{font-size:11px;color:#8e8e8e;display:flex;align-items:center;gap:4px;margin-bottom:3px;}
 .item-name{font-size:15px;font-weight:500;color:#262626;line-height:1.3;margin-bottom:3px;}
@@ -46,8 +44,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .city{font-size:14px;font-weight:500;color:#262626;}
 .r-date{font-size:11px;color:#8e8e8e;margin-left:auto;display:flex;align-items:center;gap:3px;}
 .card-actions{display:flex;align-items:center;justify-content:space-between;padding:9px 14px 4px;border-top:0.5px solid #f7f7f7;margin-top:6px;}
-.status-btn{font-size:12px;font-weight:500;color:#6C3BE8;border:0.5px solid #c4b5fd;border-radius:20px;padding:5px 13px;background:#ede9fe;cursor:pointer;transition:all 0.15s;}
-.status-btn:active{transform:scale(0.97);}
+.status-btn{font-size:12px;font-weight:500;color:#6C3BE8;border:0.5px solid #c4b5fd;border-radius:20px;padding:5px 13px;background:#ede9fe;cursor:pointer;}
 .wa-btn{font-size:13px;font-weight:500;color:#25D366;display:flex;align-items:center;gap:5px;text-decoration:none;}
 .time-line{padding:3px 14px 10px;font-size:10px;color:#bbb;letter-spacing:0.2px;}
 .empty-state{text-align:center;padding:48px 24px;}
@@ -55,7 +52,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .empty-title{font-size:16px;font-weight:500;color:#262626;margin-bottom:6px;}
 .empty-sub{font-size:13px;color:#8e8e8e;}
 .loading{text-align:center;padding:40px;color:#aaa;font-size:14px;}
-.active-label{font-size:11px;color:#aaa;padding:8px 14px 4px;text-transform:uppercase;letter-spacing:0.3px;}
+.resolved-label{font-size:11px;color:#aaa;padding:8px 14px 4px;text-transform:uppercase;letter-spacing:0.3px;}
 .resolved-section{opacity:0.55;}
 .nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-around;height:60px;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ccc;font-size:22px;}
@@ -64,12 +61,11 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .nav-item.on span{color:#6C3BE8;}
 .nav-fab{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
 .notify-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:600px;margin:0 auto;}
-.notify-txt{font-size:12px;color:#555;}
-.notify-btn{font-size:12px;font-weight:600;background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;border-radius:20px;padding:5px 14px;cursor:pointer;}
+.notify-txt{font-size:12px;color:#555;line-height:1.4;}
+.notify-btn{font-size:12px;font-weight:600;background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;border-radius:20px;padding:5px 14px;cursor:pointer;white-space:nowrap;}
 </style>
 </head>
 <body>
-
 <div class="top-bar">
   <div>
     <span class="logo">Dormic<span class="logo-sub">Ajanta Hostel No. 3</span></span>
@@ -78,8 +74,8 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 <div style="max-width:600px;margin:0 auto;">
   <div class="notify-bar" id="notify-bar" style="display:none;">
-    <span class="notify-txt">Get notified when someone posts a lost or found item</span>
-    <button class="notify-btn" onclick="requestNotify()">Allow</button>
+    <span class="notify-txt">Turn on notifications to get alerts when someone posts lost/found, sell/buy or travel updates</span>
+    <button class="notify-btn" onclick="requestNotify()">Turn on</button>
   </div>
 </div>
 
@@ -96,32 +92,11 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 </div>
 
 <nav class="nav-bar">
-  <a href="index.html" class="nav-item on">
-    <i class="ti ti-home"></i>
-    <span>Home</span>
-  </a>
-  <a href="search.html" class="nav-item">
-    <i class="ti ti-search"></i>
-    <span>Search</span>
-  </a>
-  <a href="post.html" class="nav-fab" id="post-fab" style="display:none;">
-    <i class="ti ti-plus"></i>
-  </a>
-  <a href="login.html" class="nav-fab" id="login-fab">
-    <i class="ti ti-plus"></i>
-  </a>
-  <a href="more.html" class="nav-item">
-    <i class="ti ti-layout-grid"></i>
-    <span>More</span>
-  </a>
-  <a href="profile.html" class="nav-item" id="nav-profile" style="display:none;">
-    <i class="ti ti-user"></i>
-    <span>Profile</span>
-  </a>
-  <a href="login.html" class="nav-item" id="nav-login">
-    <i class="ti ti-user"></i>
-    <span>Login</span>
-  </a>
+  <a href="index.html" class="nav-item on"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="search.html" class="nav-item"><i class="ti ti-search"></i><span>Search</span></a>
+  <a href="post.html" class="nav-fab"><i class="ti ti-plus"></i></a>
+  <a href="more.html" class="nav-item"><i class="ti ti-layout-grid"></i><span>More</span></a>
+  <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
 </nav>
 
 <script type="module">
@@ -138,28 +113,24 @@ let currentUser = null;
 let allPosts = [];
 let currentFilter = 'all';
 
-// Auth state
+const avatarBgs = ['','linear-gradient(135deg,#6C3BE8,#E8398A)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#F97316,#FBBF24)','linear-gradient(135deg,#3B82F6,#6C3BE8)','linear-gradient(135deg,#10B981,#3B82F6)','linear-gradient(135deg,#EF4444,#E8398A)','linear-gradient(135deg,#8B5CF6,#EC4899)','linear-gradient(135deg,#06B6D4,#3B82F6)','linear-gradient(135deg,#F59E0B,#EF4444)','linear-gradient(135deg,#10B981,#6C3BE8)','linear-gradient(135deg,#EC4899,#F97316)','linear-gradient(135deg,#6366F1,#8B5CF6)','linear-gradient(135deg,#14B8A6,#10B981)','linear-gradient(135deg,#F97316,#6C3BE8)','linear-gradient(135deg,#EF4444,#F97316)','linear-gradient(135deg,#3B82F6,#10B981)','linear-gradient(135deg,#A855F7,#3B82F6)','linear-gradient(135deg,#F43F5E,#6366F1)','linear-gradient(135deg,#0EA5E9,#6C3BE8)','linear-gradient(135deg,#84CC16,#10B981)'];
+
 onAuthStateChanged(auth, user => {
-  if(user) {
-    currentUser = user;
-    document.getElementById('post-fab').style.display = 'flex';
-    document.getElementById('login-fab').style.display = 'none';
-    document.getElementById('nav-profile').style.display = 'flex';
-    document.getElementById('nav-login').style.display = 'none';
+  if(!user) { window.location.href = 'login.html'; return; }
+  currentUser = user;
+  // Show notification banner only if not already dismissed and permission not granted
+  const dismissed = localStorage.getItem('dormic_notify_dismissed');
+  if(!dismissed && Notification.permission !== 'granted') {
     document.getElementById('notify-bar').style.display = 'flex';
-  } else {
-    window.location.href = 'login.html';
   }
 });
 
-// Load posts
 const q = query(collection(db,'posts'), orderBy('createdAt','desc'));
 onSnapshot(q, snap => {
   allPosts = snap.docs.map(d => ({id: d.id, ...d.data()}));
   renderFeed();
 });
 
-// Pills
 document.querySelectorAll('.pill').forEach(pill => {
   pill.addEventListener('click', () => {
     document.querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
@@ -172,7 +143,6 @@ document.querySelectorAll('.pill').forEach(pill => {
 function renderFeed() {
   const feed = document.getElementById('feed');
   let posts = allPosts;
-
   if(currentFilter === 'lost-found') posts = posts.filter(p => ['lost','found'].includes(p.type));
   else if(currentFilter === 'have-need') posts = posts.filter(p => ['have','need'].includes(p.type));
   else if(currentFilter === 'sell-buy') posts = posts.filter(p => ['sell','buy'].includes(p.type));
@@ -182,21 +152,14 @@ function renderFeed() {
   const resolved = posts.filter(p => p.status === 'resolved');
 
   if(posts.length === 0) {
-    feed.innerHTML = `
-      <div class="empty-state">
-        <img src="ajanta-illustration.png" class="empty-img" alt="Ajanta Hostel No. 3"/>
-        <div class="empty-title">No posts yet</div>
-        <div class="empty-sub">Be the first to post something</div>
-      </div>`;
+    feed.innerHTML = `<div class="empty-state"><img src="ajanta-illustration.png" class="empty-img" alt="Ajanta Hostel No. 3"/><div class="empty-title">No posts yet</div><div class="empty-sub">Be the first to post something</div></div>`;
     return;
   }
 
   let html = '';
-  if(active.length > 0) {
-    active.forEach(p => { html += buildCard(p, false); });
-  }
+  active.forEach(p => { html += buildCard(p, false); });
   if(resolved.length > 0) {
-    html += `<div class="active-label resolved-section" style="margin-top:8px;">Resolved</div>`;
+    html += `<div class="resolved-label">Resolved</div>`;
     resolved.forEach(p => { html += buildCard(p, true); });
   }
   feed.innerHTML = html;
@@ -205,95 +168,89 @@ function renderFeed() {
 function buildCard(p, isResolved) {
   const time = p.createdAt ? timeAgo(p.createdAt.seconds * 1000) : 'Just now';
   const initials = (p.posterName || '?')[0].toUpperCase();
-  const gradients = ['av-grad-1','av-grad-2','av-grad-3','av-grad-4'];
-  const grad = gradients[initials.charCodeAt(0) % 4];
-  const waLink = `https://wa.me/91${p.posterPhone}?text=Hi%20${encodeURIComponent(p.posterName)}%2C%20I%20saw%20your%20post%20on%20Dormic%20about%20${encodeURIComponent(p.itemName || 'your post')}`;
+  const avBg = avatarBgs[p.posterAvatarId || 1];
+  const waLink = `https://wa.me/91${p.posterPhone}?text=Hi%20${encodeURIComponent(p.posterName)}%2C%20I%20saw%20your%20post%20on%20Dormic`;
   const isOwner = currentUser && currentUser.uid === p.posterUid;
 
   let statusBtn = '';
   if(isOwner && !isResolved) {
-    const labels = {found:'Mark as claimed', sell:'Mark as sold', have:'Mark as available', travel:'Mark as full'};
+    const labels = {found:'Mark as claimed',sell:'Mark as sold',have:'Mark as done',travel:'Mark as full'};
     const label = labels[p.type];
-    if(label) statusBtn = `<button class="status-btn" onclick="resolvePost('${p.id}')">  ${label}</button>`;
+    if(label) statusBtn = `<button class="status-btn" onclick="resolvePost('${p.id}')">${label}</button>`;
   } else if(isResolved) {
-    const doneLabels = {found:'Claimed',sell:'Sold',have:'Done',travel:'Full',lost:'Resolved'};
-    statusBtn = `<span style="font-size:12px;color:#9ca3af;display:flex;align-items:center;gap:4px;"><i class="ti ti-check"></i> ${doneLabels[p.type] || 'Resolved'}</span>`;
+    const doneLabels = {found:'Claimed',sell:'Sold',have:'Done',travel:'Full',lost:'Resolved',need:'Done',buy:'Done'};
+    statusBtn = `<span style="font-size:12px;color:#9ca3af;display:flex;align-items:center;gap:4px;"><i class="ti ti-check"></i> ${doneLabels[p.type]||'Resolved'}</span>`;
   }
 
-  // Travel card
   if(p.type === 'travel') {
-    return `
-    <div class="gap"></div>
-    <div class="card ${isResolved ? 'resolved-section' : ''}">
+    return `<div class="gap"></div><div class="card ${isResolved?'resolved-section':''}">
       <div class="card-head">
-        <div class="av ${grad}">${initials}</div>
-        <div><div class="uname">${p.posterName || 'Unknown'}</div><div class="uloc">Room ${p.posterRoom || ''}</div></div>
-        <span class="badge b-${p.travelType === 'going' ? 'going' : 'need-travel'}">${p.travelType === 'going' ? 'Going' : 'Need'}</span>
+        <div class="av" style="background:${avBg}">${initials}</div>
+        <div><div class="uname">${p.posterName||''}</div><div class="uloc">Room ${p.posterRoom||''}</div></div>
+        <span class="badge b-${p.travelType==='going'?'going':'need-travel'}">${p.travelType==='going'?'Going':'Need'}</span>
       </div>
       <div class="card-body">
         <div class="route-box">
-          <span class="city">${p.from || ''}</span>
+          <span class="city">${p.from||''}</span>
           <i class="ti ti-arrow-right" style="color:#aaa;font-size:16px;"></i>
-          <span class="city">${p.to || ''}</span>
-          <span class="r-date"><i class="ti ti-calendar" style="font-size:13px;"></i> ${p.travelDate || ''}</span>
+          <span class="city">${p.to||''}</span>
+          <span class="r-date"><i class="ti ti-calendar" style="font-size:13px;"></i> ${p.travelDate||''}</span>
         </div>
-        ${p.itemDesc ? `<div class="item-desc">${p.itemDesc}</div>` : ''}
+        ${p.itemDesc?`<div class="item-desc">${p.itemDesc}</div>`:''}
       </div>
-      <div class="card-actions">
-        ${statusBtn || '<span></span>'}
-        <a href="${waLink}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a>
-      </div>
+      <div class="card-actions">${statusBtn||'<span></span>'}<a href="${waLink}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a></div>
       <div class="time-line">${time}</div>
     </div>`;
   }
 
-  // Standard card
   const catIcons = {lost:'ti-search-off',found:'ti-search',have:'ti-package',need:'ti-package-import',sell:'ti-tag',buy:'ti-shopping-cart'};
-  const icon = catIcons[p.type] || 'ti-circle';
-  return `
-  <div class="gap"></div>
-  <div class="card ${isResolved ? 'resolved-section' : ''}">
+  return `<div class="gap"></div><div class="card ${isResolved?'resolved-section':''}">
     <div class="card-head">
-      <div class="av ${grad}">${initials}</div>
-      <div><div class="uname">${p.posterName || 'Unknown'}</div><div class="uloc">${p.location || ''}</div></div>
+      <div class="av" style="background:${avBg}">${initials}</div>
+      <div><div class="uname">${p.posterName||''}</div><div class="uloc">${p.location||''}</div></div>
       <span class="badge b-${p.type}">${p.type.charAt(0).toUpperCase()+p.type.slice(1)}</span>
-      ${isResolved ? `<span class="badge b-resolved" style="margin-left:4px;"><i class="ti ti-check"></i></span>` : ''}
+      ${isResolved?`<span class="badge b-resolved" style="margin-left:4px;"><i class="ti ti-check"></i></span>`:''}
     </div>
     <div class="card-body">
-      <div class="cat-line"><i class="ti ${icon}"></i> ${p.itemType || ''}</div>
-      <div class="item-name">${p.itemName || ''}</div>
-      <div class="item-desc">${p.description || ''}</div>
-      ${p.imageUrl ? `<img src="${p.imageUrl}" style="width:100%;border-radius:10px;margin-top:8px;max-height:200px;object-fit:cover;"/>` : ''}
+      <div class="cat-line"><i class="ti ${catIcons[p.type]||'ti-circle'}"></i> ${p.itemType||''}</div>
+      <div class="item-name">${p.itemName||''}</div>
+      <div class="item-desc">${p.description||''}</div>
+      ${p.imageUrl?`<img src="${p.imageUrl}" style="width:100%;border-radius:10px;margin-top:8px;max-height:200px;object-fit:cover;"/>`:''}
     </div>
-    <div class="card-actions">
-      ${statusBtn || '<span></span>'}
-      <a href="${waLink}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a>
-    </div>
+    <div class="card-actions">${statusBtn||'<span></span>'}<a href="${waLink}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a></div>
     <div class="time-line">${time}</div>
   </div>`;
 }
 
 window.resolvePost = async function(id) {
-  await updateDoc(doc(db, 'posts', id), {status: 'resolved'});
+  await updateDoc(doc(db,'posts',id), {status:'resolved'});
 };
 
 window.requestNotify = function() {
   if('Notification' in window) {
     Notification.requestPermission().then(p => {
-      if(p === 'granted') document.getElementById('notify-bar').style.display = 'none';
+      // Always hide and never show again regardless of choice
+      localStorage.setItem('dormic_notify_dismissed','true');
+      document.getElementById('notify-bar').style.display = 'none';
+      if(p === 'granted') {
+        new Notification('Dormic notifications enabled!', {body:'You will now get alerts for new posts.',icon:'icon.png'});
+      }
     });
+  } else {
+    localStorage.setItem('dormic_notify_dismissed','true');
+    document.getElementById('notify-bar').style.display = 'none';
   }
 };
 
 function timeAgo(ms) {
-  const diff = Date.now() - ms;
+  const diff = Date.now()-ms;
   const m = Math.floor(diff/60000);
-  if(m < 1) return 'Just now';
-  if(m < 60) return `${m} min ago`;
+  if(m<1) return 'Just now';
+  if(m<60) return `${m} min ago`;
   const h = Math.floor(m/60);
-  if(h < 24) return `${h} hour${h>1?'s':''} ago`;
+  if(h<24) return `${h} hour${h>1?'s':''} ago`;
   const d = Math.floor(h/24);
-  if(d < 7) return `${d} day${d>1?'s':''} ago`;
+  if(d<7) return `${d} day${d>1?'s':''} ago`;
   return new Date(ms).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
 }
 </script>

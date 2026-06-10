@@ -6,14 +6,16 @@
 <title>Login — Dormic</title>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Dormic"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
 .page{max-width:420px;margin:0 auto;padding:0 0 40px;}
-.illustration{width:100%;background:#fff;padding:0;overflow:hidden;}
+.illustration{width:100%;background:#fff;}
 .illustration img{width:100%;display:block;max-height:200px;object-fit:cover;object-position:center 30%;}
-.card{background:#fff;border-radius:0 0 24px 24px;padding:20px 20px 24px;margin-bottom:0;}
+.card{background:#fff;padding:20px 20px 24px;}
 .logo{text-align:center;font-size:26px;font-weight:700;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.3px;margin-bottom:2px;}
 .sub{text-align:center;font-size:12px;color:#8e8e8e;margin-bottom:18px;}
 .tabs{display:flex;background:#f7f7f7;border-radius:10px;padding:3px;margin-bottom:16px;}
@@ -25,9 +27,9 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .inp::placeholder{color:#bbb;}
 select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:14px;}
 .row{display:flex;gap:10px;}
-.row > div{flex:1;}
+.row>div{flex:1;}
 .btn{width:100%;height:44px;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px;}
-.btn:active{opacity:0.9;}
+.btn:disabled{background:#e0e0e0;color:#aaa;cursor:not-allowed;}
 .forgot{text-align:center;font-size:13px;color:#6C3BE8;margin-top:13px;cursor:pointer;}
 .note{text-align:center;font-size:11px;color:#aaa;margin-top:10px;}
 .msg{padding:10px 12px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none;}
@@ -36,6 +38,10 @@ select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xm
 .hint{font-size:11px;margin-top:-8px;margin-bottom:10px;}
 .hint.ok{color:#3b6d11;}
 .hint.err{color:#a32d2d;}
+.avatar-section{margin-bottom:14px;}
+.avatar-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.av-opt{width:44px;height:44px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.15s;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0;}
+.av-opt.selected{border-color:#6C3BE8;transform:scale(1.1);}
 </style>
 </head>
 <body>
@@ -54,11 +60,11 @@ select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xm
     <!-- LOGIN -->
     <div id="login-form">
       <div class="msg" id="login-msg"></div>
-      <label class="lab">Admission number</label>
-      <input class="inp" id="l-admission" type="text" placeholder="Your admission number" autocomplete="off"/>
+      <label class="lab">Email</label>
+      <input class="inp" id="l-email" type="email" placeholder="Your registered email"/>
       <label class="lab">Password</label>
       <input class="inp" id="l-password" type="password" placeholder="Password"/>
-      <button class="btn" onclick="loginUser()">Log in</button>
+      <button class="btn" id="login-btn" onclick="loginUser()">Log in</button>
       <div class="forgot" onclick="forgotPassword()">Forgot password?</div>
     </div>
 
@@ -71,7 +77,7 @@ select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xm
       <input class="inp" id="s-admission" type="text" placeholder="Your admission number" oninput="validateAdmission()" autocomplete="off"/>
       <div class="hint" id="admission-hint"></div>
       <label class="lab">Email</label>
-      <input class="inp" id="s-email" type="email" placeholder="name@email.com"/>
+      <input class="inp" id="s-email" type="email" placeholder="Your real email address"/>
       <label class="lab">Department</label>
       <input class="inp" id="s-dept" type="text" placeholder="e.g. Agronomy, Seed Science and Technology..."/>
       <label class="lab">College</label>
@@ -115,6 +121,10 @@ select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xm
       </div>
       <label class="lab">Confirm password</label>
       <input class="inp" id="s-confirm" type="password" placeholder="Re-enter password"/>
+      <div class="avatar-section">
+        <label class="lab">Pick your avatar</label>
+        <div class="avatar-grid" id="avatar-grid"></div>
+      </div>
       <button class="btn" id="signup-btn" onclick="registerUser()">Create account</button>
       <div class="note">For Ajanta Hostel No. 3 residents only</div>
     </div>
@@ -131,12 +141,53 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Avatars — 20 gradient options
+const avatars = [
+  {id:1,bg:'linear-gradient(135deg,#6C3BE8,#E8398A)'},
+  {id:2,bg:'linear-gradient(135deg,#E8398A,#F97316)'},
+  {id:3,bg:'linear-gradient(135deg,#F97316,#FBBF24)'},
+  {id:4,bg:'linear-gradient(135deg,#3B82F6,#6C3BE8)'},
+  {id:5,bg:'linear-gradient(135deg,#10B981,#3B82F6)'},
+  {id:6,bg:'linear-gradient(135deg,#EF4444,#E8398A)'},
+  {id:7,bg:'linear-gradient(135deg,#8B5CF6,#EC4899)'},
+  {id:8,bg:'linear-gradient(135deg,#06B6D4,#3B82F6)'},
+  {id:9,bg:'linear-gradient(135deg,#F59E0B,#EF4444)'},
+  {id:10,bg:'linear-gradient(135deg,#10B981,#6C3BE8)'},
+  {id:11,bg:'linear-gradient(135deg,#EC4899,#F97316)'},
+  {id:12,bg:'linear-gradient(135deg,#6366F1,#8B5CF6)'},
+  {id:13,bg:'linear-gradient(135deg,#14B8A6,#10B981)'},
+  {id:14,bg:'linear-gradient(135deg,#F97316,#6C3BE8)'},
+  {id:15,bg:'linear-gradient(135deg,#EF4444,#F97316)'},
+  {id:16,bg:'linear-gradient(135deg,#3B82F6,#10B981)'},
+  {id:17,bg:'linear-gradient(135deg,#A855F7,#3B82F6)'},
+  {id:18,bg:'linear-gradient(135deg,#F43F5E,#6366F1)'},
+  {id:19,bg:'linear-gradient(135deg,#0EA5E9,#6C3BE8)'},
+  {id:20,bg:'linear-gradient(135deg,#84CC16,#10B981)'},
+];
+
+let selectedAvatar = 1;
+
+// Build avatar grid
+const grid = document.getElementById('avatar-grid');
+avatars.forEach(av => {
+  const el = document.createElement('div');
+  el.className = 'av-opt' + (av.id === 1 ? ' selected' : '');
+  el.style.background = av.bg;
+  el.dataset.id = av.id;
+  el.textContent = av.id;
+  el.onclick = () => {
+    document.querySelectorAll('.av-opt').forEach(a => a.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedAvatar = av.id;
+  };
+  grid.appendChild(el);
+});
+
 // Redirect if already logged in
 onAuthStateChanged(auth, user => {
   if(user) window.location.href = 'index.html';
 });
 
-// College other toggle
 document.getElementById('s-college').addEventListener('change', function() {
   document.getElementById('other-college-wrap').style.display = this.value === 'other' ? 'block' : 'none';
 });
@@ -159,25 +210,26 @@ window.validateAdmission = function() {
 };
 
 window.loginUser = async function() {
-  const admission = document.getElementById('l-admission').value.trim().toUpperCase();
+  const email = document.getElementById('l-email').value.trim();
   const password = document.getElementById('l-password').value;
   const msg = document.getElementById('login-msg');
+  const btn = document.getElementById('login-btn');
   msg.className = 'msg';
-  if(!admission || !password) { msg.className = 'msg error'; msg.textContent = 'Please enter your admission number and password.'; return; }
-  if(!admission.endsWith('M') && !admission.endsWith('D')) { msg.className = 'msg error'; msg.textContent = 'Invalid admission number.'; return; }
+  if(!email || !password) { msg.className = 'msg error'; msg.textContent = 'Please enter your email and password.'; return; }
+  btn.disabled = true; btn.textContent = 'Logging in...';
   try {
-    const email = admission.toLowerCase() + '@dormic.ccshau';
     await signInWithEmailAndPassword(auth, email, password);
     window.location.href = 'index.html';
   } catch(e) {
-    msg.className = 'msg error'; msg.textContent = 'Wrong admission number or password.';
+    msg.className = 'msg error'; msg.textContent = 'Wrong email or password.';
+    btn.disabled = false; btn.textContent = 'Log in';
   }
 };
 
 window.registerUser = async function() {
   const name = document.getElementById('s-name').value.trim();
   const admission = document.getElementById('s-admission').value.trim().toUpperCase();
-  const email = document.getElementById('s-email').value.trim();
+  const email = document.getElementById('s-email').value.trim().toLowerCase();
   const dept = document.getElementById('s-dept').value.trim();
   const collegeSelect = document.getElementById('s-college').value;
   const college = collegeSelect === 'other' ? document.getElementById('s-other-college').value.trim() : collegeSelect;
@@ -189,7 +241,7 @@ window.registerUser = async function() {
   const msg = document.getElementById('signup-msg');
   msg.className = 'msg';
 
-  if(!name || !admission || !email || !dept || !college || !phone || !room || !blood || !password) {
+  if(!name||!admission||!email||!dept||!college||!phone||!room||!blood||!password) {
     msg.className = 'msg error'; msg.textContent = 'Please fill all fields.'; return;
   }
   if(!admission.endsWith('M') && !admission.endsWith('D')) {
@@ -205,48 +257,53 @@ window.registerUser = async function() {
     msg.className = 'msg error'; msg.textContent = 'Passwords do not match.'; return;
   }
 
-  // Check duplicate admission number
-  const q = query(collection(db,'users'), where('admissionNo','==',admission));
-  const existing = await getDocs(q);
-  if(!existing.empty) { msg.className = 'msg error'; msg.textContent = 'This admission number is already registered.'; return; }
-
   const btn = document.getElementById('signup-btn');
-  btn.disabled = true; btn.textContent = 'Creating account...';
+  btn.disabled = true; btn.textContent = 'Checking...';
+
+  // Check duplicate admission number
+  const admSnap = await getDocs(query(collection(db,'users'), where('admissionNo','==',admission)));
+  if(!admSnap.empty) { msg.className='msg error'; msg.textContent='This admission number is already registered.'; btn.disabled=false; btn.textContent='Create account'; return; }
+
+  // Check duplicate phone
+  const phoneSnap = await getDocs(query(collection(db,'users'), where('phone','==',phone)));
+  if(!phoneSnap.empty) { msg.className='msg error'; msg.textContent='This WhatsApp number is already registered.'; btn.disabled=false; btn.textContent='Create account'; return; }
+
+  btn.textContent = 'Creating account...';
 
   try {
-    const firebaseEmail = admission.toLowerCase() + '@dormic.ccshau';
-    const cred = await createUserWithEmailAndPassword(auth, firebaseEmail, password);
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(cred.user, { displayName: name });
     await setDoc(doc(db,'users', cred.user.uid), {
       name, admissionNo: admission, email,
       department: dept, college, phone,
       roomNo: room, bloodGroup: blood,
       degree: admission.endsWith('M') ? 'MSc' : 'PhD',
+      avatarId: selectedAvatar,
       isDonor: false,
       hostel: 'Ajanta Hostel No. 3',
       createdAt: new Date()
     });
     window.location.href = 'index.html';
   } catch(e) {
-    msg.className = 'msg error'; msg.textContent = e.message;
+    if(e.code === 'auth/email-already-in-use') {
+      msg.className = 'msg error'; msg.textContent = 'This email is already registered.';
+    } else {
+      msg.className = 'msg error'; msg.textContent = e.message;
+    }
     btn.disabled = false; btn.textContent = 'Create account';
   }
 };
 
 window.forgotPassword = async function() {
-  const admission = document.getElementById('l-admission').value.trim().toUpperCase();
+  const email = document.getElementById('l-email').value.trim();
   const msg = document.getElementById('login-msg');
-  if(!admission) { msg.className = 'msg error'; msg.textContent = 'Enter your admission number first.'; return; }
+  msg.className = 'msg';
+  if(!email) { msg.className = 'msg error'; msg.textContent = 'Enter your email address first.'; return; }
   try {
-    // Get email from firestore
-    const q = query(collection(db,'users'), where('admissionNo','==',admission));
-    const snap = await getDocs(q);
-    if(snap.empty) { msg.className = 'msg error'; msg.textContent = 'No account found with this admission number.'; return; }
-    const userEmail = snap.docs[0].data().email;
-    await sendPasswordResetEmail(auth, userEmail);
+    await sendPasswordResetEmail(auth, email);
     msg.className = 'msg success'; msg.textContent = 'Password reset email sent. Check your inbox.';
   } catch(e) {
-    msg.className = 'msg error'; msg.textContent = 'Could not send reset email. Try again.';
+    msg.className = 'msg error'; msg.textContent = 'Could not send reset email. Check your email address.';
   }
 };
 </script>
