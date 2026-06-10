@@ -238,6 +238,7 @@ async function loadTodayData(){
       document.getElementById('lg').textContent=counts.lg;
       document.getElementById('dg').textContent=counts.dg;
       lockForm();
+      updateSummary();
     }
   }catch(e){console.log('No tracker data yet');}
 }
