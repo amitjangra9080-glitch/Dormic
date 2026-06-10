@@ -202,9 +202,18 @@ function loadPosts(){
         const isTravel=p.type==='travel';
         const name=isTravel?`${p.from||''}→${p.to||''}`:(p.itemName||'Post');
         const sub=isTravel?(p.travelDate||''):(p.location||'');
-        const bt=p.status==='resolved'?'resolved':p.type;
-        const bl=p.status==='resolved'?'Resolved':(p.type.charAt(0).toUpperCase()+p.type.slice(1));
-        return `<div class="post-row"><div class="post-ic"><i class="ti ${icons[p.type]||'ti-circle'}"></i></div><div><div class="post-name">${name}</div><div class="post-sub">${sub} · ${time}</div></div><span class="badge b-${bt}">${bl}</span></div>`;
+        const isResolved=p.status==='resolved';
+        const bt=isResolved?'resolved':p.type;
+        const bl=isResolved?'Resolved':(p.type.charAt(0).toUpperCase()+p.type.slice(1));
+        const resolveBtn=!isResolved?`<button onclick="resolveUserPost('${p.id}')" style="font-size:12px;color:#6C3BE8;border:0.5px solid #c4b5fd;border-radius:20px;padding:4px 11px;background:#ede9fe;cursor:pointer;margin-top:6px;font-family:inherit;">Mark as resolved</button>`:'';
+        return `<div class="post-row" style="flex-direction:column;align-items:flex-start;">
+          <div style="display:flex;align-items:center;gap:12px;width:100%;">
+            <div class="post-ic"><i class="ti ${icons[p.type]||'ti-circle'}"></i></div>
+            <div style="flex:1;"><div class="post-name">${name}</div><div class="post-sub">${sub} · ${time}</div></div>
+            <span class="badge b-${bt}">${bl}</span>
+          </div>
+          ${resolveBtn}
+        </div>`;
       }).join('')+`<div class="logout-row" onclick="logoutUser()"><i class="ti ti-logout"></i> Log out</div>`;
     });
   } catch(e){
@@ -302,6 +311,11 @@ window.saveDonor=async function(state){
 window.logoutUser=async function(){
   await signOut(auth);
   window.location.href='login.html';
+};
+window.resolveUserPost=async function(id){
+  try {
+    await updateDoc(doc(db,'posts',id),{status:'resolved'});
+  } catch(e){ alert('Error: '+e.message); }
 };
 </script>
 </body>

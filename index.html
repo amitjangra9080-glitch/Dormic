@@ -168,36 +168,36 @@ function renderFeed() {
 
 function buildCard(p, isResolved) {
   const time = p.createdAt ? timeAgo(p.createdAt.seconds * 1000) : 'Just now';
-  const initials = (p.posterName || '?')[0].toUpperCase();
   const avBg = avatarBgs[p.posterAvatarId || 1];
   const avSymbol = avatarSymbols[p.posterAvatarId || 1] || (p.posterName||'?')[0].toUpperCase();
   const waLink = `https://wa.me/91${p.posterPhone}?text=Hi%20${encodeURIComponent(p.posterName)}%2C%20I%20saw%20your%20post%20on%20Dormic`;
   const isOwner = currentUser && currentUser.uid === p.posterUid;
 
+  // Auto-grey "Going" travel posts 2 hours after departure
+  let autoResolved = false;
+  if(p.type === 'travel' && p.travelType === 'going' && p.travelDate && p.travelTime) {
+    const departure = new Date(`${p.travelDate}T${p.travelTime}`);
+    const twoHoursAfter = new Date(departure.getTime() + 2 * 60 * 60 * 1000);
+    if(Date.now() > twoHoursAfter.getTime()) autoResolved = true;
+  }
+
+  const showResolved = isResolved || autoResolved;
+
   let statusBtn = '';
-  if(isOwner && !isResolved) {
-    const labels = {
-      lost:'Mark as found',
-      found:'Mark as claimed',
-      sell:'Mark as sold',
-      buy:'Mark as got it',
-      have:'Mark as done',
-      need:'Mark as fulfilled',
-      travel:'Mark as full'
-    };
-    const label = labels[p.type];
-    if(label) statusBtn = `<button class="status-btn" onclick="resolvePost('${p.id}')">${label}</button>`;
-  } else if(isResolved) {
-    const doneLabels = {found:'Claimed',sell:'Sold',have:'Done',travel:'Full',lost:'Found',need:'Fulfilled',buy:'Got it'};
-    statusBtn = `<span style="font-size:13px;color:#9ca3af;display:flex;align-items:center;gap:4px;"><i class="ti ti-check"></i> ${doneLabels[p.type]||'Resolved'}</span>`;
+  if(isOwner && !showResolved) {
+    statusBtn = `<button class="status-btn" onclick="resolvePost('${p.id}')">Mark as resolved</button>`;
+  } else if(showResolved) {
+    const label = autoResolved ? 'Departed' : 'Resolved';
+    statusBtn = `<span style="font-size:13px;color:#9ca3af;display:flex;align-items:center;gap:4px;"><i class="ti ti-check"></i> ${label}</span>`;
   }
 
   if(p.type === 'travel') {
-    return `<div class="gap"></div><div class="card ${isResolved?'resolved-section':''}">
+    return `<div class="gap"></div><div class="card ${showResolved?'resolved-section':''}">
       <div class="card-head">
         <div class="av" style="background:${avBg}">${avSymbol}</div>
         <div><div class="uname">${p.posterName||''}</div><div class="uloc">Room ${p.posterRoom||''}</div></div>
         <span class="badge b-${p.travelType==='going'?'going':'need-travel'}">${p.travelType==='going'?'Going':'Need'}</span>
+        ${showResolved?`<span class="badge b-resolved" style="margin-left:4px;"><i class="ti ti-check"></i></span>`:''}
       </div>
       <div class="card-body">
         <div class="route-box">
@@ -214,12 +214,12 @@ function buildCard(p, isResolved) {
   }
 
   const catIcons = {lost:'ti-search-off',found:'ti-search',have:'ti-package',need:'ti-package-import',sell:'ti-tag',buy:'ti-shopping-cart'};
-  return `<div class="gap"></div><div class="card ${isResolved?'resolved-section':''}">
+  return `<div class="gap"></div><div class="card ${showResolved?'resolved-section':''}">
     <div class="card-head">
       <div class="av" style="background:${avBg}">${avSymbol}</div>
       <div><div class="uname">${p.posterName||''}</div><div class="uloc">${p.location||''}</div></div>
       <span class="badge b-${p.type}">${p.type.charAt(0).toUpperCase()+p.type.slice(1)}</span>
-      ${isResolved?`<span class="badge b-resolved" style="margin-left:4px;"><i class="ti ti-check"></i></span>`:''}
+      ${showResolved?`<span class="badge b-resolved" style="margin-left:4px;"><i class="ti ti-check"></i></span>`:''}
     </div>
     <div class="card-body">
       <div class="cat-line"><i class="ti ${catIcons[p.type]||'ti-circle'}"></i> ${p.itemType||''}</div>
