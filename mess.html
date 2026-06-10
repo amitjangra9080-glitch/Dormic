@@ -19,12 +19,11 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .sg{flex:1;text-align:center;padding:13px 0;font-size:15px;font-weight:500;color:#aaa;border-bottom:2.5px solid transparent;cursor:pointer;}
 .sg.on{color:#6C3BE8;border-bottom-color:#6C3BE8;}
 .main{max-width:500px;margin:0 auto;}
-/* MENU */
 .days-row{display:flex;gap:8px;padding:13px 14px;overflow-x:auto;background:#fff;border-bottom:0.5px solid #f0f0f0;}
 .days-row::-webkit-scrollbar{display:none;}
 .day{font-size:13px;padding:7px 14px;border-radius:20px;background:#f7f7f7;border:0.5px solid #e8e8e8;color:#666;white-space:nowrap;cursor:pointer;flex-shrink:0;}
 .day.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;}
-.meals-wrap{padding:4px 14px 16px;background:#fff;}
+.meals-wrap{padding:4px 14px 0;background:#fff;}
 .meal{padding:15px 0;border-bottom:0.5px solid #f7f7f7;}
 .meal:last-child{border-bottom:none;}
 .meal-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
@@ -33,15 +32,15 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .meal-time{font-size:13px;color:#aaa;margin-left:auto;}
 .meal-items{font-size:15px;color:#555;line-height:1.55;padding-left:42px;}
 .stars{display:flex;gap:5px;padding-left:42px;margin-top:10px;}
-.star{font-size:24px;color:#e0e0e0;cursor:pointer;transition:color 0.1s;}
+.star{font-size:26px;color:#e0e0e0;cursor:pointer;transition:color 0.1s;}
 .star.on{color:#F97316;}
-.rating-note{font-size:12px;color:#aaa;padding-left:42px;margin-top:5px;font-style:italic;}
-.complaint-box{margin:10px 14px 0 42px;display:flex;flex-direction:column;gap:8px;}
-.c-select{width:100%;border:0.5px solid #e5e5e5;border-radius:9px;background:#f9f9f9;font-size:14px;color:#262626;padding:10px 12px;outline:none;font-family:inherit;appearance:none;}
-.c-text{width:100%;border:0.5px solid #e5e5e5;border-radius:9px;background:#f9f9f9;font-size:14px;color:#262626;padding:10px 12px;outline:none;font-family:inherit;resize:none;}
-.submit-rating-btn{margin:10px 14px 4px 42px;height:40px;background:linear-gradient(90deg,#6C3BE8,#E8398A);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
-.submit-rating-btn:disabled{background:#e0e0e0;color:#aaa;}
-.submitted-badge{display:flex;align-items:center;gap:6px;font-size:13px;color:#3b6d11;background:#eaf3de;padding:8px 14px 8px 42px;margin-top:8px;}
+.complaint-box{margin:10px 0 0 42px;display:flex;flex-direction:column;gap:8px;}
+.c-select{width:100%;border:0.5px solid #e5e5e5;border-radius:10px;background:#f9f9f9;font-size:14px;color:#262626;padding:11px 13px;outline:none;font-family:inherit;}
+.c-text{width:100%;border:0.5px solid #e5e5e5;border-radius:10px;background:#f9f9f9;font-size:14px;color:#262626;padding:11px 13px;outline:none;font-family:inherit;resize:none;}
+.submit-rating-btn{margin:12px 0 4px 42px;width:calc(100% - 42px);height:44px;background:linear-gradient(90deg,#6C3BE8,#E8398A);border:none;border-radius:11px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;}
+.submit-rating-btn:disabled{background:#e0e0e0;color:#aaa;cursor:not-allowed;}
+.submitted-badge{display:flex;align-items:center;gap:6px;font-size:14px;color:#3b6d11;background:#eaf3de;padding:10px 14px 10px 42px;margin-top:8px;border-radius:8px;}
+.anon-note{font-size:13px;color:#aaa;text-align:center;padding:14px 16px;border-top:0.5px solid #f0f0f0;background:#fff;}
 /* TRACKER */
 .cal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;background:#fff;}
 .cal-month{font-size:16px;font-weight:500;color:#262626;}
@@ -60,7 +59,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .slbl{font-size:11px;color:#aaa;margin-top:2px;}
 .today-lbl{font-size:13px;color:#6C3BE8;padding:13px 14px 9px;text-transform:uppercase;letter-spacing:0.3px;background:#fff;font-weight:600;}
 .tracker-meals{padding:0 0 8px;background:#fff;}
-.tmeal{display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:12px;padding:14px 14px;border-bottom:0.5px solid #f7f7f7;}
+.tmeal{display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:12px;padding:14px;border-bottom:0.5px solid #f7f7f7;}
 .tmeal:last-child{border-bottom:none;}
 .tmic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;flex-shrink:0;}
 .tmeal-name{font-size:15px;font-weight:500;color:#262626;}
@@ -95,6 +94,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <div id="tab-menu" class="main">
   <div class="days-row" id="days-row"></div>
   <div class="meals-wrap" id="meals-content"></div>
+  <div class="anon-note">Ratings are completely anonymous and will be shared with the Mess President.</div>
 </div>
 
 <!-- TRACKER TAB -->
@@ -110,7 +110,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <div class="scard"><div class="snum" style="color:#6C3BE8;" id="s-month">Jun</div><div class="slbl">Month</div></div>
   </div>
   <div class="today-lbl" id="today-date-lbl">Today</div>
-  <div class="tracker-meals" id="tracker-meals-wrap">
+  <div class="tracker-meals">
     <div class="tmeal">
       <span class="tmic" style="background:#e8a445;"><i class="ti ti-coffee"></i></span>
       <div><div class="tmeal-name">Breakfast</div><div class="tmeal-time">8:00 – 9:00 AM</div></div>
@@ -153,7 +153,46 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Full menu with all items per meal
 const menu = {
+  Mon:{
+    B:['Potato Sabzi','Parathas','Chai','Milk','Curd','Pickle'],
+    L:['Classic Rajma','Rice','Chapatis','Curd','Raita','Buttermilk','Chutney','Salad'],
+    D:['Mixed Vegetable','Dal','Rice','Chapatis','Chutney','Salad','Milk']
+  },
+  Tue:{
+    B:['Poha','Chai','Milk','Curd','Pickle'],
+    L:['Potato & Peas','Fried Rice','Chapatis','Curd','Raita','Buttermilk','Chutney','Salad'],
+    D:['Dal Makhani','Custard','Rice','Chapatis','Chutney','Salad']
+  },
+  Wed:{
+    B:['Potato-Onion Stuffed Parathas','Chai','Milk','Curd','Pickle'],
+    L:['Kabuli Chickpeas','Rice','Chapatis','Curd','Raita','Buttermilk','Chutney','Salad'],
+    D:['Paneer','Rice','Chapatis','Chutney','Salad','Milk']
+  },
+  Thu:{
+    B:['Paneer Stuffed Parathas','Chai','Milk','Curd','Pickle'],
+    L:['Kadhi Pakora','Rice','Chapatis','Curd','Raita','Buttermilk','Chutney','Salad'],
+    D:['Seasonal Vegetable','Dal','Rice','Chapatis','Chutney','Salad','Milk']
+  },
+  Fri:{
+    B:['Desi Chickpeas','Parathas','Chai','Milk','Curd','Pickle'],
+    L:['Dal','Fried Rice','Chapatis','Curd','Raita','Buttermilk','Chutney','Salad'],
+    D:['Sev Bhaji','Rice','Chapatis','Chutney','Salad','Milk']
+  },
+  Sat:{
+    B:['Potato-Onion Parathas','Chai','Milk','Curd','Pickle'],
+    L:['Desi Chickpeas with Potato','Rice','Chapatis','Curd','Raita','Buttermilk','Chutney','Salad'],
+    D:['Dal','Rice','Chapatis','Chutney','Salad','Milk']
+  },
+  Sun:{
+    B:['Chole Kulche / Pav Bhaji','Chai','Milk','Shake'],
+    L:['Chole Puri','Rice','Chapatis','Curd','Raita','Buttermilk','Chutney','Salad'],
+    D:['Seasonal Vegetable','Dal','Rice','Chapatis','Chutney','Salad','Milk']
+  }
+};
+
+const menuDisplay = {
   Mon:{B:'Potato Sabzi with Parathas',L:'Classic Rajma with Rice',D:'Mixed Vegetable with Dal'},
   Tue:{B:'Light & Savoury Poha',L:'Potato & Peas with Fried Rice',D:'Dal Makhani with Custard'},
   Wed:{B:'Potato-Onion Stuffed Parathas',L:'Kabuli Chickpeas',D:'Paneer'},
@@ -162,23 +201,23 @@ const menu = {
   Sat:{B:'Potato-Onion Parathas',L:'Desi Chickpeas with Potato',D:'Dal'},
   Sun:{B:'Chole Kulche / Pav Bhaji',L:'Chole Puri',D:'Seasonal Vegetable with Dal'}
 };
+
 const dayKeys = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const today = new Date();
 const todayKey = dayKeys[today.getDay()===0?6:today.getDay()-1];
+const todayStr = today.toISOString().split('T')[0];
+const monthName = today.toLocaleDateString('en-IN',{month:'long',year:'numeric'});
+document.getElementById('cal-month').textContent = monthName;
+document.getElementById('s-month').textContent = today.toLocaleDateString('en-IN',{month:'short'});
+document.getElementById('today-date-lbl').textContent = `Today — ${today.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short'})}`;
+
 let activeDay = todayKey;
 let currentUser = null;
 let isLocked = false;
 const counts = {bg:0,lg:0,dg:0};
 const state = {b:null,l:null,d:null};
-
-// Format today's date as key e.g. "2026-06-10"
-const todayStr = today.toISOString().split('T')[0];
-const monthName = today.toLocaleDateString('en-IN',{month:'long',year:'numeric'});
-document.getElementById('cal-month').textContent = monthName;
-document.getElementById('s-month').textContent = today.toLocaleDateString('en-IN',{month:'short'});
-
-// Set today label
-document.getElementById('today-date-lbl').textContent = `Today — ${today.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short'})}`;
+const ratings = {b:0,l:0,d:0};
+const submitted = {b:false,l:false,d:false};
 
 onAuthStateChanged(auth, async user => {
   if(!user){window.location.href='login.html';return;}
@@ -192,39 +231,30 @@ async function loadTodayData(){
     const snap = await getDoc(doc(db,'messTracker',currentUser.uid,'days',todayStr));
     if(snap.exists()){
       const d = snap.data();
-      // Restore state
-      state.b = d.breakfast||null;
-      state.l = d.lunch||null;
-      state.d = d.dinner||null;
-      counts.bg = d.breakfastGuests||0;
-      counts.lg = d.lunchGuests||0;
-      counts.dg = d.dinnerGuests||0;
-      // Update UI
-      updateToggleUI('b',state.b);
-      updateToggleUI('l',state.l);
-      updateToggleUI('d',state.d);
-      document.getElementById('bg').textContent = counts.bg;
-      document.getElementById('lg').textContent = counts.lg;
-      document.getElementById('dg').textContent = counts.dg;
-      // Lock the form — already saved
+      state.b=d.breakfast||null; state.l=d.lunch||null; state.d=d.dinner||null;
+      counts.bg=d.breakfastGuests||0; counts.lg=d.lunchGuests||0; counts.dg=d.dinnerGuests||0;
+      updateToggleUI('b',state.b); updateToggleUI('l',state.l); updateToggleUI('d',state.d);
+      document.getElementById('bg').textContent=counts.bg;
+      document.getElementById('lg').textContent=counts.lg;
+      document.getElementById('dg').textContent=counts.dg;
       lockForm();
     }
-  } catch(e){console.log('No data yet for today');}
+  }catch(e){console.log('No tracker data yet');}
 }
 
-function updateToggleUI(meal, val){
-  const p = document.getElementById(meal+'p');
-  const a = document.getElementById(meal+'a');
+function updateToggleUI(meal,val){
+  const p=document.getElementById(meal+'p');
+  const a=document.getElementById(meal+'a');
   if(val==='present'){p.className='tp on';a.className='ta';}
   else if(val==='absent'){a.className='ta on';p.className='tp';}
   else{p.className='tp';a.className='ta';}
 }
 
 function lockForm(){
-  isLocked = true;
-  document.getElementById('tog-b').classList.add('disabled-tog');
-  document.getElementById('tog-l').classList.add('disabled-tog');
-  document.getElementById('tog-d').classList.add('disabled-tog');
+  isLocked=true;
+  ['b','l','d'].forEach(m=>{
+    document.getElementById('tog-'+m).classList.add('disabled-tog');
+  });
   document.querySelectorAll('.cbtn').forEach(b=>b.style.pointerEvents='none');
   document.getElementById('submit-btn').style.display='none';
   document.getElementById('edit-btn').style.display='block';
@@ -232,98 +262,88 @@ function lockForm(){
 }
 
 function unlockForm(){
-  isLocked = false;
-  document.getElementById('tog-b').classList.remove('disabled-tog');
-  document.getElementById('tog-l').classList.remove('disabled-tog');
-  document.getElementById('tog-d').classList.remove('disabled-tog');
+  isLocked=false;
+  ['b','l','d'].forEach(m=>{
+    document.getElementById('tog-'+m).classList.remove('disabled-tog');
+  });
   document.querySelectorAll('.cbtn').forEach(b=>b.style.pointerEvents='');
   document.getElementById('submit-btn').style.display='block';
   document.getElementById('edit-btn').style.display='none';
   document.getElementById('saved-badge').style.display='none';
 }
 
-window.setP = m => { if(isLocked)return; state[m]='present'; updateToggleUI(m,'present'); };
-window.setA = m => { if(isLocked)return; state[m]='absent'; updateToggleUI(m,'absent'); };
-window.ic = id => { if(isLocked)return; counts[id]++; document.getElementById(id).textContent=counts[id]; };
-window.dc = id => { if(isLocked)return; if(counts[id]>0){counts[id]--; document.getElementById(id).textContent=counts[id];} };
+window.setP=m=>{if(isLocked)return;state[m]='present';updateToggleUI(m,'present');};
+window.setA=m=>{if(isLocked)return;state[m]='absent';updateToggleUI(m,'absent');};
+window.ic=id=>{if(isLocked)return;counts[id]++;document.getElementById(id).textContent=counts[id];};
+window.dc=id=>{if(isLocked)return;if(counts[id]>0){counts[id]--;document.getElementById(id).textContent=counts[id];}};
 
-window.submitTracker = async function(){
-  const btn = document.getElementById('submit-btn');
-  btn.disabled=true; btn.textContent='Saving...';
+window.submitTracker=async function(){
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true;btn.textContent='Saving...';
   try {
     await setDoc(doc(db,'messTracker',currentUser.uid,'days',todayStr),{
-      date: todayStr,
-      breakfast: state.b||'not set',
-      lunch: state.l||'not set',
-      dinner: state.d||'not set',
-      breakfastGuests: counts.bg,
-      lunchGuests: counts.lg,
-      dinnerGuests: counts.dg,
-      savedAt: new Date()
+      date:todayStr,
+      breakfast:state.b||'not set',lunch:state.l||'not set',dinner:state.d||'not set',
+      breakfastGuests:counts.bg,lunchGuests:counts.lg,dinnerGuests:counts.dg,
+      savedAt:new Date()
     });
     lockForm();
     updateSummary();
-  } catch(e){
-    btn.disabled=false; btn.textContent='Save today\'s meals';
+  }catch(e){
+    btn.disabled=false;btn.textContent='Save today\'s meals';
     alert('Error saving: '+e.message);
   }
 };
 
-window.editTracker = function(){
-  unlockForm();
-};
+window.editTracker=function(){unlockForm();};
 
 function updateSummary(){
-  const meals = [state.b,state.l,state.d].filter(s=>s==='present').length;
-  const absent = [state.b,state.l,state.d].filter(s=>s==='absent').length;
-  const guests = counts.bg+counts.lg+counts.dg;
-  document.getElementById('s-meals').textContent=meals;
-  document.getElementById('s-absent').textContent=absent;
-  document.getElementById('s-guests').textContent=guests;
+  document.getElementById('s-meals').textContent=[state.b,state.l,state.d].filter(s=>s==='present').length;
+  document.getElementById('s-absent').textContent=[state.b,state.l,state.d].filter(s=>s==='absent').length;
+  document.getElementById('s-guests').textContent=counts.bg+counts.lg+counts.dg;
 }
 
 async function buildCalendar(){
-  const strip = document.getElementById('cal-strip');
-  const daysInMonth = new Date(today.getFullYear(),today.getMonth()+1,0).getDate();
+  const strip=document.getElementById('cal-strip');
+  const daysInMonth=new Date(today.getFullYear(),today.getMonth()+1,0).getDate();
   strip.innerHTML='';
   for(let i=1;i<=daysInMonth;i++){
-    const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-    const isToday = i===today.getDate();
-    const isPast = i<today.getDate();
-    const div = document.createElement('div');
-    div.className='cday';
-    const lbl = document.createElement('span');
-    lbl.className='cday-lbl';
-    lbl.textContent=i;
-    const dot = document.createElement('span');
-    dot.className='cdot'+(isToday?' today':'');
-    // Only load data for past days and today
-    if(isPast||isToday){
+    const dateStr=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+    const isToday=i===today.getDate();
+    const isPast=i<today.getDate();
+    const div=document.createElement('div');div.className='cday';
+    const lbl=document.createElement('span');lbl.className='cday-lbl';lbl.textContent=i;
+    const dot=document.createElement('span');dot.className='cdot'+(isToday?' today':'');
+    if((isPast||isToday)&&currentUser){
       try {
-        const snap = await getDoc(doc(db,'messTracker',currentUser.uid,'days',dateStr));
+        const snap=await getDoc(doc(db,'messTracker',currentUser.uid,'days',dateStr));
         if(snap.exists()){
           const d=snap.data();
-          const presentCount=[d.breakfast,d.lunch,d.dinner].filter(v=>v==='present').length;
-          if(presentCount===3)dot.classList.add('full');
-          else if(presentCount>0)dot.classList.add('part');
+          const pc=[d.breakfast,d.lunch,d.dinner].filter(v=>v==='present').length;
+          if(pc===3)dot.classList.add('full');
+          else if(pc>0)dot.classList.add('part');
           else dot.classList.add('miss');
-          dot.textContent=presentCount;
+          dot.textContent=pc;
         }
       }catch(e){}
     }
-    div.appendChild(lbl);
-    div.appendChild(dot);
+    div.appendChild(lbl);div.appendChild(dot);
     strip.appendChild(div);
   }
 }
 
 // MENU
-const daysRow = document.getElementById('days-row');
+const daysRow=document.getElementById('days-row');
 dayKeys.forEach(d=>{
   const el=document.createElement('span');
   el.className='day'+(d===activeDay?' on':'');
   el.textContent=d;
-  el.onclick=()=>{activeDay=d;renderMenu();document.querySelectorAll('.day').forEach(x=>x.classList.remove('on'));el.classList.add('on');};
+  el.onclick=()=>{
+    activeDay=d;
+    renderMenu();
+    document.querySelectorAll('.day').forEach(x=>x.classList.remove('on'));
+    el.classList.add('on');
+  };
   daysRow.appendChild(el);
 });
 
@@ -332,63 +352,55 @@ const mealData=[
   {key:'L',name:'Lunch',time:'1:00 – 2:00 PM',color:'#4c9c5e',icon:'ti-tools-kitchen-2',rk:'l'},
   {key:'D',name:'Dinner',time:'8:00 – 9:00 PM',color:'#6C3BE8',icon:'ti-moon',rk:'d'}
 ];
-const ratings={b:0,l:0,d:0};
-const submitted={b:false,l:false,d:false};
-
-function getMenuItems(mealKey){
-  const m=menu[activeDay];
-  // Split menu items by comma for dropdown
-  const items = m[mealKey].split(',').map(i=>i.trim());
-  items.push('Milk / Tea','Other');
-  return items;
-}
 
 function renderMenu(){
-  const m=menu[activeDay];
   const isToday=activeDay===todayKey;
-  document.getElementById('meals-content').innerHTML=mealData.map(meal=>`
-    <div class="meal" id="meal-wrap-${meal.rk}">
+  document.getElementById('meals-content').innerHTML=mealData.map(meal=>{
+    const items=menu[activeDay][meal.key];
+    const displayText=menuDisplay[activeDay][meal.key];
+    const itemOptions=items.map(i=>`<option value="${i}">${i}</option>`).join('');
+    return `
+    <div class="meal">
       <div class="meal-head">
         <span class="meal-ic" style="background:${meal.color};"><i class="ti ${meal.icon}"></i></span>
         <span class="meal-name">${meal.name}</span>
         <span class="meal-time">${meal.time}</span>
       </div>
-      <div class="meal-items">${m[meal.key]}</div>
-      ${isToday ? `
-        <div class="rating-section" id="rating-${meal.rk}">
-          <div class="stars" id="stars-${meal.rk}">
-            ${[1,2,3,4,5].map(n=>`<span class="star" onclick="rate('${meal.rk}',${n})">★</span>`).join('')}
-          </div>
-          <div class="rating-note"><i class="ti ti-lock" style="font-size:12px;"></i> Your ratings are anonymous — only the mess president sees a weekly summary, never your name</div>
-          <div class="complaint-box" id="complaint-${meal.rk}" style="display:none;">
-            <select class="c-select" id="item-${meal.rk}">
-              <option value="">Which item had an issue? (optional)</option>
-              ${getMenuItems(meal.key).map(i=>`<option value="${i}">${i}</option>`).join('')}
-            </select>
-            <select class="c-select" id="issue-${meal.rk}">
-              <option value="">What was wrong? (optional)</option>
-              <option>Quantity was less</option>
-              <option>Quality was poor</option>
-              <option>Was cold / not fresh</option>
-              <option>Item was missing from menu</option>
-              <option>Other</option>
-            </select>
-            <textarea class="c-text" id="note-${meal.rk}" placeholder="Any other feedback... (optional)" rows="2"></textarea>
-          </div>
-          <button class="submit-rating-btn" id="submit-rating-${meal.rk}" onclick="submitRating('${meal.rk}')" style="display:none;">Submit rating</button>
+      <div class="meal-items">${displayText}</div>
+      ${isToday&&!submitted[meal.rk]?`
+        <div class="stars" id="stars-${meal.rk}">
+          ${[1,2,3,4,5].map(n=>`<span class="star" onclick="rate('${meal.rk}',${n})">★</span>`).join('')}
         </div>
-        <div class="submitted-badge" id="done-${meal.rk}" style="display:none;"><i class="ti ti-check"></i> Feedback submitted — thank you</div>
-      ` : ''}
-    </div>`).join('');
+        <div class="complaint-box" id="complaint-${meal.rk}" style="display:none;">
+          <select class="c-select" id="item-${meal.rk}">
+            <option value="">Which item had an issue? (optional)</option>
+            ${itemOptions}
+          </select>
+          <select class="c-select" id="issue-${meal.rk}">
+            <option value="">What was wrong? (optional)</option>
+            <option>Quantity was less</option>
+            <option>Quality was poor</option>
+            <option>Was cold / not fresh</option>
+            <option>Item was missing from menu</option>
+            <option>Other</option>
+          </select>
+          <textarea class="c-text" id="note-${meal.rk}" placeholder="Any other feedback... (optional)" rows="2"></textarea>
+          <button class="submit-rating-btn" id="submit-rating-${meal.rk}" onclick="submitRating('${meal.rk}')">Submit</button>
+        </div>
+      `:isToday&&submitted[meal.rk]?`
+        <div class="submitted-badge"><i class="ti ti-check"></i> Feedback submitted — thank you</div>
+      `:''}
+    </div>`;
+  }).join('');
 }
 
 window.rate=function(meal,n){
   if(submitted[meal])return;
   ratings[meal]=n;
   document.querySelectorAll(`#stars-${meal} .star`).forEach((s,i)=>s.classList.toggle('on',i<n));
-  // Show complaint box and submit button after rating
-  document.getElementById(`complaint-${meal}`).style.display='block';
-  document.getElementById(`submit-rating-${meal}`).style.display='block';
+  document.getElementById(`complaint-${meal}`).style.display='flex';
+  document.getElementById(`complaint-${meal}`).style.flexDirection='column';
+  document.getElementById(`complaint-${meal}`).style.gap='8px';
 };
 
 window.submitRating=async function(meal){
@@ -408,12 +420,10 @@ window.submitRating=async function(meal){
       createdAt:serverTimestamp()
     });
     submitted[meal]=true;
-    document.getElementById(`rating-${meal}`).style.display='none';
-    const done=document.getElementById(`done-${meal}`);
-    done.style.display='flex';
-  } catch(e){
-    btn.disabled=false;btn.textContent='Submit rating';
-    alert('Error submitting: '+e.message);
+    renderMenu();
+  }catch(e){
+    btn.disabled=false;btn.textContent='Submit';
+    alert('Error: '+e.message);
   }
 };
 
