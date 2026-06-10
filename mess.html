@@ -345,12 +345,12 @@ window.rate=function(meal,n){ratings[meal]=n;document.querySelectorAll(`#stars-$
 
 renderMenu();
 
-function showTab(i){
+window.showTab=function(i){
   document.getElementById('sg0').classList.toggle('on',i===0);
   document.getElementById('sg1').classList.toggle('on',i===1);
   document.getElementById('tab-menu').style.display=i===0?'block':'none';
   document.getElementById('tab-tracker').style.display=i===1?'block':'none';
-}
+};
 </script>
 </body>
 </html>
