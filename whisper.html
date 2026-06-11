@@ -1,872 +1,367 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Whisper Box — Dormic</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --grad: linear-gradient(135deg, #6C3BE8, #E8398A, #F97316);
-      --purple: #6C3BE8;
-      --pink: #E8398A;
-      --orange: #F97316;
-      --bg: #F7F7F8;
-      --surface: #FFFFFF;
-      --grey-light: #F0EFF4;
-      --grey-mid: #C8C7D0;
-      --grey-dark: #6B6A75;
-      --text: #1A1A2E;
-      --text-muted: #6B6A75;
-      --radius: 16px;
-      --radius-sm: 10px;
-      --nav-h: 64px;
-      --header-h: 56px;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding-bottom: calc(var(--nav-h) + 80px);
-    }
-
-    /* ── HEADER ── */
-    .header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--header-h);
-      background: var(--surface);
-      border-bottom: 1px solid #EBEBEB;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      z-index: 100;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .header-icon-wrap {
-      width: 36px; height: 36px;
-      background: var(--grey-light);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    .header-icon-wrap i {
-      font-size: 18px;
-      background: var(--grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .header-title {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .header-subtitle {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 1px;
-    }
-
-    .online-badge {
-      font-size: 11px;
-      background: var(--grey-light);
-      color: var(--grey-dark);
-      padding: 4px 10px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .online-dot {
-      width: 6px; height: 6px;
-      background: #22C55E;
-      border-radius: 50%;
-    }
-
-    /* ── GREY THEME BANNER ── */
-    .whisper-banner {
-      margin: calc(var(--header-h) + 12px) 16px 0;
-      background: #2C2C35;
-      border-radius: var(--radius);
-      padding: 16px;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .ghost-avatar {
-      width: 44px; height: 44px;
-      background: #3E3E4A;
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .ghost-avatar i {
-      font-size: 22px;
-      color: #ADADBA;
-    }
-
-    .banner-text h2 {
-      font-size: 15px;
-      font-weight: 600;
-      color: #F0F0F5;
-      margin-bottom: 3px;
-    }
-
-    .banner-text p {
-      font-size: 12px;
-      color: #8A8A98;
-      line-height: 1.5;
-    }
-
-    .my-id-pill {
-      margin: 10px 16px 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--surface);
-      border: 1px solid #EBEBEB;
-      border-radius: 20px;
-      padding: 6px 12px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .my-id-pill strong {
-      color: var(--purple);
-      font-weight: 600;
-    }
-
-    /* ── MESSAGES ── */
-    .messages-wrap {
-      padding: 12px 16px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .msg-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-      border: 1px solid #EBEBEB;
-      position: relative;
-    }
-
-    .msg-card.is-reply-child {
-      margin-left: 20px;
-      border-left: 3px solid var(--grey-mid);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    }
-
-    .msg-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-
-    .msg-id {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--purple);
-    }
-
-    .msg-id.is-me {
-      color: var(--pink);
-    }
-
-    .msg-time {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .msg-text {
-      font-size: 14px;
-      color: var(--text);
-      line-height: 1.55;
-    }
-
-    .reply-context {
-      background: var(--grey-light);
-      border-radius: 8px;
-      padding: 6px 10px;
-      margin-bottom: 8px;
-      font-size: 12px;
-      color: var(--grey-dark);
-      border-left: 2px solid var(--grey-mid);
-    }
-
-    .reply-context-id {
-      font-weight: 600;
-      color: var(--purple);
-      margin-bottom: 2px;
-      font-size: 11px;
-    }
-
-    .msg-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .action-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 12px;
-      color: var(--text-muted);
-      padding: 4px 8px;
-      border-radius: 8px;
-      transition: background 0.15s;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .action-btn:hover { background: var(--grey-light); }
-
-    .action-btn i { font-size: 14px; }
-
-    .plus-btn.active {
-      color: var(--purple);
-      font-weight: 600;
-    }
-
-    .plus-count {
-      font-weight: 600;
-    }
-
-    /* ── EXPIRED NOTICE ── */
-    .expired-notice {
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-muted);
-      padding: 20px 16px;
-    }
-
-    /* ── COMPOSE ── */
-    .compose-wrap {
-      position: fixed;
-      bottom: var(--nav-h);
-      left: 0; right: 0;
-      background: var(--surface);
-      border-top: 1px solid #EBEBEB;
-      padding: 10px 12px;
-      z-index: 100;
-    }
-
-    .reply-preview {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--grey-light);
-      border-radius: 8px;
-      padding: 6px 10px;
-      margin-bottom: 8px;
-      font-size: 12px;
-      color: var(--grey-dark);
-    }
-
-    .reply-preview.visible { display: flex; }
-
-    .reply-preview-text { flex: 1; }
-    .reply-cancel {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      color: var(--grey-dark);
-      padding: 0 4px;
-    }
-
-    .compose-row {
-      display: flex;
-      align-items: flex-end;
-      gap: 8px;
-    }
-
-    .compose-input {
-      flex: 1;
-      background: var(--grey-light);
-      border: none;
-      border-radius: 20px;
-      padding: 10px 16px;
-      font-size: 14px;
-      font-family: 'Inter', sans-serif;
-      color: var(--text);
-      outline: none;
-      resize: none;
-      max-height: 100px;
-      line-height: 1.4;
-    }
-
-    .compose-input::placeholder { color: var(--grey-dark); }
-
-    .send-btn {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: var(--grad);
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: opacity 0.15s, transform 0.1s;
-    }
-
-    .send-btn:active { transform: scale(0.93); }
-    .send-btn:disabled { opacity: 0.4; cursor: default; }
-
-    .send-btn i { color: white; font-size: 16px; }
-
-    /* ── BOTTOM NAV ── */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      height: var(--nav-h);
-      background: var(--surface);
-      border-top: 1px solid #EBEBEB;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      z-index: 200;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      text-decoration: none;
-      flex: 1;
-      padding: 8px 0;
-    }
-
-    .nav-item i {
-      font-size: 22px;
-      color: var(--grey-mid);
-    }
-
-    .nav-item span {
-      font-size: 10px;
-      color: var(--grey-mid);
-      font-weight: 500;
-    }
-
-    .nav-item.active i {
-      background: var(--grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .nav-item.active span {
-      background: var(--grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* ── LOADING / EMPTY ── */
-    .loading-state, .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-
-    .empty-state i {
-      font-size: 40px;
-      color: var(--grey-mid);
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    /* ── AUTH GATE ── */
-    .auth-gate {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 999;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 12px;
-      text-align: center;
-      padding: 32px;
-    }
-
-    .auth-gate.visible { display: flex; }
-
-    .auth-gate i {
-      font-size: 48px;
-      color: var(--grey-mid);
-    }
-
-    .auth-gate h2 { font-size: 18px; font-weight: 600; }
-    .auth-gate p { font-size: 14px; color: var(--text-muted); }
-
-    .auth-gate a {
-      margin-top: 8px;
-      padding: 12px 28px;
-      background: var(--grad);
-      color: white;
-      border-radius: 24px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 15px;
-    }
-
-    .date-divider {
-      text-align: center;
-      font-size: 11px;
-      color: var(--text-muted);
-      padding: 8px 0 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .date-divider::before, .date-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #EBEBEB;
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Whisper — Dormic</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Dormic"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;font-size:16px;}
+.top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;flex-shrink:0;}
+.top-title{font-size:17px;font-weight:500;color:#262626;}
+.top-right{display:flex;align-items:center;gap:12px;}
+.online-count{font-size:12px;color:#aaa;display:flex;align-items:center;gap:4px;}
+.online-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;}
+.my-id-badge{font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;}
+.anon-note{background:#ede9fe;border-bottom:0.5px solid #ddd6fe;padding:8px 14px;font-size:12px;color:#6C3BE8;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;}
+.chat-feed{flex:1;overflow-y:auto;padding:12px 14px 80px;max-width:600px;width:100%;margin:0 auto;}
+.day-divider{text-align:center;font-size:11px;color:#aaa;margin:12px 0;display:flex;align-items:center;gap:8px;}
+.day-divider::before,.day-divider::after{content:'';flex:1;height:0.5px;background:#e0e0e0;}
+.msg-wrap{margin-bottom:10px;}
+.msg-bubble{background:#fff;border-radius:14px;padding:10px 13px;box-shadow:0 1px 3px rgba(0,0,0,0.06);position:relative;}
+.msg-bubble.own{background:linear-gradient(135deg,#ede9fe,#fce7f3);}
+.msg-bubble.hidden-msg{background:#f3f4f6;opacity:0.6;}
+.msg-header{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.anon-id{font-size:12px;font-weight:700;color:#6C3BE8;}
+.anon-id.own{color:#E8398A;}
+.msg-time{font-size:10px;color:#bbb;margin-left:auto;}
+.msg-text{font-size:14px;color:#262626;line-height:1.5;word-break:break-word;}
+.msg-text.hidden-txt{font-size:13px;color:#9ca3af;font-style:italic;}
+.msg-actions{display:flex;align-items:center;gap:8px;margin-top:7px;padding-top:6px;border-top:0.5px solid #f0f0f0;}
+.react-btn{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;border:0.5px solid #e0e0e0;background:#f7f7f7;cursor:pointer;color:#555;display:flex;align-items:center;gap:3px;transition:all 0.15s;}
+.react-btn.active-up{background:#eaf3de;color:#3b6d11;border-color:#b7dfb0;}
+.react-btn.active-down{background:#fee2e2;color:#a32d2d;border-color:#fca5a5;}
+.reply-btn{font-size:12px;color:#6C3BE8;cursor:pointer;margin-left:4px;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:3px;}
+.report-btn{font-size:12px;color:#aaa;cursor:pointer;margin-left:auto;background:none;border:none;font-family:inherit;}
+.replies-wrap{margin-top:8px;padding-left:14px;border-left:2px solid #e0d4f7;}
+.reply-bubble{background:#f9f9f9;border-radius:10px;padding:8px 11px;margin-bottom:6px;}
+.reply-bubble.own{background:#ede9fe;}
+.reply-header{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.reply-anon-id{font-size:11px;font-weight:700;color:#6C3BE8;}
+.reply-anon-id.own{color:#E8398A;}
+.reply-time{font-size:10px;color:#bbb;margin-left:auto;}
+.reply-text{font-size:13px;color:#262626;line-height:1.45;word-break:break-word;}
+.reply-actions{display:flex;align-items:center;gap:6px;margin-top:5px;}
+.reply-reply-btn{font-size:11px;color:#6C3BE8;cursor:pointer;background:none;border:none;font-family:inherit;}
+.nested-replies{margin-top:6px;padding-left:12px;border-left:2px solid #f0e6ff;}
+/* INPUT */
+.input-bar{position:fixed;bottom:62px;left:0;right:0;background:#fff;border-top:0.5px solid #f0f0f0;padding:10px 14px;z-index:100;}
+.reply-context{background:#ede9fe;border-radius:8px;padding:6px 10px;margin-bottom:8px;font-size:12px;color:#6C3BE8;display:none;align-items:center;justify-content:space-between;}
+.reply-context.show{display:flex;}
+.input-row{display:flex;gap:8px;align-items:flex-end;}
+.input-wrap{flex:1;background:#f7f7f7;border:0.5px solid #e0e0e0;border-radius:20px;padding:9px 14px;min-height:40px;max-height:100px;overflow-y:auto;font-size:14px;color:#262626;outline:none;font-family:inherit;line-height:1.4;}
+.input-wrap:empty::before{content:attr(data-placeholder);color:#bbb;}
+.send-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#6C3BE8,#E8398A);border:none;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;}
+.send-btn:disabled{background:#e0e0e0;cursor:not-allowed;}
+.char-count{font-size:11px;color:#aaa;text-align:right;margin-top:4px;}
+.char-count.warn{color:#F97316;}
+.char-count.over{color:#e53935;}
+/* NAV */
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-around;height:62px;z-index:100;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ccc;font-size:23px;}
+.nav-item span{font-size:11px;color:#ccc;}
+.nav-item.on{color:#6C3BE8;}
+.nav-item.on span{color:#6C3BE8;}
+.nav-fab{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;font-size:21px;color:#fff;text-decoration:none;}
+.loading{text-align:center;padding:40px;color:#aaa;font-size:14px;}
+</style>
 </head>
 <body>
-
-<!-- Auth gate for non-logged in users -->
-<div class="auth-gate" id="authGate">
-  <i class="ti ti-ghost"></i>
-  <h2>Residents only</h2>
-  <p>Log in to enter the Whisper Box</p>
-  <a href="login.html">Log in</a>
-</div>
-
-<!-- Header -->
-<header class="header">
-  <div class="header-left">
-    <div class="header-icon-wrap">
-      <i class="ti ti-ghost"></i>
-    </div>
-    <div>
-      <div class="header-title">Whisper Box</div>
-      <div class="header-subtitle">Drop your thoughts. No names, no identity.</div>
-    </div>
+<div class="top-bar">
+  <div>
+    <div class="top-title">Whisper <span style="font-size:12px;color:#aaa;font-weight:400;">· Anonymous chat</span></div>
   </div>
-  <div class="online-badge">
-    <div class="online-dot"></div>
-    <span id="onlineCount">—</span>
-  </div>
-</header>
-
-<!-- Banner -->
-<div class="whisper-banner">
-  <div class="ghost-avatar"><i class="ti ti-ghost"></i></div>
-  <div class="banner-text">
-    <h2>You're anonymous here 👻</h2>
-    <p>Even the admin can't trace who said what.<br>Your words, your mystery.</p>
+  <div class="top-right">
+    <span class="online-count"><span class="online-dot"></span><span id="online-count">0</span> online</span>
+    <span class="my-id-badge" id="my-id-badge">...</span>
   </div>
 </div>
 
-<div style="padding: 0 16px; margin-top: 10px;">
-  <div class="my-id-pill">
-    <i class="ti ti-fingerprint" style="font-size:14px;"></i>
-    You appear as <strong id="myIdDisplay">...</strong>
-  </div>
+<div class="anon-note">
+  <i class="ti ti-lock"></i>
+  No real names — ever. Your identity stays completely anonymous.
 </div>
 
-<!-- Messages -->
-<div class="messages-wrap" id="messagesWrap">
-  <div class="loading-state">Loading whispers...</div>
+<div class="chat-feed" id="chat-feed">
+  <div class="loading">Loading messages...</div>
 </div>
 
-<!-- Compose -->
-<div class="compose-wrap">
-  <div class="reply-preview" id="replyPreview">
-    <div class="reply-preview-text" id="replyPreviewText">Replying to...</div>
-    <button class="reply-cancel" id="replyCancel">×</button>
+<div class="input-bar">
+  <div class="reply-context" id="reply-context">
+    <span id="reply-context-txt"></span>
+    <span onclick="cancelReply()" style="cursor:pointer;font-size:16px;"><i class="ti ti-x"></i></span>
   </div>
-  <div class="compose-row">
-    <textarea
-      class="compose-input"
-      id="composeInput"
-      placeholder="Whisper something..."
-      rows="1"
-      maxlength="500"
-    ></textarea>
-    <button class="send-btn" id="sendBtn" disabled>
-      <i class="ti ti-send"></i>
-    </button>
+  <div class="input-row">
+    <div class="input-wrap" id="msg-input" contenteditable="true" data-placeholder="Whisper something..." oninput="updateCharCount()"></div>
+    <button class="send-btn" id="send-btn" onclick="sendMessage()"><i class="ti ti-send"></i></button>
   </div>
+  <div class="char-count" id="char-count">0 / 200</div>
 </div>
 
-<!-- Bottom nav -->
-<nav class="bottom-nav">
-  <a href="index.html" class="nav-item">
-    <i class="ti ti-home"></i>
-    <span>Home</span>
-  </a>
-  <a href="post.html" class="nav-item">
-    <i class="ti ti-plus"></i>
-    <span>Post</span>
-  </a>
-  <a href="whisper.html" class="nav-item active">
-    <i class="ti ti-ghost"></i>
-    <span>Whisper</span>
-  </a>
-  <a href="profile.html" class="nav-item">
-    <i class="ti ti-user"></i>
-    <span>Profile</span>
-  </a>
-  <a href="more.html" class="nav-item">
-    <i class="ti ti-dots"></i>
-    <span>More</span>
-  </a>
+<nav class="nav-bar">
+  <a href="index.html" class="nav-item"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="whisper.html" class="nav-item on"><i class="ti ti-message-circle"></i><span>Whisper</span></a>
+  <a href="post.html" class="nav-fab"><i class="ti ti-plus"></i></a>
+  <a href="more.html" class="nav-item"><i class="ti ti-layout-grid"></i><span>More</span></a>
+  <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
 </nav>
 
-<!-- Firebase -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import {
-    getAuth, onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import {
-    getFirestore, collection, doc, getDoc, setDoc, addDoc,
-    query, orderBy, where, onSnapshot, updateDoc,
-    serverTimestamp, Timestamp, increment, limit
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc, onSnapshot, query, orderBy, serverTimestamp, increment, arrayUnion, arrayRemove, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCDwXIwC-r4rSWvxH2xAmbaQdzaUTev6P8",
-    authDomain: "hostel-lost-found.firebaseapp.com",
-    projectId: "hostel-lost-found",
-    storageBucket: "hostel-lost-found.firebasestorage.app",
-    messagingSenderId: "283586453029",
-    appId: "1:283586453029:web:a09be8f2680ba94dbbe9cc"
-  };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+const adjectives = ["Silent","Pixel","Neon","Cosmic","Breezy","Velvet","Frosty","Hidden","Zesty","Lucky","Misty","Swift","Chill","Golden","Nova","Urban","Jolly","Sneaky","Calm","Cloudy","Moonlit","Electric","Rapid","Dusty","Echo","Brave","Tiny","Wild","Sleepy","Clever","Happy","Secret","Gentle","Bold","Sunny","Magic","Witty","Shadow","Fuzzy","Lazy"];
+const animals = ["Owl","Otter","Badger","Yak","Falcon","Mongoose","Koala","Raven","Panda","Gecko","Tiger","Fox","Husky","Crane","Shark","Turtle","Eagle","Leopard","Frog","Zebra","Dolphin","Hawk","Mole","Hedgehog","Sparrow","Cobra","Rabbit","Penguin","Swan","Bear","Raccoon","Bison","Horse","Cheetah","Wolf","Lynx","Seal","Whale","Parrot","Deer"];
 
-  // ── ANON ID GENERATION ──
-  const adjectives = [
-    "Silent","Pixel","Neon","Cosmic","Breezy","Velvet","Frosty",
-    "Hidden","Zesty","Lucky","Misty","Swift","Chill","Golden",
-    "Nova","Urban","Jolly","Sneaky","Calm","Cloudy","Moonlit",
-    "Electric","Rapid","Dusty","Echo","Brave","Tiny","Wild",
-    "Sleepy","Clever","Happy","Secret","Gentle","Bold","Sunny",
-    "Magic","Witty","Shadow","Fuzzy","Lazy"
-  ];
-  const animals = [
-    "Owl","Otter","Badger","Yak","Falcon","Mongoose","Koala",
-    "Raven","Panda","Gecko","Tiger","Fox","Husky","Crane",
-    "Shark","Turtle","Eagle","Leopard","Frog","Zebra","Dolphin",
-    "Hawk","Mole","Hedgehog","Sparrow","Cobra","Rabbit","Penguin",
-    "Swan","Bear","Raccoon","Bison","Horse","Cheetah","Wolf",
-    "Lynx","Seal","Whale","Parrot","Deer"
-  ];
+let currentUser = null;
+let myAnonId = null;
+let replyTo = null; // {msgId, anonId, text, parentId}
+const WORD_LIMIT = 200;
+const REPORT_THRESHOLD = 7;
+const MSG_EXPIRY_DAYS = 30;
 
-  async function getOrCreateAnonId(uid) {
-    const ref = doc(db, "anonIds", uid);
-    const snap = await getDoc(ref);
-    if (snap.exists()) return snap.data().anonId;
+onAuthStateChanged(auth, async user => {
+  if(!user){ window.location.href='login.html'; return; }
+  currentUser = user;
+  myAnonId = await getOrCreateAnonId(user.uid);
+  document.getElementById('my-id-badge').textContent = myAnonId;
+  loadMessages();
+  trackPresence(user.uid);
+});
 
-    // fetch all taken name parts
-    const allSnap = await getDoc(doc(db, "anonIds", "_usedNames"));
-    const used = new Set(allSnap.exists() ? allSnap.data().names : []);
+// ── ANON ID ──────────────────────────────────────────────
+async function getOrCreateAnonId(uid){
+  const ref = doc(db,'anonIds',uid);
+  const snap = await getDoc(ref);
+  if(snap.exists()) return snap.data().anonId;
+  // Generate new unique ID
+  const adj = adjectives[Math.floor(Math.random()*adjectives.length)];
+  const animal = animals[Math.floor(Math.random()*animals.length)];
+  const id = `${adj} ${animal}`;
+  await setDoc(ref,{anonId:id, uid, createdAt:new Date()});
+  return id;
+}
 
-    let namePart;
-    do {
-      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-      const ani = animals[Math.floor(Math.random() * animals.length)];
-      namePart = `${adj}${ani}`;
-    } while (used.has(namePart));
-
-    const number = 100 + Math.floor(Math.random() * 900);
-    const anonId = `${namePart}#${number}`;
-
-    used.add(namePart);
-    await setDoc(ref, { anonId });
-    await setDoc(doc(db, "anonIds", "_usedNames"), { names: [...used] });
-
-    return anonId;
-  }
-
-  // ── STATE ──
-  let myUid = null;
-  let myAnonId = null;
-  let replyingTo = null; // { msgId, anonId, text }
-  let reactedSet = new Set(JSON.parse(localStorage.getItem("whisper_reacted") || "[]"));
-
-  // ── AUTH CHECK ──
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      document.getElementById("authGate").classList.add("visible");
-      return;
-    }
-    myUid = user.uid;
-    myAnonId = await getOrCreateAnonId(myUid);
-    document.getElementById("myIdDisplay").textContent = myAnonId;
-    document.getElementById("sendBtn").disabled = false;
-    listenMessages();
-    updateOnlineCount();
+// ── PRESENCE ─────────────────────────────────────────────
+function trackPresence(uid){
+  const ref = doc(db,'presence',uid);
+  setDoc(ref,{online:true, lastSeen:new Date()});
+  // Count online users
+  onSnapshot(query(collection(db,'presence'),where('online','==',true)), snap => {
+    document.getElementById('online-count').textContent = snap.size;
   });
+  // Mark offline on page hide
+  document.addEventListener('visibilitychange',()=>{
+    setDoc(ref,{online: document.visibilityState==='visible', lastSeen:new Date()});
+  });
+}
 
-  // ── LISTEN MESSAGES (last 30 days) ──
-  function listenMessages() {
-    const cutoff = Timestamp.fromMillis(Date.now() - 30 * 24 * 60 * 60 * 1000);
-    const q = query(
-      collection(db, "whispers"),
-      where("createdAt", ">=", cutoff),
-      where("parentId", "==", null),
-      orderBy("createdAt", "desc"),
-      limit(100)
-    );
+// ── MESSAGES ─────────────────────────────────────────────
+function loadMessages(){
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - MSG_EXPIRY_DAYS);
+  const q = query(collection(db,'whispers'), orderBy('createdAt','asc'));
+  onSnapshot(q, snap => {
+    const msgs = snap.docs.map(d=>({id:d.id,...d.data()}))
+      .filter(m => !m.parentId) // top-level only
+      .filter(m => m.createdAt?.seconds > cutoff.getTime()/1000);
+    renderMessages(msgs, snap);
+  });
+}
 
-    onSnapshot(q, async (snap) => {
-      const msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (msgs.length === 0) {
-        document.getElementById("messagesWrap").innerHTML = `
-          <div class="empty-state">
-            <i class="ti ti-ghost"></i>
-            No whispers yet. Be the first ghost.
-          </div>`;
-        return;
-      }
-      await renderMessages(msgs);
-    });
-  }
-
-  async function getReplies(parentId) {
-    const q = query(
-      collection(db, "whispers"),
-      where("parentId", "==", parentId),
-      orderBy("createdAt", "asc")
-    );
-    return new Promise(resolve => {
-      onSnapshot(q, snap => {
-        resolve(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      });
-    });
-  }
-
-  async function renderMessages(msgs) {
-    const wrap = document.getElementById("messagesWrap");
-    wrap.innerHTML = "";
-
-    let lastDate = null;
-
-    for (const msg of msgs) {
-      const msgDate = msg.createdAt?.toDate?.() || new Date();
-      const dateStr = msgDate.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
-
-      if (dateStr !== lastDate) {
-        const div = document.createElement("div");
-        div.className = "date-divider";
-        div.textContent = isToday(msgDate) ? "Today" : dateStr;
-        wrap.appendChild(div);
-        lastDate = dateStr;
-      }
-
-      const card = buildMsgCard(msg, false);
-      wrap.appendChild(card);
-
-      // replies
-      if (msg.replyCount > 0) {
-        const replies = await getReplies(msg.id);
-        replies.forEach(r => {
-          const rc = buildMsgCard(r, true);
-          wrap.appendChild(rc);
-        });
-      }
+function renderMessages(msgs, snap){
+  const feed = document.getElementById('chat-feed');
+  const wasAtBottom = feed.scrollHeight - feed.scrollTop - feed.clientHeight < 80;
+  const allDocs = snap.docs.map(d=>({id:d.id,...d.data()}));
+  let html = '';
+  let lastDate = '';
+  msgs.forEach(msg => {
+    const dateStr = msg.createdAt ? new Date(msg.createdAt.seconds*1000).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '';
+    if(dateStr !== lastDate){
+      html += `<div class="day-divider">${dateStr}</div>`;
+      lastDate = dateStr;
     }
+    html += buildMsgHTML(msg, allDocs, false);
+  });
+  if(!msgs.length) html = '<div class="loading" style="padding-top:60px;">No messages yet. Say something 👻</div>';
+  feed.innerHTML = html;
+  if(wasAtBottom) feed.scrollTop = feed.scrollHeight;
+}
+
+function buildMsgHTML(msg, allDocs, isNested){
+  const isOwn = msg.anonId === myAnonId;
+  const isHidden = (msg.reports||0) >= REPORT_THRESHOLD;
+  const time = msg.createdAt ? new Date(msg.createdAt.seconds*1000).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:false}) : '';
+  const upCount = msg.upvotes||0;
+  const downCount = msg.downvotes||0;
+  const myUp = msg.upvoters?.includes(currentUser.uid);
+  const myDown = msg.downvoters?.includes(currentUser.uid);
+  const replies = allDocs.filter(d => d.parentId === msg.id);
+  const repliesHTML = replies.map(r => buildMsgHTML(r, allDocs, true)).join('');
+
+  if(isNested){
+    return `<div class="reply-bubble ${isOwn?'own':''}">
+      <div class="reply-header">
+        <span class="reply-anon-id ${isOwn?'own':''}">${msg.anonId}</span>
+        <span class="reply-time">${time}</span>
+      </div>
+      ${isHidden
+        ? `<div class="reply-text" style="color:#9ca3af;font-style:italic;">Message hidden after reports.</div>`
+        : `<div class="reply-text">${escHtml(msg.text)}</div>`}
+      <div class="reply-actions">
+        <button class="react-btn ${myUp?'active-up':''}" onclick="react('${msg.id}','up')" style="font-size:11px;padding:2px 8px;">▲ ${upCount}</button>
+        <button class="react-btn ${myDown?'active-down':''}" onclick="react('${msg.id}','down')" style="font-size:11px;padding:2px 8px;">▼ ${downCount}</button>
+        <button class="reply-reply-btn" onclick="setReply('${msg.id}','${escAttr(msg.anonId)}','${escAttr(msg.text.substring(0,40))}','${msg.parentId||msg.id}')"><i class="ti ti-corner-down-right"></i> Reply</button>
+        ${!isOwn?`<button class="report-btn" onclick="reportMsg('${msg.id}')"><i class="ti ti-flag"></i></button>`:''}
+      </div>
+      ${replies.length ? `<div class="nested-replies">${repliesHTML}</div>` : ''}
+    </div>`;
   }
 
-  function buildMsgCard(msg, isChild) {
-    const card = document.createElement("div");
-    card.className = `msg-card${isChild ? " is-reply-child" : ""}`;
-    card.dataset.id = msg.id;
-
-    const isMe = msg.anonId === myAnonId;
-    const time = formatTime(msg.createdAt?.toDate?.() || new Date());
-    const plusCount = msg.plusCount || 0;
-    const reacted = reactedSet.has(msg.id);
-
-    let replyHtml = "";
-    if (msg.parentId && msg.replyToText) {
-      replyHtml = `
-        <div class="reply-context">
-          <div class="reply-context-id">${escHtml(msg.replyToAnonId)}</div>
-          <div>${escHtml(msg.replyToText.substring(0, 60))}${msg.replyToText.length > 60 ? "…" : ""}</div>
-        </div>`;
-    }
-
-    card.innerHTML = `
+  return `<div class="msg-wrap" id="msg-${msg.id}">
+    <div class="msg-bubble ${isOwn?'own':''} ${isHidden?'hidden-msg':''}">
       <div class="msg-header">
-        <span class="msg-id${isMe ? " is-me" : ""}">${escHtml(msg.anonId)}${isMe ? " · you" : ""}</span>
+        <span class="anon-id ${isOwn?'own':''}">${msg.anonId}</span>
         <span class="msg-time">${time}</span>
       </div>
-      ${replyHtml}
-      <div class="msg-text">${escHtml(msg.text)}</div>
+      ${isHidden
+        ? `<div class="msg-text hidden-txt">This message was hidden after multiple reports.</div>`
+        : `<div class="msg-text">${escHtml(msg.text)}</div>`}
       <div class="msg-actions">
-        <button class="action-btn plus-btn${reacted ? " active" : ""}" data-id="${msg.id}">
-          <i class="ti ti-thumb-up"></i>
-          <span class="plus-count">${plusCount > 0 ? `+${plusCount}` : "+1"}</span>
-        </button>
-        ${!isChild ? `<button class="action-btn reply-btn" data-id="${msg.id}" data-anon="${escHtml(msg.anonId)}" data-text="${escHtml(msg.text)}">
-          <i class="ti ti-message-reply"></i> Reply
-        </button>` : ""}
-      </div>`;
+        <button class="react-btn ${myUp?'active-up':''}" onclick="react('${msg.id}','up')">▲ ${upCount}</button>
+        <button class="react-btn ${myDown?'active-down':''}" onclick="react('${msg.id}','down')">▼ ${downCount}</button>
+        <button class="reply-btn" onclick="setReply('${msg.id}','${escAttr(msg.anonId)}','${escAttr(msg.text.substring(0,40))}',null)"><i class="ti ti-corner-down-right"></i> Reply</button>
+        ${!isOwn?`<button class="report-btn" onclick="reportMsg('${msg.id}')"><i class="ti ti-flag"></i></button>`:''}
+      </div>
+      ${replies.length ? `<div class="replies-wrap">${repliesHTML}</div>` : ''}
+    </div>
+  </div>`;
+}
 
-    return card;
+// ── SEND ─────────────────────────────────────────────────
+window.sendMessage = async function(){
+  const input = document.getElementById('msg-input');
+  const text = input.innerText.trim();
+  if(!text) return;
+  const words = text.trim().split(/\s+/).length;
+  if(words > WORD_LIMIT){
+    alert(`Message too long. Max ${WORD_LIMIT} words.`);
+    return;
   }
-
-  // ── EVENT DELEGATION ──
-  document.getElementById("messagesWrap").addEventListener("click", async (e) => {
-    const plusBtn = e.target.closest(".plus-btn");
-    if (plusBtn) {
-      const id = plusBtn.dataset.id;
-      if (reactedSet.has(id)) return;
-      reactedSet.add(id);
-      localStorage.setItem("whisper_reacted", JSON.stringify([...reactedSet]));
-      plusBtn.classList.add("active");
-      await updateDoc(doc(db, "whispers", id), { plusCount: increment(1) });
-      const countEl = plusBtn.querySelector(".plus-count");
-      const cur = parseInt(countEl.textContent.replace("+", "")) || 0;
-      countEl.textContent = `+${cur + 1}`;
-      return;
-    }
-
-    const replyBtn = e.target.closest(".reply-btn");
-    if (replyBtn) {
-      replyingTo = {
-        msgId: replyBtn.dataset.id,
-        anonId: replyBtn.dataset.anon,
-        text: replyBtn.dataset.text
-      };
-      const preview = document.getElementById("replyPreview");
-      preview.classList.add("visible");
-      document.getElementById("replyPreviewText").textContent =
-        `Replying to ${replyingTo.anonId}: ${replyingTo.text.substring(0, 50)}${replyingTo.text.length > 50 ? "…" : ""}`;
-      document.getElementById("composeInput").focus();
-    }
-  });
-
-  document.getElementById("replyCancel").addEventListener("click", () => {
-    replyingTo = null;
-    document.getElementById("replyPreview").classList.remove("visible");
-  });
-
-  // ── AUTO RESIZE TEXTAREA ──
-  const input = document.getElementById("composeInput");
-  input.addEventListener("input", () => {
-    input.style.height = "auto";
-    input.style.height = Math.min(input.scrollHeight, 100) + "px";
-  });
-
-  // ── SEND ──
-  document.getElementById("sendBtn").addEventListener("click", sendMessage);
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  });
-
-  async function sendMessage() {
-    const text = input.value.trim();
-    if (!text || !myAnonId) return;
-
-    const btn = document.getElementById("sendBtn");
-    btn.disabled = true;
-
-    const payload = {
-      anonId: myAnonId,
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  try {
+    await addDoc(collection(db,'whispers'),{
       text,
-      plusCount: 0,
-      parentId: replyingTo ? replyingTo.msgId : null,
-      replyToAnonId: replyingTo ? replyingTo.anonId : null,
-      replyToText: replyingTo ? replyingTo.text : null,
+      anonId: myAnonId,
+      uid: currentUser.uid,
+      parentId: replyTo?.parentId || replyTo?.msgId || null,
+      replyToId: replyTo?.msgId || null,
+      replyToAnonId: replyTo?.anonId || null,
+      upvotes: 0, downvotes: 0,
+      upvoters: [], downvoters: [],
+      reports: 0, reportedBy: [],
       createdAt: serverTimestamp()
-    };
+    });
+    input.innerText = '';
+    updateCharCount();
+    cancelReply();
+    document.getElementById('chat-feed').scrollTop = document.getElementById('chat-feed').scrollHeight;
+  } catch(e){ alert('Error: '+e.message); }
+  btn.disabled = false;
+};
 
-    try {
-      const ref = await addDoc(collection(db, "whispers"), payload);
+// ── REPLY ─────────────────────────────────────────────────
+window.setReply = function(msgId, anonId, preview, parentId){
+  replyTo = {msgId, anonId, preview, parentId};
+  const ctx = document.getElementById('reply-context');
+  document.getElementById('reply-context-txt').textContent = `Replying to ${anonId}: "${preview}${preview.length>=40?'...':''}"`;
+  ctx.classList.add('show');
+  document.getElementById('msg-input').focus();
+};
 
-      if (replyingTo) {
-        await updateDoc(doc(db, "whispers", replyingTo.msgId), {
-          replyCount: increment(1)
-        });
-      }
+window.cancelReply = function(){
+  replyTo = null;
+  document.getElementById('reply-context').classList.remove('show');
+};
 
-      input.value = "";
-      input.style.height = "auto";
-      replyingTo = null;
-      document.getElementById("replyPreview").classList.remove("visible");
-    } catch (err) {
-      console.error(err);
-      alert("Couldn't send. Try again.");
+// ── REACT ─────────────────────────────────────────────────
+window.react = async function(msgId, type){
+  const ref = doc(db,'whispers',msgId);
+  const snap = await getDoc(ref);
+  if(!snap.exists()) return;
+  const d = snap.data();
+  const uid = currentUser.uid;
+  const upvoters = d.upvoters||[];
+  const downvoters = d.downvoters||[];
+  if(type==='up'){
+    if(upvoters.includes(uid)){
+      await updateDoc(ref,{upvotes:increment(-1),upvoters:arrayRemove(uid)});
+    } else {
+      const updates = {upvotes:increment(1),upvoters:arrayUnion(uid)};
+      if(downvoters.includes(uid)){updates.downvotes=increment(-1);updates.downvoters=arrayRemove(uid);}
+      await updateDoc(ref,updates);
     }
-
-    btn.disabled = false;
+  } else {
+    if(downvoters.includes(uid)){
+      await updateDoc(ref,{downvotes:increment(-1),downvoters:arrayRemove(uid)});
+    } else {
+      const updates = {downvotes:increment(1),downvoters:arrayUnion(uid)};
+      if(upvoters.includes(uid)){updates.upvotes=increment(-1);updates.upvoters=arrayRemove(uid);}
+      await updateDoc(ref,updates);
+    }
   }
+};
 
-  // ── ONLINE COUNT (rough: users active in last 5 min) ──
-  async function updateOnlineCount() {
-    if (!myUid) return;
-    const ref = doc(db, "presence", myUid);
-    await setDoc(ref, { lastSeen: serverTimestamp() }, { merge: true });
-
-    const cutoff = Timestamp.fromMillis(Date.now() - 5 * 60 * 1000);
-    onSnapshot(
-      query(collection(db, "presence"), where("lastSeen", ">=", cutoff)),
-      snap => {
-        document.getElementById("onlineCount").textContent = `${snap.size} online`;
-      }
-    );
+// ── REPORT ────────────────────────────────────────────────
+window.reportMsg = async function(msgId){
+  if(!confirm('Report this message?')) return;
+  const ref = doc(db,'whispers',msgId);
+  const snap = await getDoc(ref);
+  if(!snap.exists()) return;
+  const d = snap.data();
+  if((d.reportedBy||[]).includes(currentUser.uid)){
+    alert('You already reported this message.');
+    return;
   }
+  await updateDoc(ref,{
+    reports: increment(1),
+    reportedBy: arrayUnion(currentUser.uid)
+  });
+  alert('Reported. Thank you.');
+};
 
-  // ── HELPERS ──
-  function escHtml(str) {
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
+// ── CHAR COUNT ────────────────────────────────────────────
+window.updateCharCount = function(){
+  const text = document.getElementById('msg-input').innerText.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  const el = document.getElementById('char-count');
+  el.textContent = `${words} / ${WORD_LIMIT} words`;
+  el.className = 'char-count' + (words > WORD_LIMIT*0.8 ? (words > WORD_LIMIT ? ' over' : ' warn') : '');
+};
 
-  function formatTime(date) {
-    return date.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+// Handle Enter key
+document.getElementById('msg-input').addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){
+    e.preventDefault();
+    sendMessage();
   }
+});
 
-  function isToday(date) {
-    const now = new Date();
-    return date.getDate() === now.getDate() &&
-      date.getMonth() === now.getMonth() &&
-      date.getFullYear() === now.getFullYear();
-  }
+// ── UTILS ─────────────────────────────────────────────────
+function escHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escAttr(t){ return (t||'').replace(/'/g,'&#39;').replace(/"/g,'&quot;'); }
 </script>
 </body>
 </html>
