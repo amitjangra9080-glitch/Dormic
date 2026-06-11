@@ -316,6 +316,7 @@ window.logoutUser=async function(){
 window.resolveUserPost=async function(id){
   try {
     await updateDoc(doc(db,'posts',id),{status:'resolved'});
+    // onSnapshot will auto-refresh the list
   } catch(e){ alert('Error: '+e.message); }
 };
 </script>

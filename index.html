@@ -10,15 +10,15 @@
 <meta name="apple-mobile-web-app-title" content="Dormic"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:70px;}
-.top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-.logo{font-size:42px;font-weight:700;font-family:'Caveat',cursive;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.5px;}
-.logo-hostel{font-size:13px;font-weight:400;color:#aaa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin-left:8px;-webkit-text-fill-color:#aaa;}
-.logo-sub{font-size:10px;color:#aaa;font-weight:400;display:block;margin-top:-2px;-webkit-text-fill-color:#aaa;}
+.top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;padding:0 16px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo-wrap{display:flex;flex-direction:column;line-height:1;}
+.logo{font-size:30px;font-weight:400;font-family:'Fredoka One',cursive;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.3px;}
+.logo-hostel{font-size:11px;font-weight:400;color:#aaa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-text-fill-color:#aaa;margin-top:1px;}
 .pills-wrap{background:#fff;border-bottom:0.5px solid #f0f0f0;padding:10px 14px;overflow-x:auto;display:flex;gap:7px;}
 .pills-wrap::-webkit-scrollbar{display:none;}
 .pill{font-size:12px;padding:6px 14px;border-radius:20px;background:#f7f7f7;border:0.5px solid #e8e8e8;color:#666;white-space:nowrap;cursor:pointer;transition:all 0.15s;}
@@ -71,7 +71,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 </head>
 <body>
 <div class="top-bar">
-  <div style="display:flex;align-items:center;gap:6px;">
+  <div class="logo-wrap">
     <span class="logo">Dormic</span>
     <span class="logo-hostel">Ajanta Hostel No. 3</span>
   </div>
@@ -125,11 +125,12 @@ const avatarSymbols = ['','⚽','🏏','🎮','🏆','🔑','📚','🎯','💡'
 onAuthStateChanged(auth, user => {
   if(!user) { window.location.href = 'login.html'; return; }
   currentUser = user;
-  // Show notification banner only if not already dismissed and permission not granted
   const dismissed = localStorage.getItem('dormic_notify_dismissed');
   if(!dismissed && Notification.permission !== 'granted') {
     document.getElementById('notify-bar').style.display = 'flex';
   }
+  watchNewPosts();
+  watchGhostBox();
 });
 
 const q = query(collection(db,'posts'), orderBy('createdAt','desc'));
@@ -201,6 +202,13 @@ function buildCard(p, isResolved) {
   }
 
   if(p.type === 'travel') {
+    // Format date DD/MM/YYYY
+    let displayDate = p.travelDate || '';
+    if(displayDate && displayDate.includes('-')){
+      const parts = displayDate.split('-');
+      displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+    const displayTime = p.travelTime || '';
     return `<div class="gap"></div><div class="card ${showResolved?'resolved-section':''}">
       <div class="card-head">
         <div class="av" style="background:${avBg}">${avSymbol}</div>
@@ -213,7 +221,7 @@ function buildCard(p, isResolved) {
           <span class="city">${p.from||''}</span>
           <i class="ti ti-arrow-right" style="color:#aaa;font-size:16px;"></i>
           <span class="city">${p.to||''}</span>
-          <span class="r-date"><i class="ti ti-calendar" style="font-size:13px;"></i> ${p.travelDate||''}</span>
+          <span class="r-date"><i class="ti ti-calendar" style="font-size:13px;"></i> ${displayDate}${displayTime?' · '+displayTime:''}</span>
         </div>
         ${p.itemDesc?`<div class="item-desc">${p.itemDesc}</div>`:''}
       </div>
@@ -248,7 +256,6 @@ window.resolvePost = async function(id) {
 window.requestNotify = function() {
   if('Notification' in window) {
     Notification.requestPermission().then(p => {
-      // Always hide and never show again regardless of choice
       localStorage.setItem('dormic_notify_dismissed','true');
       document.getElementById('notify-bar').style.display = 'none';
       if(p === 'granted') {
@@ -260,6 +267,49 @@ window.requestNotify = function() {
     document.getElementById('notify-bar').style.display = 'none';
   }
 };
+
+// Listen for new posts and fire notifications
+function watchNewPosts(){
+  if(Notification.permission !== 'granted') return;
+  let initialized = false;
+  const q = query(collection(db,'posts'), orderBy('createdAt','desc'));
+  onSnapshot(q, snap => {
+    if(!initialized){ initialized = true; return; } // skip initial load
+    snap.docChanges().forEach(change => {
+      if(change.type === 'added'){
+        const p = change.doc.data();
+        if(p.posterUid === currentUser?.uid) return; // don't notify own posts
+        const typeLabels = {lost:'Lost item',found:'Found item',sell:'Selling',buy:'Buying',donate:'Donating',need:'Needs something',travel:'Travel update'};
+        const label = typeLabels[p.type] || 'New post';
+        new Notification(`Dormic — ${label}`, {
+          body: p.itemName || p.from && p.to ? `${p.from} → ${p.to}` : 'New post in hostel feed',
+          icon: 'icon.png',
+          badge: 'icon.png'
+        });
+      }
+    });
+  });
+}
+
+// Watch Ghost Box for new messages
+function watchGhostBox(){
+  if(Notification.permission !== 'granted') return;
+  let initialized = false;
+  const q = query(collection(db,'whispers'), orderBy('createdAt','desc'));
+  onSnapshot(q, snap => {
+    if(!initialized){ initialized = true; return; }
+    snap.docChanges().forEach(change => {
+      if(change.type === 'added'){
+        const m = change.doc.data();
+        if(m.uid === currentUser?.uid) return;
+        new Notification('Dormic — Ghost Box', {
+          body: 'Someone sent a message in Ghost Box',
+          icon: 'icon.png'
+        });
+      }
+    });
+  });
+}
 
 function timeAgo(ms) {
   const diff = Date.now()-ms;
