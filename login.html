@@ -76,6 +76,7 @@ select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xm
       <div class="hint" id="admission-hint"></div>
       <label class="lab">Email</label>
       <input class="inp" id="s-email" type="email" placeholder="Your real email address"/>
+      <div class="hint ok" style="margin-top:-8px;margin-bottom:10px;font-size:12px;color:#8e8e8e;">Used for account recovery only — never shown to anyone</div>
       <label class="lab">Department</label>
       <input class="inp" id="s-dept" type="text" placeholder="e.g. Agronomy, Seed Science and Technology..."/>
       <label class="lab">College</label>
@@ -91,17 +92,13 @@ select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xm
         <label class="lab">Specify college</label>
         <input class="inp" id="s-other-college" type="text" placeholder="Enter your college name"/>
       </div>
+      <label class="lab">WhatsApp number</label>
+      <input class="inp" id="s-phone" type="tel" placeholder="10-digit number" maxlength="10"/>
       <div class="row">
-        <div>
-          <label class="lab">WhatsApp number</label>
-          <input class="inp" id="s-phone" type="tel" placeholder="10-digit number" maxlength="10"/>
-        </div>
         <div>
           <label class="lab">Room number</label>
-          <input class="inp" id="s-room" type="text" placeholder="e.g. 112"/>
+          <input class="inp" id="s-room" type="text" placeholder="1 – 169"/>
         </div>
-      </div>
-      <div class="row">
         <div>
           <label class="lab">Blood group</label>
           <select class="inp" id="s-blood">
@@ -112,11 +109,9 @@ select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xm
             <option>AB+</option><option>AB−</option>
           </select>
         </div>
-        <div>
-          <label class="lab">Password</label>
-          <input class="inp" id="s-password" type="password" placeholder="Min 6 characters"/>
-        </div>
       </div>
+      <label class="lab">Password</label>
+      <input class="inp" id="s-password" type="password" placeholder="Min 6 characters"/>
       <label class="lab">Confirm password</label>
       <input class="inp" id="s-confirm" type="password" placeholder="Re-enter password"/>
       <label class="av-label">Pick your avatar</label>
