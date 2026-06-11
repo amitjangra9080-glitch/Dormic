@@ -530,9 +530,9 @@
     <i class="ti ti-home"></i>
     <span>Home</span>
   </a>
-  <a href="index.html#feed" class="nav-item">
-    <i class="ti ti-layout-grid"></i>
-    <span>Feed</span>
+  <a href="post.html" class="nav-item">
+    <i class="ti ti-plus"></i>
+    <span>Post</span>
   </a>
   <a href="whisper.html" class="nav-item active">
     <i class="ti ti-ghost"></i>
@@ -560,14 +560,13 @@
     serverTimestamp, Timestamp, increment, limit
   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // ── YOUR FIREBASE CONFIG ──
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCDwXIwC-r4rSWvxH2xAmbaQdzaUTev6P8",
+    authDomain: "hostel-lost-found.firebaseapp.com",
+    projectId: "hostel-lost-found",
+    storageBucket: "hostel-lost-found.firebasestorage.app",
+    messagingSenderId: "283586453029",
+    appId: "1:283586453029:web:a09be8f2680ba94dbbe9cc"
   };
 
   const app = initializeApp(firebaseConfig);
