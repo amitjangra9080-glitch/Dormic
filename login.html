@@ -171,6 +171,13 @@ avatars.forEach(av => {
   grid.appendChild(el);
 });
 
+// Clear red border when user starts typing
+['s-name','s-admission','s-email','s-dept','s-college','s-phone','s-room','s-blood','s-password','s-confirm'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('input', ()=>{ el.style.border='0.5px solid #e5e5e5'; });
+  if(el) el.addEventListener('change', ()=>{ el.style.border='0.5px solid #e5e5e5'; });
+});
+
 onAuthStateChanged(auth, user => { if(user) window.location.href='index.html'; });
 
 document.getElementById('s-college').addEventListener('change', function() {
@@ -227,20 +234,56 @@ window.registerUser = async function() {
   const btn = document.getElementById('signup-btn');
   msg.className='msg';
 
-  // Basic validation first — no Firebase calls yet
-  if(!name||!admission||!email||!dept||!college||!phone||!room||!blood||!password){
-    msg.className='msg error';msg.textContent='Please fill all fields.';return;
+  // Clear all previous error borders
+  ['s-name','s-admission','s-email','s-dept','s-college','s-phone','s-room','s-blood','s-password','s-confirm'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.style.border='0.5px solid #e5e5e5';
+  });
+
+  // Mark empty fields red
+  const required = [
+    {id:'s-name', val:name},
+    {id:'s-admission', val:admission},
+    {id:'s-email', val:email},
+    {id:'s-dept', val:dept},
+    {id:'s-college', val:collegeSelect},
+    {id:'s-phone', val:phone},
+    {id:'s-room', val:room},
+    {id:'s-blood', val:blood},
+    {id:'s-password', val:password},
+    {id:'s-confirm', val:confirm},
+  ];
+
+  let hasEmpty = false;
+  required.forEach(({id, val}) => {
+    if(!val) {
+      const el = document.getElementById(id);
+      if(el) el.style.border = '1.5px solid #e53935';
+      hasEmpty = true;
+    }
+  });
+
+  if(hasEmpty){
+    msg.className='msg error';
+    msg.textContent='Please fill all highlighted fields.';
+    return;
   }
+
   if(!admission.endsWith('M')&&!admission.endsWith('D')){
+    document.getElementById('s-admission').style.border='1.5px solid #e53935';
     msg.className='msg error';msg.textContent='Invalid admission number.';return;
   }
   if(phone.length!==10||!/^\d+$/.test(phone)){
+    document.getElementById('s-phone').style.border='1.5px solid #e53935';
     msg.className='msg error';msg.textContent='Enter a valid 10-digit WhatsApp number.';return;
   }
   if(password.length<6){
+    document.getElementById('s-password').style.border='1.5px solid #e53935';
     msg.className='msg error';msg.textContent='Password must be at least 6 characters.';return;
   }
   if(password!==confirm){
+    document.getElementById('s-password').style.border='1.5px solid #e53935';
+    document.getElementById('s-confirm').style.border='1.5px solid #e53935';
     msg.className='msg error';msg.textContent='Passwords do not match.';return;
   }
 
