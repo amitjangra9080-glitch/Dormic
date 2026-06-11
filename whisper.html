@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whisper Box — Dormic</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --grad: linear-gradient(135deg, #6C3BE8, #E8398A, #F97316);
+      --purple: #6C3BE8;
+      --pink: #E8398A;
+      --orange: #F97316;
+      --bg: #F7F7F8;
+      --surface: #FFFFFF;
+      --grey-light: #F0EFF4;
+      --grey-mid: #C8C7D0;
+      --grey-dark: #6B6A75;
+      --text: #1A1A2E;
+      --text-muted: #6B6A75;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --nav-h: 64px;
+      --header-h: 56px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: calc(var(--nav-h) + 80px);
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: var(--surface);
+      border-bottom: 1px solid #EBEBEB;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-icon-wrap {
+      width: 36px; height: 36px;
+      background: var(--grey-light);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .header-icon-wrap i {
+      font-size: 18px;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .header-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .online-badge {
+      font-size: 11px;
+      background: var(--grey-light);
+      color: var(--grey-dark);
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .online-dot {
+      width: 6px; height: 6px;
+      background: #22C55E;
+      border-radius: 50%;
+    }
+
+    /* ── GREY THEME BANNER ── */
+    .whisper-banner {
+      margin: calc(var(--header-h) + 12px) 16px 0;
+      background: #2C2C35;
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .ghost-avatar {
+      width: 44px; height: 44px;
+      background: #3E3E4A;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ghost-avatar i {
+      font-size: 22px;
+      color: #ADADBA;
+    }
+
+    .banner-text h2 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #F0F0F5;
+      margin-bottom: 3px;
+    }
+
+    .banner-text p {
+      font-size: 12px;
+      color: #8A8A98;
+      line-height: 1.5;
+    }
+
+    .my-id-pill {
+      margin: 10px 16px 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid #EBEBEB;
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .my-id-pill strong {
+      color: var(--purple);
+      font-weight: 600;
+    }
+
+    /* ── MESSAGES ── */
+    .messages-wrap {
+      padding: 12px 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .msg-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      border: 1px solid #EBEBEB;
+      position: relative;
+    }
+
+    .msg-card.is-reply-child {
+      margin-left: 20px;
+      border-left: 3px solid var(--grey-mid);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .msg-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .msg-id {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--purple);
+    }
+
+    .msg-id.is-me {
+      color: var(--pink);
+    }
+
+    .msg-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .msg-text {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .reply-context {
+      background: var(--grey-light);
+      border-radius: 8px;
+      padding: 6px 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--grey-dark);
+      border-left: 2px solid var(--grey-mid);
+    }
+
+    .reply-context-id {
+      font-weight: 600;
+      color: var(--purple);
+      margin-bottom: 2px;
+      font-size: 11px;
+    }
+
+    .msg-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: background 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .action-btn:hover { background: var(--grey-light); }
+
+    .action-btn i { font-size: 14px; }
+
+    .plus-btn.active {
+      color: var(--purple);
+      font-weight: 600;
+    }
+
+    .plus-count {
+      font-weight: 600;
+    }
+
+    /* ── EXPIRED NOTICE ── */
+    .expired-notice {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 20px 16px;
+    }
+
+    /* ── COMPOSE ── */
+    .compose-wrap {
+      position: fixed;
+      bottom: var(--nav-h);
+      left: 0; right: 0;
+      background: var(--surface);
+      border-top: 1px solid #EBEBEB;
+      padding: 10px 12px;
+      z-index: 100;
+    }
+
+    .reply-preview {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--grey-light);
+      border-radius: 8px;
+      padding: 6px 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--grey-dark);
+    }
+
+    .reply-preview.visible { display: flex; }
+
+    .reply-preview-text { flex: 1; }
+    .reply-cancel {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--grey-dark);
+      padding: 0 4px;
+    }
+
+    .compose-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .compose-input {
+      flex: 1;
+      background: var(--grey-light);
+      border: none;
+      border-radius: 20px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      outline: none;
+      resize: none;
+      max-height: 100px;
+      line-height: 1.4;
+    }
+
+    .compose-input::placeholder { color: var(--grey-dark); }
+
+    .send-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--grad);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    .send-btn:active { transform: scale(0.93); }
+    .send-btn:disabled { opacity: 0.4; cursor: default; }
+
+    .send-btn i { color: white; font-size: 16px; }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--surface);
+      border-top: 1px solid #EBEBEB;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 200;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      text-decoration: none;
+      flex: 1;
+      padding: 8px 0;
+    }
+
+    .nav-item i {
+      font-size: 22px;
+      color: var(--grey-mid);
+    }
+
+    .nav-item span {
+      font-size: 10px;
+      color: var(--grey-mid);
+      font-weight: 500;
+    }
+
+    .nav-item.active i {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-item.active span {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ── LOADING / EMPTY ── */
+    .loading-state, .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .empty-state i {
+      font-size: 40px;
+      color: var(--grey-mid);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    /* ── AUTH GATE ── */
+    .auth-gate {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+      padding: 32px;
+    }
+
+    .auth-gate.visible { display: flex; }
+
+    .auth-gate i {
+      font-size: 48px;
+      color: var(--grey-mid);
+    }
+
+    .auth-gate h2 { font-size: 18px; font-weight: 600; }
+    .auth-gate p { font-size: 14px; color: var(--text-muted); }
+
+    .auth-gate a {
+      margin-top: 8px;
+      padding: 12px 28px;
+      background: var(--grad);
+      color: white;
+      border-radius: 24px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .date-divider {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 8px 0 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .date-divider::before, .date-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #EBEBEB;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Auth gate for non-logged in users -->
+<div class="auth-gate" id="authGate">
+  <i class="ti ti-ghost"></i>
+  <h2>Residents only</h2>
+  <p>Log in to enter the Whisper Box</p>
+  <a href="login.html">Log in</a>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <div class="header-icon-wrap">
+      <i class="ti ti-ghost"></i>
+    </div>
+    <div>
+      <div class="header-title">Whisper Box</div>
+      <div class="header-subtitle">Drop your thoughts. No names, no identity.</div>
+    </div>
+  </div>
+  <div class="online-badge">
+    <div class="online-dot"></div>
+    <span id="onlineCount">—</span>
+  </div>
+</header>
+
+<!-- Banner -->
+<div class="whisper-banner">
+  <div class="ghost-avatar"><i class="ti ti-ghost"></i></div>
+  <div class="banner-text">
+    <h2>You're anonymous here 👻</h2>
+    <p>Even the admin can't trace who said what.<br>Your words, your mystery.</p>
+  </div>
+</div>
+
+<div style="padding: 0 16px; margin-top: 10px;">
+  <div class="my-id-pill">
+    <i class="ti ti-fingerprint" style="font-size:14px;"></i>
+    You appear as <strong id="myIdDisplay">...</strong>
+  </div>
+</div>
+
+<!-- Messages -->
+<div class="messages-wrap" id="messagesWrap">
+  <div class="loading-state">Loading whispers...</div>
+</div>
+
+<!-- Compose -->
+<div class="compose-wrap">
+  <div class="reply-preview" id="replyPreview">
+    <div class="reply-preview-text" id="replyPreviewText">Replying to...</div>
+    <button class="reply-cancel" id="replyCancel">×</button>
+  </div>
+  <div class="compose-row">
+    <textarea
+      class="compose-input"
+      id="composeInput"
+      placeholder="Whisper something..."
+      rows="1"
+      maxlength="500"
+    ></textarea>
+    <button class="send-btn" id="sendBtn" disabled>
+      <i class="ti ti-send"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Bottom nav -->
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <i class="ti ti-home"></i>
+    <span>Home</span>
+  </a>
+  <a href="index.html#feed" class="nav-item">
+    <i class="ti ti-layout-grid"></i>
+    <span>Feed</span>
+  </a>
+  <a href="whisper.html" class="nav-item active">
+    <i class="ti ti-ghost"></i>
+    <span>Whisper</span>
+  </a>
+  <a href="profile.html" class="nav-item">
+    <i class="ti ti-user"></i>
+    <span>Profile</span>
+  </a>
+  <a href="more.html" class="nav-item">
+    <i class="ti ti-dots"></i>
+    <span>More</span>
+  </a>
+</nav>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getAuth, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore, collection, doc, getDoc, setDoc, addDoc,
+    query, orderBy, where, onSnapshot, updateDoc,
+    serverTimestamp, Timestamp, increment, limit
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // ── YOUR FIREBASE CONFIG ──
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // ── ANON ID GENERATION ──
+  const adjectives = [
+    "Silent","Pixel","Neon","Cosmic","Breezy","Velvet","Frosty",
+    "Hidden","Zesty","Lucky","Misty","Swift","Chill","Golden",
+    "Nova","Urban","Jolly","Sneaky","Calm","Cloudy","Moonlit",
+    "Electric","Rapid","Dusty","Echo","Brave","Tiny","Wild",
+    "Sleepy","Clever","Happy","Secret","Gentle","Bold","Sunny",
+    "Magic","Witty","Shadow","Fuzzy","Lazy"
+  ];
+  const animals = [
+    "Owl","Otter","Badger","Yak","Falcon","Mongoose","Koala",
+    "Raven","Panda","Gecko","Tiger","Fox","Husky","Crane",
+    "Shark","Turtle","Eagle","Leopard","Frog","Zebra","Dolphin",
+    "Hawk","Mole","Hedgehog","Sparrow","Cobra","Rabbit","Penguin",
+    "Swan","Bear","Raccoon","Bison","Horse","Cheetah","Wolf",
+    "Lynx","Seal","Whale","Parrot","Deer"
+  ];
+
+  async function getOrCreateAnonId(uid) {
+    const ref = doc(db, "anonIds", uid);
+    const snap = await getDoc(ref);
+    if (snap.exists()) return snap.data().anonId;
+
+    // fetch all taken name parts
+    const allSnap = await getDoc(doc(db, "anonIds", "_usedNames"));
+    const used = new Set(allSnap.exists() ? allSnap.data().names : []);
+
+    let namePart;
+    do {
+      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+      const ani = animals[Math.floor(Math.random() * animals.length)];
+      namePart = `${adj}${ani}`;
+    } while (used.has(namePart));
+
+    const number = 100 + Math.floor(Math.random() * 900);
+    const anonId = `${namePart}#${number}`;
+
+    used.add(namePart);
+    await setDoc(ref, { anonId });
+    await setDoc(doc(db, "anonIds", "_usedNames"), { names: [...used] });
+
+    return anonId;
+  }
+
+  // ── STATE ──
+  let myUid = null;
+  let myAnonId = null;
+  let replyingTo = null; // { msgId, anonId, text }
+  let reactedSet = new Set(JSON.parse(localStorage.getItem("whisper_reacted") || "[]"));
+
+  // ── AUTH CHECK ──
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      document.getElementById("authGate").classList.add("visible");
+      return;
+    }
+    myUid = user.uid;
+    myAnonId = await getOrCreateAnonId(myUid);
+    document.getElementById("myIdDisplay").textContent = myAnonId;
+    document.getElementById("sendBtn").disabled = false;
+    listenMessages();
+    updateOnlineCount();
+  });
+
+  // ── LISTEN MESSAGES (last 30 days) ──
+  function listenMessages() {
+    const cutoff = Timestamp.fromMillis(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const q = query(
+      collection(db, "whispers"),
+      where("createdAt", ">=", cutoff),
+      where("parentId", "==", null),
+      orderBy("createdAt", "desc"),
+      limit(100)
+    );
+
+    onSnapshot(q, async (snap) => {
+      const msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      if (msgs.length === 0) {
+        document.getElementById("messagesWrap").innerHTML = `
+          <div class="empty-state">
+            <i class="ti ti-ghost"></i>
+            No whispers yet. Be the first ghost.
+          </div>`;
+        return;
+      }
+      await renderMessages(msgs);
+    });
+  }
+
+  async function getReplies(parentId) {
+    const q = query(
+      collection(db, "whispers"),
+      where("parentId", "==", parentId),
+      orderBy("createdAt", "asc")
+    );
+    return new Promise(resolve => {
+      onSnapshot(q, snap => {
+        resolve(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      });
+    });
+  }
+
+  async function renderMessages(msgs) {
+    const wrap = document.getElementById("messagesWrap");
+    wrap.innerHTML = "";
+
+    let lastDate = null;
+
+    for (const msg of msgs) {
+      const msgDate = msg.createdAt?.toDate?.() || new Date();
+      const dateStr = msgDate.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+
+      if (dateStr !== lastDate) {
+        const div = document.createElement("div");
+        div.className = "date-divider";
+        div.textContent = isToday(msgDate) ? "Today" : dateStr;
+        wrap.appendChild(div);
+        lastDate = dateStr;
+      }
+
+      const card = buildMsgCard(msg, false);
+      wrap.appendChild(card);
+
+      // replies
+      if (msg.replyCount > 0) {
+        const replies = await getReplies(msg.id);
+        replies.forEach(r => {
+          const rc = buildMsgCard(r, true);
+          wrap.appendChild(rc);
+        });
+      }
+    }
+  }
+
+  function buildMsgCard(msg, isChild) {
+    const card = document.createElement("div");
+    card.className = `msg-card${isChild ? " is-reply-child" : ""}`;
+    card.dataset.id = msg.id;
+
+    const isMe = msg.anonId === myAnonId;
+    const time = formatTime(msg.createdAt?.toDate?.() || new Date());
+    const plusCount = msg.plusCount || 0;
+    const reacted = reactedSet.has(msg.id);
+
+    let replyHtml = "";
+    if (msg.parentId && msg.replyToText) {
+      replyHtml = `
+        <div class="reply-context">
+          <div class="reply-context-id">${escHtml(msg.replyToAnonId)}</div>
+          <div>${escHtml(msg.replyToText.substring(0, 60))}${msg.replyToText.length > 60 ? "…" : ""}</div>
+        </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="msg-header">
+        <span class="msg-id${isMe ? " is-me" : ""}">${escHtml(msg.anonId)}${isMe ? " · you" : ""}</span>
+        <span class="msg-time">${time}</span>
+      </div>
+      ${replyHtml}
+      <div class="msg-text">${escHtml(msg.text)}</div>
+      <div class="msg-actions">
+        <button class="action-btn plus-btn${reacted ? " active" : ""}" data-id="${msg.id}">
+          <i class="ti ti-thumb-up"></i>
+          <span class="plus-count">${plusCount > 0 ? `+${plusCount}` : "+1"}</span>
+        </button>
+        ${!isChild ? `<button class="action-btn reply-btn" data-id="${msg.id}" data-anon="${escHtml(msg.anonId)}" data-text="${escHtml(msg.text)}">
+          <i class="ti ti-message-reply"></i> Reply
+        </button>` : ""}
+      </div>`;
+
+    return card;
+  }
+
+  // ── EVENT DELEGATION ──
+  document.getElementById("messagesWrap").addEventListener("click", async (e) => {
+    const plusBtn = e.target.closest(".plus-btn");
+    if (plusBtn) {
+      const id = plusBtn.dataset.id;
+      if (reactedSet.has(id)) return;
+      reactedSet.add(id);
+      localStorage.setItem("whisper_reacted", JSON.stringify([...reactedSet]));
+      plusBtn.classList.add("active");
+      await updateDoc(doc(db, "whispers", id), { plusCount: increment(1) });
+      const countEl = plusBtn.querySelector(".plus-count");
+      const cur = parseInt(countEl.textContent.replace("+", "")) || 0;
+      countEl.textContent = `+${cur + 1}`;
+      return;
+    }
+
+    const replyBtn = e.target.closest(".reply-btn");
+    if (replyBtn) {
+      replyingTo = {
+        msgId: replyBtn.dataset.id,
+        anonId: replyBtn.dataset.anon,
+        text: replyBtn.dataset.text
+      };
+      const preview = document.getElementById("replyPreview");
+      preview.classList.add("visible");
+      document.getElementById("replyPreviewText").textContent =
+        `Replying to ${replyingTo.anonId}: ${replyingTo.text.substring(0, 50)}${replyingTo.text.length > 50 ? "…" : ""}`;
+      document.getElementById("composeInput").focus();
+    }
+  });
+
+  document.getElementById("replyCancel").addEventListener("click", () => {
+    replyingTo = null;
+    document.getElementById("replyPreview").classList.remove("visible");
+  });
+
+  // ── AUTO RESIZE TEXTAREA ──
+  const input = document.getElementById("composeInput");
+  input.addEventListener("input", () => {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 100) + "px";
+  });
+
+  // ── SEND ──
+  document.getElementById("sendBtn").addEventListener("click", sendMessage);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text || !myAnonId) return;
+
+    const btn = document.getElementById("sendBtn");
+    btn.disabled = true;
+
+    const payload = {
+      anonId: myAnonId,
+      text,
+      plusCount: 0,
+      parentId: replyingTo ? replyingTo.msgId : null,
+      replyToAnonId: replyingTo ? replyingTo.anonId : null,
+      replyToText: replyingTo ? replyingTo.text : null,
+      createdAt: serverTimestamp()
+    };
+
+    try {
+      const ref = await addDoc(collection(db, "whispers"), payload);
+
+      if (replyingTo) {
+        await updateDoc(doc(db, "whispers", replyingTo.msgId), {
+          replyCount: increment(1)
+        });
+      }
+
+      input.value = "";
+      input.style.height = "auto";
+      replyingTo = null;
+      document.getElementById("replyPreview").classList.remove("visible");
+    } catch (err) {
+      console.error(err);
+      alert("Couldn't send. Try again.");
+    }
+
+    btn.disabled = false;
+  }
+
+  // ── ONLINE COUNT (rough: users active in last 5 min) ──
+  async function updateOnlineCount() {
+    if (!myUid) return;
+    const ref = doc(db, "presence", myUid);
+    await setDoc(ref, { lastSeen: serverTimestamp() }, { merge: true });
+
+    const cutoff = Timestamp.fromMillis(Date.now() - 5 * 60 * 1000);
+    onSnapshot(
+      query(collection(db, "presence"), where("lastSeen", ">=", cutoff)),
+      snap => {
+        document.getElementById("onlineCount").textContent = `${snap.size} online`;
+      }
+    );
+  }
+
+  // ── HELPERS ──
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function formatTime(date) {
+    return date.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+  }
+
+  function isToday(date) {
+    const now = new Date();
+    return date.getDate() === now.getDate() &&
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear();
+  }
+</script>
+</body>
+</html>
