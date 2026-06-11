@@ -252,8 +252,18 @@ window.openEdit=function(type){
     body.innerHTML=`<div style="display:flex;flex-wrap:wrap;justify-content:center;margin-bottom:16px;">${grid}</div><button class="modal-btn" onclick="saveAvatar()">Save avatar</button>`;
   }else if(type==='donor'){
     title.textContent='Blood donor status';
-    const isDonor=userData.isDonor;
-    body.innerHTML=`<div style="font-size:15px;color:#555;line-height:1.6;margin-bottom:16px;">Blood group: <strong>${userData.bloodGroup}</strong><br/>${isDonor?'You are currently listed as a willing donor.':'You are not listed as a donor.'}</div><button class="modal-btn" style="background:${isDonor?'#fee2e2':'linear-gradient(90deg,#6C3BE8,#E8398A)'};color:${isDonor?'#a32d2d':'#fff'}" onclick="saveDonor(${!isDonor})">${isDonor?'Remove from donor list':'List me as willing donor'}</button>`;
+    const isDonor=userData.isDonor===true;
+    body.innerHTML=`
+      <div style="font-size:15px;color:#555;line-height:1.6;margin-bottom:6px;">
+        Blood group: <strong>${userData.bloodGroup}</strong>
+      </div>
+      <div style="font-size:13px;color:#8e8e8e;line-height:1.5;margin-bottom:16px;">
+        ${isDonor
+          ? 'You are listed as a willing donor. Your name and room number are visible to hostel residents in emergencies.'
+          : 'Not listed as a donor yet. Enable this and your name shows up when someone urgently needs ' + userData.bloodGroup + ' blood — you could literally save a life.'}
+      </div>
+      <button class="modal-btn" style="background:${isDonor?'#fee2e2':'linear-gradient(90deg,#6C3BE8,#E8398A)'};color:${isDonor?'#a32d2d':'#fff'}" onclick="saveDonor(${!isDonor})">${isDonor?'Remove me from donor list':'Yes, list me as willing donor'}</button>
+    `;
   }
   modal.classList.add('show');
 };
@@ -304,9 +314,10 @@ window.saveAvatar=async function(){
   closeModal();renderProfile();loadPosts();
 };
 window.saveDonor=async function(state){
-  await updateDoc(doc(db,'users',currentUser.uid),{isDonor:state});
-  userData.isDonor=state;
-  document.getElementById('donor-status-sub').textContent=state?'Currently listed as donor':'Not listed as donor';
+  const boolState = state === true || state === 'true';
+  await updateDoc(doc(db,'users',currentUser.uid),{isDonor: boolState});
+  userData.isDonor = boolState;
+  document.getElementById('donor-status-sub').textContent = boolState ? 'Currently listed as donor' : 'Not listed as donor';
   closeModal();
 };
 window.logoutUser=async function(){

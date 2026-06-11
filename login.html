@@ -289,21 +289,31 @@ window.registerUser = async function() {
 
   btn.disabled=true;btn.textContent='Creating account...';
 
+  let cred = null;
   try {
-    // Create Firebase Auth account first (this checks duplicate email natively)
-    const cred = await createUserWithEmailAndPassword(auth,email,password);
+    // Step 1 — Create Firebase Auth account
+    cred = await createUserWithEmailAndPassword(auth,email,password);
     await updateProfile(cred.user,{displayName:name});
+  } catch(e) {
+    if(e.code==='auth/email-already-in-use'){
+      msg.className='msg error';msg.textContent='This email is already registered.';
+    } else {
+      msg.className='msg error';msg.textContent='Account creation failed: '+e.message;
+    }
+    btn.disabled=false;btn.textContent='Create account';
+    return;
+  }
 
-    // Now check duplicate admission number in Firestore
+  try {
+    // Step 2 — Check duplicate admission number
     const admSnap = await getDocs(query(collection(db,'users'),where('admissionNo','==',admission)));
     if(!admSnap.empty){
-      // Admission already exists — delete the auth account we just created
       await cred.user.delete();
       msg.className='msg error';msg.textContent='This admission number is already registered.';
       btn.disabled=false;btn.textContent='Create account';return;
     }
 
-    // Check duplicate phone
+    // Step 3 — Check duplicate phone
     const phoneSnap = await getDocs(query(collection(db,'users'),where('phone','==',phone)));
     if(!phoneSnap.empty){
       await cred.user.delete();
@@ -311,24 +321,54 @@ window.registerUser = async function() {
       btn.disabled=false;btn.textContent='Create account';return;
     }
 
-    // All good — save to Firestore
-    await setDoc(doc(db,'users',cred.user.uid),{
-      name,admissionNo:admission,email,
-      department:dept,college,phone,
-      roomNo:room,bloodGroup:blood,
-      degree:admission.endsWith('M')?'MSc':'PhD',
-      avatarId:selectedAvatar,
-      isDonor:false,
-      hostel:'Ajanta Hostel No. 3',
-      createdAt:new Date()
-    });
-    window.location.href='index.html';
-  } catch(e) {
-    if(e.code==='auth/email-already-in-use'){
-      msg.className='msg error';msg.textContent='This email is already registered.';
-    } else {
-      msg.className='msg error';msg.textContent=e.message;
+    // Step 4 — Save to Firestore with retry
+    const userData = {
+      name,
+      admissionNo: admission,
+      email,
+      department: dept,
+      college,
+      phone,
+      roomNo: room,
+      bloodGroup: blood,
+      degree: admission.endsWith('M') ? 'MSc' : 'PhD',
+      avatarId: selectedAvatar,
+      isDonor: false,
+      hostel: 'Ajanta Hostel No. 3',
+      createdAt: new Date()
+    };
+
+    btn.textContent='Saving profile...';
+
+    // Try up to 3 times
+    let saved = false;
+    let lastError = null;
+    for(let attempt=1; attempt<=3; attempt++){
+      try {
+        await setDoc(doc(db,'users',cred.user.uid), userData);
+        saved = true;
+        break;
+      } catch(e){
+        lastError = e;
+        await new Promise(r=>setTimeout(r, 500*attempt)); // wait 500ms, 1s, 1.5s
+      }
     }
+
+    if(!saved){
+      // Sign out and show error — don't let user in with no profile
+      await cred.user.delete();
+      msg.className='msg error';
+      msg.textContent='Profile could not be saved. Please try again. ('+lastError?.message+')';
+      btn.disabled=false;btn.textContent='Create account';
+      return;
+    }
+
+    window.location.href='index.html';
+
+  } catch(e){
+    // Unexpected error — clean up auth account
+    try { await cred.user.delete(); } catch(_){}
+    msg.className='msg error';msg.textContent='Registration failed: '+e.message;
     btn.disabled=false;btn.textContent='Create account';
   }
 };
