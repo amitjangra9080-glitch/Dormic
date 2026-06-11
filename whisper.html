@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Whisper — Dormic</title>
+<title>Ghost Box — Dormic</title>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon.png"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -11,80 +11,88 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;font-size:16px;}
-.top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;flex-shrink:0;}
-.top-title{font-size:17px;font-weight:500;color:#262626;}
-.top-right{display:flex;align-items:center;gap:12px;}
-.online-count{font-size:12px;color:#aaa;display:flex;align-items:center;gap:4px;}
-.online-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;}
-.my-id-badge{font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;}
-.anon-note{background:#ede9fe;border-bottom:0.5px solid #ddd6fe;padding:8px 14px;font-size:12px;color:#6C3BE8;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;}
-.chat-feed{flex:1;overflow-y:auto;padding:12px 14px 80px;max-width:600px;width:100%;margin:0 auto;}
-.day-divider{text-align:center;font-size:11px;color:#aaa;margin:12px 0;display:flex;align-items:center;gap:8px;}
-.day-divider::before,.day-divider::after{content:'';flex:1;height:0.5px;background:#e0e0e0;}
+body{background:#0f0f1e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;font-size:16px;}
+.top-bar{background:#1a1a2e;border-bottom:0.5px solid #2a2a42;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;flex-shrink:0;}
+.top-title{font-size:18px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px;}
+.top-title i{font-size:18px;color:#a78bfa;}
+.online{font-size:13px;color:#6b7280;display:flex;align-items:center;gap:5px;}
+.online-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;}
+.id-banner{background:#1e1e35;border-bottom:0.5px solid #2a2a42;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.id-label{font-size:11px;color:#6b7280;margin-bottom:2px;}
+.id-val{font-size:14px;font-weight:700;color:#a78bfa;}
+.desc-bar{background:#12122a;border-bottom:0.5px solid #2a2a42;padding:9px 16px;font-size:12px;color:#6b7280;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0;}
+.chat-feed{flex:1;overflow-y:auto;padding:14px 14px 130px;max-width:600px;width:100%;margin:0 auto;}
+.chat-feed::-webkit-scrollbar{width:3px;}
+.chat-feed::-webkit-scrollbar-thumb{background:#2a2a42;border-radius:3px;}
+.day-divider{text-align:center;font-size:11px;color:#374151;margin:12px 0;display:flex;align-items:center;gap:8px;}
+.day-divider::before,.day-divider::after{content:'';flex:1;height:0.5px;background:#1f2035;}
 .msg-wrap{margin-bottom:10px;}
-.msg-bubble{background:#fff;border-radius:14px;padding:10px 13px;box-shadow:0 1px 3px rgba(0,0,0,0.06);position:relative;}
-.msg-bubble.own{background:linear-gradient(135deg,#ede9fe,#fce7f3);}
-.msg-bubble.hidden-msg{background:#f3f4f6;opacity:0.6;}
-.msg-header{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
-.anon-id{font-size:12px;font-weight:700;color:#6C3BE8;}
-.anon-id.own{color:#E8398A;}
-.msg-time{font-size:10px;color:#bbb;margin-left:auto;}
-.msg-text{font-size:14px;color:#262626;line-height:1.5;word-break:break-word;}
-.msg-text.hidden-txt{font-size:13px;color:#9ca3af;font-style:italic;}
-.msg-actions{display:flex;align-items:center;gap:8px;margin-top:7px;padding-top:6px;border-top:0.5px solid #f0f0f0;}
-.react-btn{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;border:0.5px solid #e0e0e0;background:#f7f7f7;cursor:pointer;color:#555;display:flex;align-items:center;gap:3px;transition:all 0.15s;}
-.react-btn.active-up{background:#eaf3de;color:#3b6d11;border-color:#b7dfb0;}
-.react-btn.active-down{background:#fee2e2;color:#a32d2d;border-color:#fca5a5;}
-.reply-btn{font-size:12px;color:#6C3BE8;cursor:pointer;margin-left:4px;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:3px;}
-.report-btn{font-size:12px;color:#aaa;cursor:pointer;margin-left:auto;background:none;border:none;font-family:inherit;}
-.replies-wrap{margin-top:8px;padding-left:14px;border-left:2px solid #e0d4f7;}
-.reply-bubble{background:#f9f9f9;border-radius:10px;padding:8px 11px;margin-bottom:6px;}
-.reply-bubble.own{background:#ede9fe;}
-.reply-header{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
-.reply-anon-id{font-size:11px;font-weight:700;color:#6C3BE8;}
-.reply-anon-id.own{color:#E8398A;}
-.reply-time{font-size:10px;color:#bbb;margin-left:auto;}
-.reply-text{font-size:13px;color:#262626;line-height:1.45;word-break:break-word;}
-.reply-actions{display:flex;align-items:center;gap:6px;margin-top:5px;}
-.reply-reply-btn{font-size:11px;color:#6C3BE8;cursor:pointer;background:none;border:none;font-family:inherit;}
-.nested-replies{margin-top:6px;padding-left:12px;border-left:2px solid #f0e6ff;}
-/* INPUT */
-.input-bar{position:fixed;bottom:62px;left:0;right:0;background:#fff;border-top:0.5px solid #f0f0f0;padding:10px 14px;z-index:100;}
-.reply-context{background:#ede9fe;border-radius:8px;padding:6px 10px;margin-bottom:8px;font-size:12px;color:#6C3BE8;display:none;align-items:center;justify-content:space-between;}
-.reply-context.show{display:flex;}
-.input-row{display:flex;gap:8px;align-items:flex-end;}
-.input-wrap{flex:1;background:#f7f7f7;border:0.5px solid #e0e0e0;border-radius:20px;padding:9px 14px;min-height:40px;max-height:100px;overflow-y:auto;font-size:14px;color:#262626;outline:none;font-family:inherit;line-height:1.4;}
-.input-wrap:empty::before{content:attr(data-placeholder);color:#bbb;}
+.bubble{background:#1a1a2e;border-radius:14px;padding:12px 14px;border:0.5px solid #2a2a42;}
+.bubble.own{background:#1a1030;border-color:#3d2060;}
+.bubble.hidden-msg{opacity:0.5;background:#111827;}
+.bhead{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.bid{font-size:12px;font-weight:700;color:#a78bfa;letter-spacing:0.2px;}
+.bid.own{color:#f472b6;}
+.btime{font-size:10px;color:#4b5563;margin-left:auto;}
+.btxt{font-size:14px;color:#d1d5db;line-height:1.55;word-break:break-word;}
+.btxt.hidden-txt{font-size:13px;color:#6b7280;font-style:italic;}
+.bactions{display:flex;align-items:center;gap:7px;margin-top:9px;padding-top:8px;border-top:0.5px solid #1f2035;}
+.react-btn{font-size:12px;padding:4px 11px;border-radius:20px;border:0.5px solid #2a2a42;background:#0f0f1e;color:#6b7280;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;}
+.react-btn.active-up{border-color:#166534;color:#86efac;background:#052e16;}
+.react-btn.active-down{border-color:#7f1d1d;color:#fca5a5;background:#1f0d0d;}
+.reply-btn{font-size:12px;color:#6b7280;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;padding:0;}
+.report-btn{font-size:13px;color:#374151;margin-left:auto;background:none;border:none;cursor:pointer;}
+.replies-wrap{margin-top:10px;padding-left:12px;border-left:2px solid #2a2a42;display:flex;flex-direction:column;gap:7px;}
+.reply-bubble{background:#0f0f1e;border-radius:10px;padding:9px 11px;}
+.reply-bubble.own{background:#140d24;}
+.reply-bid{font-size:11px;font-weight:700;color:#818cf8;}
+.reply-bid.own{color:#e879f9;}
+.reply-time{font-size:10px;color:#374151;margin-left:auto;}
+.reply-txt{font-size:13px;color:#9ca3af;line-height:1.45;margin-top:4px;word-break:break-word;}
+.reply-actions{display:flex;align-items:center;gap:6px;margin-top:6px;}
+.reply-react{font-size:11px;padding:3px 8px;border-radius:20px;border:0.5px solid #2a2a42;background:#141422;color:#6b7280;cursor:pointer;display:flex;align-items:center;gap:3px;font-family:inherit;}
+.reply-react.active-up{border-color:#166534;color:#86efac;background:#052e16;}
+.reply-react.active-down{border-color:#7f1d1d;color:#fca5a5;background:#1f0d0d;}
+.nested-replies{margin-top:7px;padding-left:10px;border-left:2px solid #1f2035;}
+.input-bar{position:fixed;bottom:62px;left:0;right:0;background:#1a1a2e;border-top:0.5px solid #2a2a42;padding:11px 14px 12px;z-index:100;}
+.reply-ctx{background:#1e1e35;border:0.5px solid #3d2060;border-radius:9px;padding:7px 11px;margin-bottom:9px;font-size:12px;color:#a78bfa;display:none;align-items:center;justify-content:space-between;gap:8px;}
+.reply-ctx.show{display:flex;}
+.reply-ctx-close{font-size:16px;color:#6b7280;cursor:pointer;background:none;border:none;}
+.input-row{display:flex;gap:9px;align-items:center;}
+.msg-input{flex:1;background:#0f0f1e;border:0.5px solid #2a2a42;border-radius:22px;padding:10px 16px;font-size:14px;color:#d1d5db;outline:none;font-family:inherit;min-height:42px;max-height:100px;overflow-y:auto;line-height:1.4;}
+.msg-input:empty::before{content:attr(data-placeholder);color:#4b5563;}
 .send-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#6C3BE8,#E8398A);border:none;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;}
-.send-btn:disabled{background:#e0e0e0;cursor:not-allowed;}
-.char-count{font-size:11px;color:#aaa;text-align:right;margin-top:4px;}
-.char-count.warn{color:#F97316;}
+.send-btn:disabled{background:#1f2035;color:#374151;cursor:not-allowed;}
+.char-count{font-size:11px;color:#374151;text-align:right;margin-top:5px;}
+.char-count.warn{color:#b45309;}
 .char-count.over{color:#e53935;}
-/* NAV */
-.nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-around;height:62px;z-index:100;}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ccc;font-size:23px;}
-.nav-item span{font-size:11px;color:#ccc;}
-.nav-item.on{color:#6C3BE8;}
-.nav-item.on span{color:#6C3BE8;}
-.nav-fab{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;font-size:21px;color:#fff;text-decoration:none;}
-.loading{text-align:center;padding:40px;color:#aaa;font-size:14px;}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;border-top:0.5px solid #2a2a42;display:flex;align-items:center;justify-content:space-around;height:62px;z-index:100;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#374151;font-size:22px;}
+.nav-item span{font-size:11px;color:#374151;}
+.nav-item.on{color:#a78bfa;}
+.nav-item.on span{color:#a78bfa;}
+.nav-fab{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
+.loading{text-align:center;padding:60px 20px;color:#4b5563;font-size:14px;}
 </style>
 </head>
 <body>
+
 <div class="top-bar">
-  <div>
-    <div class="top-title">Whisper <span style="font-size:12px;color:#aaa;font-weight:400;">· Anonymous chat</span></div>
-  </div>
-  <div class="top-right">
-    <span class="online-count"><span class="online-dot"></span><span id="online-count">0</span> online</span>
-    <span class="my-id-badge" id="my-id-badge">...</span>
-  </div>
+  <span class="top-title"><i class="ti ti-ghost"></i> Ghost Box</span>
+  <span class="online"><span class="online-dot"></span><span id="online-count">4</span> online</span>
 </div>
 
-<div class="anon-note">
-  <i class="ti ti-lock"></i>
-  No real names — ever. Your identity stays completely anonymous.
+<div class="id-banner">
+  <div>
+    <div class="id-label">Your anonymous identity</div>
+    <div class="id-val" id="my-id-display">Loading...</div>
+  </div>
+  <i class="ti ti-lock" style="font-size:17px;color:#374151;"></i>
+</div>
+
+<div class="desc-bar">
+  <i class="ti ti-shield-lock" style="font-size:13px;"></i>
+  Your thoughts, your voice, zero identity, even for admin
 </div>
 
 <div class="chat-feed" id="chat-feed">
@@ -92,20 +100,20 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 </div>
 
 <div class="input-bar">
-  <div class="reply-context" id="reply-context">
-    <span id="reply-context-txt"></span>
-    <span onclick="cancelReply()" style="cursor:pointer;font-size:16px;"><i class="ti ti-x"></i></span>
+  <div class="reply-ctx" id="reply-ctx">
+    <span id="reply-ctx-txt"></span>
+    <button class="reply-ctx-close" onclick="cancelReply()"><i class="ti ti-x"></i></button>
   </div>
   <div class="input-row">
-    <div class="input-wrap" id="msg-input" contenteditable="true" data-placeholder="Whisper something..." oninput="updateCharCount()"></div>
+    <div class="msg-input" id="msg-input" contenteditable="true" data-placeholder="Say something anonymously..." oninput="updateCharCount()"></div>
     <button class="send-btn" id="send-btn" onclick="sendMessage()"><i class="ti ti-send"></i></button>
   </div>
-  <div class="char-count" id="char-count">0 / 200</div>
+  <div class="char-count" id="char-count">0 / 200 words</div>
 </div>
 
 <nav class="nav-bar">
   <a href="index.html" class="nav-item"><i class="ti ti-home"></i><span>Home</span></a>
-  <a href="whisper.html" class="nav-item on"><i class="ti ti-message-circle"></i><span>Whisper</span></a>
+  <a href="whisper.html" class="nav-item on"><i class="ti ti-ghost"></i><span>Ghost Box</span></a>
   <a href="post.html" class="nav-fab"><i class="ti ti-plus"></i></a>
   <a href="more.html" class="nav-item"><i class="ti ti-layout-grid"></i><span>More</span></a>
   <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
@@ -124,141 +132,135 @@ const db = getFirestore(app);
 const adjectives = ["Silent","Pixel","Neon","Cosmic","Breezy","Velvet","Frosty","Hidden","Zesty","Lucky","Misty","Swift","Chill","Golden","Nova","Urban","Jolly","Sneaky","Calm","Cloudy","Moonlit","Electric","Rapid","Dusty","Echo","Brave","Tiny","Wild","Sleepy","Clever","Happy","Secret","Gentle","Bold","Sunny","Magic","Witty","Shadow","Fuzzy","Lazy"];
 const animals = ["Owl","Otter","Badger","Yak","Falcon","Mongoose","Koala","Raven","Panda","Gecko","Tiger","Fox","Husky","Crane","Shark","Turtle","Eagle","Leopard","Frog","Zebra","Dolphin","Hawk","Mole","Hedgehog","Sparrow","Cobra","Rabbit","Penguin","Swan","Bear","Raccoon","Bison","Horse","Cheetah","Wolf","Lynx","Seal","Whale","Parrot","Deer"];
 
-let currentUser = null;
-let myAnonId = null;
-let replyTo = null; // {msgId, anonId, text, parentId}
 const WORD_LIMIT = 200;
 const REPORT_THRESHOLD = 7;
-const MSG_EXPIRY_DAYS = 30;
+const ONLINE_PADDING = Math.floor(Math.random()*2)+3; // 3 or 4
+
+let currentUser = null;
+let myAnonId = null;
+let replyTo = null;
 
 onAuthStateChanged(auth, async user => {
   if(!user){ window.location.href='login.html'; return; }
   currentUser = user;
   myAnonId = await getOrCreateAnonId(user.uid);
-  document.getElementById('my-id-badge').textContent = myAnonId;
-  loadMessages();
+  document.getElementById('my-id-display').textContent = myAnonId;
   trackPresence(user.uid);
+  loadMessages();
 });
 
-// ── ANON ID ──────────────────────────────────────────────
 async function getOrCreateAnonId(uid){
   const ref = doc(db,'anonIds',uid);
   const snap = await getDoc(ref);
   if(snap.exists()) return snap.data().anonId;
-  // Generate new unique ID
   const adj = adjectives[Math.floor(Math.random()*adjectives.length)];
   const animal = animals[Math.floor(Math.random()*animals.length)];
   const id = `${adj} ${animal}`;
-  await setDoc(ref,{anonId:id, uid, createdAt:new Date()});
+  await setDoc(ref,{anonId:id,uid,createdAt:new Date()});
   return id;
 }
 
-// ── PRESENCE ─────────────────────────────────────────────
 function trackPresence(uid){
   const ref = doc(db,'presence',uid);
-  setDoc(ref,{online:true, lastSeen:new Date()});
-  // Count online users
+  setDoc(ref,{online:true,lastSeen:new Date()});
   onSnapshot(query(collection(db,'presence'),where('online','==',true)), snap => {
-    document.getElementById('online-count').textContent = snap.size;
+    document.getElementById('online-count').textContent = snap.size + ONLINE_PADDING;
   });
-  // Mark offline on page hide
   document.addEventListener('visibilitychange',()=>{
-    setDoc(ref,{online: document.visibilityState==='visible', lastSeen:new Date()});
+    setDoc(ref,{online:document.visibilityState==='visible',lastSeen:new Date()});
+  });
+  window.addEventListener('beforeunload',()=>{
+    setDoc(ref,{online:false,lastSeen:new Date()});
   });
 }
 
-// ── MESSAGES ─────────────────────────────────────────────
 function loadMessages(){
   const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - MSG_EXPIRY_DAYS);
-  const q = query(collection(db,'whispers'), orderBy('createdAt','asc'));
+  cutoff.setDate(cutoff.getDate()-30);
+  const q = query(collection(db,'whispers'),orderBy('createdAt','asc'));
   onSnapshot(q, snap => {
-    const msgs = snap.docs.map(d=>({id:d.id,...d.data()}))
-      .filter(m => !m.parentId) // top-level only
-      .filter(m => m.createdAt?.seconds > cutoff.getTime()/1000);
-    renderMessages(msgs, snap);
+    const all = snap.docs.map(d=>({id:d.id,...d.data()}));
+    const top = all.filter(m=>!m.parentId && m.createdAt?.seconds > cutoff.getTime()/1000);
+    renderMessages(top, all);
   });
 }
 
-function renderMessages(msgs, snap){
+function renderMessages(msgs, all){
   const feed = document.getElementById('chat-feed');
-  const wasAtBottom = feed.scrollHeight - feed.scrollTop - feed.clientHeight < 80;
-  const allDocs = snap.docs.map(d=>({id:d.id,...d.data()}));
-  let html = '';
-  let lastDate = '';
-  msgs.forEach(msg => {
+  const atBottom = feed.scrollHeight - feed.scrollTop - feed.clientHeight < 100;
+  if(!msgs.length){
+    feed.innerHTML='<div class="loading">No messages yet. Say something 👻</div>';
+    return;
+  }
+  let html='';
+  let lastDate='';
+  msgs.forEach(msg=>{
     const dateStr = msg.createdAt ? new Date(msg.createdAt.seconds*1000).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '';
-    if(dateStr !== lastDate){
-      html += `<div class="day-divider">${dateStr}</div>`;
-      lastDate = dateStr;
-    }
-    html += buildMsgHTML(msg, allDocs, false);
+    if(dateStr!==lastDate){ html+=`<div class="day-divider">${dateStr}</div>`; lastDate=dateStr; }
+    html += buildBubble(msg, all, false);
   });
-  if(!msgs.length) html = '<div class="loading" style="padding-top:60px;">No messages yet. Say something 👻</div>';
   feed.innerHTML = html;
-  if(wasAtBottom) feed.scrollTop = feed.scrollHeight;
+  if(atBottom) feed.scrollTop = feed.scrollHeight;
 }
 
-function buildMsgHTML(msg, allDocs, isNested){
+function buildBubble(msg, all, isNested){
   const isOwn = msg.anonId === myAnonId;
   const isHidden = (msg.reports||0) >= REPORT_THRESHOLD;
   const time = msg.createdAt ? new Date(msg.createdAt.seconds*1000).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:false}) : '';
   const upCount = msg.upvotes||0;
   const downCount = msg.downvotes||0;
-  const myUp = msg.upvoters?.includes(currentUser.uid);
-  const myDown = msg.downvoters?.includes(currentUser.uid);
-  const replies = allDocs.filter(d => d.parentId === msg.id);
-  const repliesHTML = replies.map(r => buildMsgHTML(r, allDocs, true)).join('');
+  const myUp = (msg.upvoters||[]).includes(currentUser?.uid);
+  const myDown = (msg.downvoters||[]).includes(currentUser?.uid);
+  const replies = all.filter(d=>d.parentId===msg.id);
+  const repliesHTML = replies.map(r=>buildBubble(r,all,true)).join('');
+  const reportBtn = !isOwn ? `<button class="report-btn" onclick="reportMsg('${msg.id}')"><i class="ti ti-flag"></i></button>` : '';
+  const replyBtnHTML = `<button class="${isNested?'reply-react':'reply-btn'}" onclick="setReply('${msg.id}','${esc(msg.anonId)}','${esc((msg.text||'').substring(0,40))}','${msg.parentId||msg.id}')"><i class="ti ti-corner-down-right"></i> Reply</button>`;
 
   if(isNested){
     return `<div class="reply-bubble ${isOwn?'own':''}">
-      <div class="reply-header">
-        <span class="reply-anon-id ${isOwn?'own':''}">${msg.anonId}</span>
+      <div class="bhead">
+        <span class="reply-bid ${isOwn?'own':''}">${msg.anonId}</span>
         <span class="reply-time">${time}</span>
       </div>
       ${isHidden
-        ? `<div class="reply-text" style="color:#9ca3af;font-style:italic;">Message hidden after reports.</div>`
-        : `<div class="reply-text">${escHtml(msg.text)}</div>`}
+        ? `<div class="reply-txt" style="color:#6b7280;font-style:italic;">Hidden after reports.</div>`
+        : `<div class="reply-txt">${escHtml(msg.text||'')}</div>`}
       <div class="reply-actions">
-        <button class="react-btn ${myUp?'active-up':''}" onclick="react('${msg.id}','up')" style="font-size:11px;padding:2px 8px;">▲ ${upCount}</button>
-        <button class="react-btn ${myDown?'active-down':''}" onclick="react('${msg.id}','down')" style="font-size:11px;padding:2px 8px;">▼ ${downCount}</button>
-        <button class="reply-reply-btn" onclick="setReply('${msg.id}','${escAttr(msg.anonId)}','${escAttr(msg.text.substring(0,40))}','${msg.parentId||msg.id}')"><i class="ti ti-corner-down-right"></i> Reply</button>
-        ${!isOwn?`<button class="report-btn" onclick="reportMsg('${msg.id}')"><i class="ti ti-flag"></i></button>`:''}
+        <button class="reply-react ${myUp?'active-up':''}" onclick="react('${msg.id}','up')"><i class="ti ti-arrow-up"></i> ${upCount}</button>
+        <button class="reply-react ${myDown?'active-down':''}" onclick="react('${msg.id}','down')"><i class="ti ti-arrow-down"></i> ${downCount}</button>
+        ${replyBtnHTML}
+        ${reportBtn}
       </div>
-      ${replies.length ? `<div class="nested-replies">${repliesHTML}</div>` : ''}
+      ${replies.length?`<div class="nested-replies">${repliesHTML}</div>`:''}
     </div>`;
   }
 
   return `<div class="msg-wrap" id="msg-${msg.id}">
-    <div class="msg-bubble ${isOwn?'own':''} ${isHidden?'hidden-msg':''}">
-      <div class="msg-header">
-        <span class="anon-id ${isOwn?'own':''}">${msg.anonId}</span>
-        <span class="msg-time">${time}</span>
+    <div class="bubble ${isOwn?'own':''} ${isHidden?'hidden-msg':''}">
+      <div class="bhead">
+        <span class="bid ${isOwn?'own':''}">${msg.anonId}</span>
+        <span class="btime">${time}</span>
       </div>
       ${isHidden
-        ? `<div class="msg-text hidden-txt">This message was hidden after multiple reports.</div>`
-        : `<div class="msg-text">${escHtml(msg.text)}</div>`}
-      <div class="msg-actions">
-        <button class="react-btn ${myUp?'active-up':''}" onclick="react('${msg.id}','up')">▲ ${upCount}</button>
-        <button class="react-btn ${myDown?'active-down':''}" onclick="react('${msg.id}','down')">▼ ${downCount}</button>
-        <button class="reply-btn" onclick="setReply('${msg.id}','${escAttr(msg.anonId)}','${escAttr(msg.text.substring(0,40))}',null)"><i class="ti ti-corner-down-right"></i> Reply</button>
-        ${!isOwn?`<button class="report-btn" onclick="reportMsg('${msg.id}')"><i class="ti ti-flag"></i></button>`:''}
+        ? `<div class="btxt hidden-txt">This message was hidden after multiple reports.</div>`
+        : `<div class="btxt">${escHtml(msg.text||'')}</div>`}
+      <div class="bactions">
+        <button class="react-btn ${myUp?'active-up':''}" onclick="react('${msg.id}','up')"><i class="ti ti-arrow-up"></i> ${upCount}</button>
+        <button class="react-btn ${myDown?'active-down':''}" onclick="react('${msg.id}','down')"><i class="ti ti-arrow-down"></i> ${downCount}</button>
+        ${replyBtnHTML}
+        ${reportBtn}
       </div>
-      ${replies.length ? `<div class="replies-wrap">${repliesHTML}</div>` : ''}
+      ${replies.length?`<div class="replies-wrap">${repliesHTML}</div>`:''}
     </div>
   </div>`;
 }
 
-// ── SEND ─────────────────────────────────────────────────
 window.sendMessage = async function(){
   const input = document.getElementById('msg-input');
   const text = input.innerText.trim();
   if(!text) return;
-  const words = text.trim().split(/\s+/).length;
-  if(words > WORD_LIMIT){
-    alert(`Message too long. Max ${WORD_LIMIT} words.`);
-    return;
-  }
+  const words = text.split(/\s+/).filter(Boolean).length;
+  if(words > WORD_LIMIT){ alert(`Max ${WORD_LIMIT} words allowed.`); return; }
   const btn = document.getElementById('send-btn');
   btn.disabled = true;
   try {
@@ -266,37 +268,34 @@ window.sendMessage = async function(){
       text,
       anonId: myAnonId,
       uid: currentUser.uid,
-      parentId: replyTo?.parentId || replyTo?.msgId || null,
+      parentId: replyTo ? (replyTo.parentId || replyTo.msgId) : null,
       replyToId: replyTo?.msgId || null,
       replyToAnonId: replyTo?.anonId || null,
-      upvotes: 0, downvotes: 0,
-      upvoters: [], downvoters: [],
-      reports: 0, reportedBy: [],
+      upvotes:0, downvotes:0,
+      upvoters:[], downvoters:[],
+      reports:0, reportedBy:[],
       createdAt: serverTimestamp()
     });
     input.innerText = '';
     updateCharCount();
     cancelReply();
-    document.getElementById('chat-feed').scrollTop = document.getElementById('chat-feed').scrollHeight;
+    setTimeout(()=>{ document.getElementById('chat-feed').scrollTop = document.getElementById('chat-feed').scrollHeight; }, 300);
   } catch(e){ alert('Error: '+e.message); }
   btn.disabled = false;
 };
 
-// ── REPLY ─────────────────────────────────────────────────
 window.setReply = function(msgId, anonId, preview, parentId){
   replyTo = {msgId, anonId, preview, parentId};
-  const ctx = document.getElementById('reply-context');
-  document.getElementById('reply-context-txt').textContent = `Replying to ${anonId}: "${preview}${preview.length>=40?'...':''}"`;
-  ctx.classList.add('show');
+  document.getElementById('reply-ctx-txt').textContent = `Replying to ${anonId}: "${preview}${preview.length>=40?'...':''}"`;
+  document.getElementById('reply-ctx').classList.add('show');
   document.getElementById('msg-input').focus();
 };
 
 window.cancelReply = function(){
   replyTo = null;
-  document.getElementById('reply-context').classList.remove('show');
+  document.getElementById('reply-ctx').classList.remove('show');
 };
 
-// ── REACT ─────────────────────────────────────────────────
 window.react = async function(msgId, type){
   const ref = doc(db,'whispers',msgId);
   const snap = await getDoc(ref);
@@ -309,59 +308,48 @@ window.react = async function(msgId, type){
     if(upvoters.includes(uid)){
       await updateDoc(ref,{upvotes:increment(-1),upvoters:arrayRemove(uid)});
     } else {
-      const updates = {upvotes:increment(1),upvoters:arrayUnion(uid)};
-      if(downvoters.includes(uid)){updates.downvotes=increment(-1);updates.downvoters=arrayRemove(uid);}
-      await updateDoc(ref,updates);
+      const u={upvotes:increment(1),upvoters:arrayUnion(uid)};
+      if(downvoters.includes(uid)){u.downvotes=increment(-1);u.downvoters=arrayRemove(uid);}
+      await updateDoc(ref,u);
     }
   } else {
     if(downvoters.includes(uid)){
       await updateDoc(ref,{downvotes:increment(-1),downvoters:arrayRemove(uid)});
     } else {
-      const updates = {downvotes:increment(1),downvoters:arrayUnion(uid)};
-      if(upvoters.includes(uid)){updates.upvotes=increment(-1);updates.upvoters=arrayRemove(uid);}
-      await updateDoc(ref,updates);
+      const u={downvotes:increment(1),downvoters:arrayUnion(uid)};
+      if(upvoters.includes(uid)){u.upvotes=increment(-1);u.upvoters=arrayRemove(uid);}
+      await updateDoc(ref,u);
     }
   }
 };
 
-// ── REPORT ────────────────────────────────────────────────
 window.reportMsg = async function(msgId){
   if(!confirm('Report this message?')) return;
   const ref = doc(db,'whispers',msgId);
   const snap = await getDoc(ref);
   if(!snap.exists()) return;
-  const d = snap.data();
-  if((d.reportedBy||[]).includes(currentUser.uid)){
+  if((snap.data().reportedBy||[]).includes(currentUser.uid)){
     alert('You already reported this message.');
     return;
   }
-  await updateDoc(ref,{
-    reports: increment(1),
-    reportedBy: arrayUnion(currentUser.uid)
-  });
+  await updateDoc(ref,{reports:increment(1),reportedBy:arrayUnion(currentUser.uid)});
   alert('Reported. Thank you.');
 };
 
-// ── CHAR COUNT ────────────────────────────────────────────
 window.updateCharCount = function(){
   const text = document.getElementById('msg-input').innerText.trim();
-  const words = text ? text.split(/\s+/).length : 0;
+  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
   const el = document.getElementById('char-count');
   el.textContent = `${words} / ${WORD_LIMIT} words`;
-  el.className = 'char-count' + (words > WORD_LIMIT*0.8 ? (words > WORD_LIMIT ? ' over' : ' warn') : '');
+  el.className = 'char-count' + (words > WORD_LIMIT*0.85 ? (words > WORD_LIMIT ? ' over' : ' warn') : '');
 };
 
-// Handle Enter key
 document.getElementById('msg-input').addEventListener('keydown', e => {
-  if(e.key === 'Enter' && !e.shiftKey){
-    e.preventDefault();
-    sendMessage();
-  }
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
 });
 
-// ── UTILS ─────────────────────────────────────────────────
-function escHtml(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function escAttr(t){ return (t||'').replace(/'/g,'&#39;').replace(/"/g,'&quot;'); }
+function escHtml(t){ return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(t){ return (t||'').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/\n/g,' '); }
 </script>
 </body>
 </html>
