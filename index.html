@@ -108,7 +108,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
@@ -122,9 +122,28 @@ let currentFilter = 'all';
 const avatarBgs = ['','linear-gradient(135deg,#6C3BE8,#E8398A)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#F97316,#FBBF24)','linear-gradient(135deg,#3B82F6,#6C3BE8)','linear-gradient(135deg,#10B981,#3B82F6)','linear-gradient(135deg,#EF4444,#E8398A)','linear-gradient(135deg,#8B5CF6,#EC4899)','linear-gradient(135deg,#06B6D4,#3B82F6)','linear-gradient(135deg,#F59E0B,#EF4444)','linear-gradient(135deg,#10B981,#6C3BE8)','linear-gradient(135deg,#EC4899,#F97316)','linear-gradient(135deg,#6366F1,#8B5CF6)','linear-gradient(135deg,#14B8A6,#10B981)','linear-gradient(135deg,#F97316,#6C3BE8)','linear-gradient(135deg,#EF4444,#F97316)','linear-gradient(135deg,#3B82F6,#10B981)','linear-gradient(135deg,#A855F7,#3B82F6)','linear-gradient(135deg,#F43F5E,#6366F1)','linear-gradient(135deg,#0EA5E9,#6C3BE8)','linear-gradient(135deg,#84CC16,#10B981)'];
 const avatarSymbols = ['','⚽','🏏','🎮','🏆','🔑','📚','🎯','💡','🌍','🚗','✈️','🎸','🏋️','🧪','🔬','💻','🎲','🏠','⚡','🔥'];
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
   if(!user) { window.location.href = 'login.html'; return; }
   currentUser = user;
+
+  // Save pending profile if registration just completed
+  const pending = localStorage.getItem('dormic_pending_profile');
+  if(pending){
+    try {
+      const userData = JSON.parse(pending);
+      userData.createdAt = new Date();
+      // Check if profile already exists
+      const existing = await getDoc(doc(db,'users',user.uid));
+      if(!existing.exists()){
+        await setDoc(doc(db,'users',user.uid), userData);
+      }
+      localStorage.removeItem('dormic_pending_profile');
+    } catch(e){
+      console.error('Profile save error:',e);
+      // Will retry next time they open the app
+    }
+  }
+
   const dismissed = localStorage.getItem('dormic_notify_dismissed');
   if(!dismissed && Notification.permission !== 'granted') {
     document.getElementById('notify-bar').style.display = 'flex';
