@@ -324,8 +324,7 @@ window.registerUser = async function() {
       btn.disabled=false;btn.textContent='Create account';return;
     }
 
-    // Step 4 — Store user data in localStorage and redirect
-    // Firestore write will happen on index.html after full auth
+    // Step 4 — Write to Firestore directly now that auth is settled
     const userData = {
       name,
       admissionNo: admission,
@@ -339,9 +338,28 @@ window.registerUser = async function() {
       avatarId: selectedAvatar,
       isDonor: false,
       hostel: 'Ajanta Hostel No. 3',
-      createdAt: new Date().toISOString()
+      createdAt: new Date()
     };
-    localStorage.setItem('dormic_pending_profile', JSON.stringify(userData));
+
+    btn.textContent = 'Saving profile...';
+
+    // Wait for auth state to be confirmed then write
+    await new Promise((resolve, reject) => {
+      const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        if(user && user.uid === cred.user.uid) {
+          unsubscribe();
+          try {
+            await setDoc(doc(db,'users', user.uid), userData);
+            resolve();
+          } catch(err) {
+            reject(err);
+          }
+        }
+      });
+      // Timeout after 10 seconds
+      setTimeout(() => reject(new Error('Timeout')), 10000);
+    });
+
     window.location.href='index.html';
 
   } catch(e){
