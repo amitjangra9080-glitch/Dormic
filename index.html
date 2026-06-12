@@ -132,15 +132,20 @@ onAuthStateChanged(auth, async user => {
     try {
       const userData = JSON.parse(pending);
       userData.createdAt = new Date();
+      console.log('Found pending profile, attempting save for UID:', user.uid);
+      console.log('User auth state:', user.email, user.emailVerified);
       // Check if profile already exists
       const existing = await getDoc(doc(db,'users',user.uid));
+      console.log('Profile exists:', existing.exists());
       if(!existing.exists()){
         await setDoc(doc(db,'users',user.uid), userData);
+        console.log('Profile saved successfully!');
       }
       localStorage.removeItem('dormic_pending_profile');
+      console.log('Pending profile cleared from localStorage');
     } catch(e){
-      console.error('Profile save error:',e);
-      // Will retry next time they open the app
+      console.error('Profile save error:', e.code, e.message);
+      // Keep in localStorage for next attempt
     }
   }
 
