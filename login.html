@@ -294,6 +294,9 @@ window.registerUser = async function() {
     // Step 1 — Create Firebase Auth account
     cred = await createUserWithEmailAndPassword(auth,email,password);
     await updateProfile(cred.user,{displayName:name});
+    // Wait for auth token to fully propagate before Firestore writes
+    await cred.user.getIdToken(true);
+    await new Promise(r=>setTimeout(r,1000));
   } catch(e) {
     if(e.code==='auth/email-already-in-use'){
       msg.className='msg error';msg.textContent='This email is already registered.';
