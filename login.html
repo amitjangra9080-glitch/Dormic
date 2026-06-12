@@ -350,14 +350,16 @@ window.registerUser = async function() {
           unsubscribe();
           try {
             await setDoc(doc(db,'users', user.uid), userData);
+            alert('SUCCESS: Profile saved to Firestore!');
             resolve();
           } catch(err) {
+            alert('FIRESTORE ERROR: ' + err.code + ' — ' + err.message);
             reject(err);
           }
         }
       });
       // Timeout after 10 seconds
-      setTimeout(() => reject(new Error('Timeout')), 10000);
+      setTimeout(() => { alert('TIMEOUT: auth state never confirmed'); reject(new Error('Timeout')); }, 10000);
     });
 
     window.location.href='index.html';
