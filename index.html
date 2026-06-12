@@ -129,24 +129,26 @@ onAuthStateChanged(auth, async user => {
   // Save pending profile if registration just completed
   const pending = localStorage.getItem('dormic_pending_profile');
   if(pending){
-    try {
-      const userData = JSON.parse(pending);
-      userData.createdAt = new Date();
-      console.log('Found pending profile, attempting save for UID:', user.uid);
-      console.log('User auth state:', user.email, user.emailVerified);
-      // Check if profile already exists
-      const existing = await getDoc(doc(db,'users',user.uid));
-      console.log('Profile exists:', existing.exists());
-      if(!existing.exists()){
-        await setDoc(doc(db,'users',user.uid), userData);
-        console.log('Profile saved successfully!');
+    const saveProfile = async () => {
+      try {
+        const userData = JSON.parse(pending);
+        userData.createdAt = new Date();
+        // Force fresh token
+        await user.getIdToken(true);
+        // Write directly using user's own UID
+        const ref = doc(db,'users',user.uid);
+        const existing = await getDoc(ref);
+        if(!existing.exists()){
+          await setDoc(ref, userData, {merge: true});
+        }
+        localStorage.removeItem('dormic_pending_profile');
+      } catch(e){
+        // Retry after 2 seconds
+        setTimeout(saveProfile, 2000);
       }
-      localStorage.removeItem('dormic_pending_profile');
-      console.log('Pending profile cleared from localStorage');
-    } catch(e){
-      console.error('Profile save error:', e.code, e.message);
-      // Keep in localStorage for next attempt
-    }
+    };
+    // Wait 2 seconds for auth to fully settle then save
+    setTimeout(saveProfile, 2000);
   }
 
   const dismissed = localStorage.getItem('dormic_notify_dismissed');
