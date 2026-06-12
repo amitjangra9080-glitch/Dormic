@@ -178,7 +178,8 @@ avatars.forEach(av => {
   if(el) el.addEventListener('change', ()=>{ el.style.border='0.5px solid #e5e5e5'; });
 });
 
-onAuthStateChanged(auth, user => { if(user) window.location.href='index.html'; });
+let isRegistering = false;
+onAuthStateChanged(auth, user => { if(user && !isRegistering) window.location.href='index.html'; });
 
 document.getElementById('s-college').addEventListener('change', function() {
   document.getElementById('other-college-wrap').style.display = this.value==='other'?'block':'none';
@@ -288,16 +289,15 @@ window.registerUser = async function() {
   }
 
   btn.disabled=true;btn.textContent='Creating account...';
+  isRegistering = true;
 
   let cred = null;
   try {
     // Step 1 — Create Firebase Auth account
     cred = await createUserWithEmailAndPassword(auth,email,password);
     await updateProfile(cred.user,{displayName:name});
-    // Wait for auth token to fully propagate before Firestore writes
-    await cred.user.getIdToken(true);
-    await new Promise(r=>setTimeout(r,1000));
   } catch(e) {
+    isRegistering = false;
     if(e.code==='auth/email-already-in-use'){
       msg.className='msg error';msg.textContent='This email is already registered.';
     } else {
@@ -312,6 +312,7 @@ window.registerUser = async function() {
     const admSnap = await getDocs(query(collection(db,'users'),where('admissionNo','==',admission)));
     if(!admSnap.empty){
       await cred.user.delete();
+      isRegistering = false;
       msg.className='msg error';msg.textContent='This admission number is already registered.';
       btn.disabled=false;btn.textContent='Create account';return;
     }
@@ -320,6 +321,7 @@ window.registerUser = async function() {
     const phoneSnap = await getDocs(query(collection(db,'users'),where('phone','==',phone)));
     if(!phoneSnap.empty){
       await cred.user.delete();
+      isRegistering = false;
       msg.className='msg error';msg.textContent='This WhatsApp number is already registered.';
       btn.disabled=false;btn.textContent='Create account';return;
     }
@@ -342,29 +344,11 @@ window.registerUser = async function() {
     };
 
     btn.textContent = 'Saving profile...';
-
-    // Wait for auth state to be confirmed then write
-    await new Promise((resolve, reject) => {
-      const unsubscribe = auth.onAuthStateChanged(async (user) => {
-        if(user && user.uid === cred.user.uid) {
-          unsubscribe();
-          try {
-            await setDoc(doc(db,'users', user.uid), userData);
-            alert('SUCCESS: Profile saved to Firestore!');
-            resolve();
-          } catch(err) {
-            alert('FIRESTORE ERROR: ' + err.code + ' — ' + err.message);
-            reject(err);
-          }
-        }
-      });
-      // Timeout after 10 seconds
-      setTimeout(() => { alert('TIMEOUT: auth state never confirmed'); reject(new Error('Timeout')); }, 10000);
-    });
-
+    await setDoc(doc(db,'users', cred.user.uid), userData);
     window.location.href='index.html';
 
   } catch(e){
+    isRegistering = false;
     // Unexpected error — clean up auth account
     try { await cred.user.delete(); } catch(_){}
     msg.className='msg error';msg.textContent='Registration failed: '+e.message;
