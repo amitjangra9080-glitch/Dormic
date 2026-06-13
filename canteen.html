@@ -33,7 +33,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .cnum{font-size:15px;font-weight:600;color:#262626;min-width:20px;text-align:center;}
 .custom-section{background:#fff;margin-top:8px;padding:16px;}
 .custom-row{display:flex;gap:8px;width:100%;align-items:stretch;}
-.custom-row input{flex:1;min-width:0;border:0.5px solid #e5e5e5;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;outline:none;}
+.custom-row input{flex:1;min-width:0;border:0.5px solid #e5e5e5;border-radius:10px;padding:11px 13px;font-size:16px;font-family:inherit;outline:none;}
 .custom-row input:focus{border-color:#B65CE0;}
 .custom-row input[type="number"]{flex:0 0 72px;min-width:0;}
 .add-btn{flex:0 0 auto;padding:0 14px;height:42px;background:linear-gradient(90deg,#F47B33,#EE4654);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
@@ -61,7 +61,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   .scard{padding:12px 8px;}
   .custom-section{padding:14px 12px;}
   .custom-row{gap:6px;}
-  .custom-row input{padding:10px 10px;font-size:13px;}
+  .custom-row input{padding:10px 10px;font-size:16px;}
   .custom-row input[type="number"]{flex-basis:60px;}
   .add-btn{padding:0 11px;font-size:13px;}
   .item-row{padding:12px;gap:8px;}
@@ -154,6 +154,45 @@ const todayStr = localDateStr(today);
 const counts = {};
 let customItems = [];
 let currentUser = null;
+let savedOtherDaysMonthTotal = 0;
+let isLoadingInitialData = true;
+
+function draftKey(){
+  return currentUser ? `dormic_canteen_draft_${currentUser.uid}_${todayStr}` : null;
+}
+
+function saveDraft(){
+  const key = draftKey();
+  if(!key || isLoadingInitialData) return;
+  const draft = {
+    counts: Object.fromEntries(Object.entries(counts)),
+    customItems,
+    updatedAt: Date.now()
+  };
+  localStorage.setItem(key, JSON.stringify(draft));
+}
+
+function loadDraft(){
+  const key = draftKey();
+  if(!key) return false;
+  try {
+    const raw = localStorage.getItem(key);
+    if(!raw) return false;
+    const draft = JSON.parse(raw);
+    if(draft.counts){
+      Object.keys(counts).forEach(i=>{ counts[i] = Number(draft.counts[i]) || 0; });
+    }
+    customItems = Array.isArray(draft.customItems) ? draft.customItems.map(c=>({name:String(c.name||''),price:Number(c.price)||0})).filter(c=>c.name&&c.price>0) : [];
+    return true;
+  } catch(e){
+    return false;
+  }
+}
+
+function clearDraft(){
+  const key = draftKey();
+  if(key) localStorage.removeItem(key);
+}
 
 items.forEach((_,i)=>counts[i]=0);
 
@@ -174,7 +213,7 @@ function renderItems(){
 
 function renderCustom(){
   const list = document.getElementById('custom-list');
-  if(!customItems.length){ list.innerHTML = ''; return; }
+  if(!customItems.length){ list.innerHTML = ''; updateTodayTotal(); return; }
   list.innerHTML = customItems.map((c,i)=>`
     <div class="custom-item">
       <span class="ci-name">${c.name}</span>
@@ -185,8 +224,8 @@ function renderCustom(){
   updateTodayTotal();
 }
 
-window.inc = i => { counts[i]++; document.getElementById(`c-${i}`).textContent=counts[i]; updateTodayTotal(); };
-window.dec = i => { if(counts[i]>0){counts[i]--; document.getElementById(`c-${i}`).textContent=counts[i]; updateTodayTotal();} };
+window.inc = i => { counts[i]++; document.getElementById(`c-${i}`).textContent=counts[i]; updateTodayTotal(); saveDraft(); };
+window.dec = i => { if(counts[i]>0){counts[i]--; document.getElementById(`c-${i}`).textContent=counts[i]; updateTodayTotal(); saveDraft();} };
 
 window.addCustom = function(){
   const name = document.getElementById('custom-name').value.trim();
@@ -196,11 +235,13 @@ window.addCustom = function(){
   document.getElementById('custom-name').value='';
   document.getElementById('custom-price').value='';
   renderCustom();
+  saveDraft();
 };
 
 window.removeCustom = function(i){
   customItems.splice(i,1);
   renderCustom();
+  saveDraft();
 };
 
 function updateTodayTotal(){
@@ -208,6 +249,8 @@ function updateTodayTotal(){
   items.forEach((item,i)=> total += item.price * counts[i]);
   customItems.forEach(c=> total += c.price);
   document.getElementById('today-total').textContent = '₹'+total;
+  document.getElementById('month-total').textContent = '₹'+(savedOtherDaysMonthTotal + total);
+  return total;
 }
 
 window.saveDay = async function(){
@@ -225,6 +268,7 @@ window.saveDay = async function(){
       total,
       savedAt: new Date()
     });
+    clearDraft();
     document.getElementById('saved-badge').style.display='block';
     btn.textContent = 'Saved!';
     setTimeout(()=>{ btn.textContent='Save today\'s tab'; btn.disabled=false; document.getElementById('saved-badge').style.display='none'; }, 2000);
@@ -241,10 +285,10 @@ async function loadCanteenSummary(){
     const snap = await getDocs(collection(db,'canteenTab',currentUser.uid,'days'));
     const allDays = snap.docs.map(d=>d.data()).filter(d=>d.date);
     const monthPrefix = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
-    const monthTotal = allDays
-      .filter(d=>String(d.date).startsWith(monthPrefix))
+    savedOtherDaysMonthTotal = allDays
+      .filter(d=>String(d.date).startsWith(monthPrefix) && d.date !== todayStr)
       .reduce((sum,d)=>sum+(Number(d.total)||0),0);
-    document.getElementById('month-total').textContent = '₹'+monthTotal;
+    updateTodayTotal();
 
     const previous = allDays
       .filter(d=>d.date < todayStr)
@@ -260,7 +304,7 @@ async function loadCanteenSummary(){
       const dateObj = new Date(day.date+'T00:00:00');
       const dateLabel = dateObj.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
       const regular = (day.items||[]).map(i=>`${i.name} ×${i.qty}`);
-      const custom = (day.customItems||[]).map(i=>i.name);
+      const custom = (day.customItems||[]).map(i=>`${i.name} (₹${Number(i.price)||0})`);
       const itemText = [...regular,...custom].join(' · ') || 'No items recorded';
       return `<div class="history-card">
         <div class="history-head">
@@ -271,34 +315,42 @@ async function loadCanteenSummary(){
       </div>`;
     }).join('');
   } catch(e){
-    document.getElementById('month-total').textContent = '₹0';
+    updateTodayTotal();
     history.innerHTML = '<div class="history-empty">Could not load previous tabs</div>';
   }
 }
 
 async function loadTodayData(){
+  let loadedFromCloud = false;
   try {
     const snap = await getDoc(doc(db,'canteenTab',currentUser.uid,'days',todayStr));
     if(snap.exists()){
       const d = snap.data();
+      Object.keys(counts).forEach(i=>counts[i]=0);
       (d.items||[]).forEach(saved=>{
         const idx = items.findIndex(it=>it.name===saved.name);
-        if(idx>=0) counts[idx] = saved.qty;
+        if(idx>=0) counts[idx] = Number(saved.qty)||0;
       });
-      customItems = d.customItems || [];
-      renderItems();
-      renderCustom();
+      customItems = Array.isArray(d.customItems)
+        ? d.customItems.map(c=>({name:String(c.name||''),price:Number(c.price)||0})).filter(c=>c.name&&c.price>0)
+        : [];
+      loadedFromCloud = true;
     }
   } catch(e){}
+
+  const loadedDraft = loadDraft();
+  renderItems();
+  renderCustom();
+  return loadedFromCloud || loadedDraft;
 }
 
 onAuthStateChanged(auth, async user => {
   if(!user){ window.location.href='login.html'; return; }
   currentUser = user;
-  renderItems();
-  renderCustom();
   await loadTodayData();
   await loadCanteenSummary();
+  isLoadingInitialData = false;
+  updateTodayTotal();
 });
 </script>
 </body>
