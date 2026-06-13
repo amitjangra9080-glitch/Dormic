@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Dormic — Ajanta Hostel No. 3</title>
+<title>Dormic — Ajanta Hostel No. 3</title><!-- v2.1 -->
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon.png"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -79,6 +79,11 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 </div>
 
 <div style="max-width:600px;margin:0 auto;">
+  <div id="delete-banner" style="display:none;background:#fee2e2;border-bottom:0.5px solid #fecaca;padding:12px 16px;display:flex;align-items:center;gap:12px;">
+    <i class="ti ti-alert-triangle" style="font-size:20px;color:#a32d2d;flex-shrink:0;"></i>
+    <span style="flex:1;font-size:13px;color:#a32d2d;line-height:1.4;" id="delete-banner-text">Account scheduled for deletion</span>
+    <a href="profile.html" style="font-size:13px;font-weight:600;color:#a32d2d;text-decoration:underline;white-space:nowrap;">Cancel</a>
+  </div>
   <div class="notify-bar" id="notify-bar" style="display:none;">
     <span class="notify-txt">Turn on notifications to get alerts when someone posts lost/found, sell/buy or travel updates</span>
     <button class="notify-btn" onclick="requestNotify()">Turn on</button>
@@ -108,7 +113,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc, setDoc, deleteDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
@@ -155,8 +160,35 @@ onAuthStateChanged(auth, async user => {
   if(!dismissed && Notification.permission !== 'granted') {
     document.getElementById('notify-bar').style.display = 'flex';
   }
+
+  // Check if account is scheduled for deletion or due for actual delete
+  try {
+    const userSnap = await getDoc(doc(db,'users',user.uid));
+    if(userSnap.exists()){
+      const ud = userSnap.data();
+      if(ud.pendingDelete && ud.deleteAt){
+        const deleteDate = ud.deleteAt.toDate ? ud.deleteAt.toDate() : new Date(ud.deleteAt);
+        if(deleteDate <= new Date()){
+          // Time's up — perform actual deletion
+          await deleteUserAccount(user.uid);
+          await auth.signOut();
+          alert('Your account has been deleted.');
+          window.location.href='login.html';
+          return;
+        } else {
+          // Show banner with days left
+          const daysLeft = Math.ceil((deleteDate - new Date())/(1000*60*60*24));
+          document.getElementById('delete-banner-text').textContent =
+            `Account will be deleted in ${daysLeft} day${daysLeft===1?'':'s'}. Tap to cancel.`;
+          document.getElementById('delete-banner').style.display = 'flex';
+        }
+      }
+    }
+  } catch(e){}
+
   watchNewPosts();
   watchGhostBox();
+  watchAlerts();
 });
 
 const q = query(collection(db,'posts'), orderBy('createdAt','desc'));
@@ -335,6 +367,44 @@ function watchGhostBox(){
       }
     });
   });
+}
+
+// Watch Alerts for new community alerts
+function watchAlerts(){
+  if(Notification.permission !== 'granted') return;
+  let initialized = false;
+  const q = query(collection(db,'alerts'), orderBy('createdAt','desc'));
+  onSnapshot(q, snap => {
+    if(!initialized){ initialized = true; return; }
+    snap.docChanges().forEach(change => {
+      if(change.type === 'added'){
+        const a = change.doc.data();
+        if(a.posterUid === currentUser?.uid) return;
+        new Notification(`Dormic — Alert from ${a.posterName||'someone'}`, {
+          body: a.text,
+          icon: 'icon.png',
+          requireInteraction: true
+        });
+      }
+    });
+  });
+}
+
+async function deleteUserAccount(uid){
+  try {
+    // Delete user's posts
+    const postsSnap = await getDocs(query(collection(db,'posts'), where('posterUid','==',uid)));
+    for(const p of postsSnap.docs) await deleteDoc(p.ref);
+    // Delete user doc
+    await deleteDoc(doc(db,'users',uid));
+    // Delete anon ID
+    try { await deleteDoc(doc(db,'anonIds',uid)); } catch(_){}
+  } catch(e){ console.error('Delete error:',e); }
+}
+
+// Register service worker for background notifications (when on Blaze plan + Cloud Functions)
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/firebase-messaging-sw.js').catch(()=>{});
 }
 
 function timeAgo(ms) {

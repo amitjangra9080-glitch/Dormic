@@ -146,6 +146,7 @@ onAuthStateChanged(auth, async user => {
   await buildCalendar();
   await loadDayData(todayStr);
   updateDayLabel(todayStr);
+  updateSummary();
 });
 
 async function buildCalendar(){
@@ -302,10 +303,27 @@ window.submitTracker=async function(){
 
 window.editTracker=function(){unlockForm();};
 
-function updateSummary(){
-  document.getElementById('s-meals').textContent=[state.b,state.l,state.d].filter(s=>s==='present').length;
-  document.getElementById('s-absent').textContent=[state.b,state.l,state.d].filter(s=>s==='absent').length;
-  document.getElementById('s-guests').textContent=counts.bg+counts.lg+counts.dg;
+async function updateSummary(){
+  // Aggregate across ALL days in current month
+  let totalMeals = 0;
+  let totalAbsent = 0;
+  let totalGuests = 0;
+  const daysInMonth = new Date(today.getFullYear(),today.getMonth()+1,0).getDate();
+  for(let i=1;i<=daysInMonth;i++){
+    const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+    try {
+      const snap = await getDoc(doc(db,'messTracker',currentUser.uid,'days',dateStr));
+      if(snap.exists()){
+        const d = snap.data();
+        totalMeals += [d.breakfast,d.lunch,d.dinner].filter(v=>v==='present').length;
+        totalAbsent += [d.breakfast,d.lunch,d.dinner].filter(v=>v==='absent').length;
+        totalGuests += (d.breakfastGuests||0)+(d.lunchGuests||0)+(d.dinnerGuests||0);
+      }
+    }catch(e){}
+  }
+  document.getElementById('s-meals').textContent=totalMeals;
+  document.getElementById('s-absent').textContent=totalAbsent;
+  document.getElementById('s-guests').textContent=totalGuests;
 }
 </script>
 </body>

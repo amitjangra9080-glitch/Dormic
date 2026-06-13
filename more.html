@@ -47,6 +47,12 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <span class="rarr" style="color:#e87a7a;"><i class="ti ti-chevron-right"></i></span>
   </a>
 
+  <a href="alerts.html" class="row">
+    <div class="ric" style="background:#fef3c7;color:#92400e;"><i class="ti ti-bell-ringing"></i></div>
+    <div><div class="rn">Alerts</div><div class="rs">Challan, gate, warden — community alerts</div></div>
+    <span class="rarr"><i class="ti ti-chevron-right"></i></span>
+  </a>
+
   <div class="sec-lab">Hostel</div>
 
   <a href="menu.html" class="row">
@@ -61,20 +67,73 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <span class="rarr"><i class="ti ti-chevron-right"></i></span>
   </a>
 
+  <a href="canteen.html" class="row">
+    <div class="ric" style="background:#ffe4e6;color:#9f1239;"><i class="ti ti-coffee"></i></div>
+    <div><div class="rn">Canteen Tab</div><div class="rs">Your chai, snacks, and canteen खर्चा</div></div>
+    <span class="rarr"><i class="ti ti-chevron-right"></i></span>
+  </a>
+
   <a href="amenities.html" class="row">
     <div class="ric" style="background:#ede9fe;color:#5b21b6;"><i class="ti ti-phone"></i></div>
     <div><div class="rn">Amenities directory</div><div class="rs">Electrician, warden, carpenter...</div></div>
     <span class="rarr"><i class="ti ti-chevron-right"></i></span>
   </a>
 
-  <div class="sec-lab">Resources</div>
+  <div class="sec-lab">Important links</div>
 
-  <a href="links.html" class="row">
-    <div class="ric" style="background:#fce7f3;color:#9d174d;"><i class="ti ti-link"></i></div>
-    <div><div class="rn">Important links</div><div class="rs">Student portal, jobs, study material</div></div>
-    <span class="rarr"><i class="ti ti-chevron-right"></i></span>
+  <a href="https://drive.google.com/drive/folders/168QJ5ELekaDLtZk8t3TOMgYEOeeD28J6" target="_blank" class="row">
+    <div class="ric" style="background:#fce7f3;color:#9d174d;"><i class="ti ti-folder"></i></div>
+    <div><div class="rn">PGS Courses</div><div class="rs">Course material · Google Drive</div></div>
+    <span class="rarr"><i class="ti ti-external-link"></i></span>
   </a>
+
+  <a href="https://ssp.hauiums.in/" target="_blank" class="row">
+    <div class="ric" style="background:#dbeafe;color:#1e40af;"><i class="ti ti-school"></i></div>
+    <div><div class="rn">CCS HAU Student Portal</div><div class="rs">Login · academic info</div></div>
+    <span class="rarr"><i class="ti ti-external-link"></i></span>
+  </a>
+
+  <a href="https://hau.ac.in" target="_blank" class="row">
+    <div class="ric" style="background:#fef9c3;color:#854d0e;"><i class="ti ti-world"></i></div>
+    <div><div class="rn">HAU Official Website</div><div class="rs">hau.ac.in · news, notices, departments</div></div>
+    <span class="rarr"><i class="ti ti-external-link"></i></span>
+  </a>
+
+  <a href="https://icar.org.in" target="_blank" class="row">
+    <div class="ric" style="background:#dcfce7;color:#166534;"><i class="ti ti-leaf"></i></div>
+    <div><div class="rn">ICAR</div><div class="rs">Indian Council of Agricultural Research</div></div>
+    <span class="rarr"><i class="ti ti-external-link"></i></span>
+  </a>
+
+  <a href="https://dsssb.delhi.gov.in" target="_blank" class="row">
+    <div class="ric" style="background:#f3e8ff;color:#6b21a8;"><i class="ti ti-briefcase"></i></div>
+    <div><div class="rn">DSSSB</div><div class="rs">Govt jobs · recruitment notices</div></div>
+    <span class="rarr"><i class="ti ti-external-link"></i></span>
+  </a>
+
+  <div id="admin-section" style="display:none;">
+    <div class="sec-lab">Admin</div>
+    <a href="admin.html" class="row">
+      <div class="ric" style="background:#1f2937;color:#fbbf24;"><i class="ti ti-shield-lock"></i></div>
+      <div><div class="rn">Admin Dashboard</div><div class="rs">Manage users, alerts, Ghost Box</div></div>
+      <span class="rarr"><i class="ti ti-chevron-right"></i></span>
+    </a>
+  </div>
 </div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { firebaseConfig } from "./firebase-config.js";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+onAuthStateChanged(auth, user => {
+  if(!user){window.location.href='login.html';return;}
+  if(user.email === 'admin@hostelradar.com'){
+    document.getElementById('admin-section').style.display='block';
+  }
+});
+</script>
 
 <nav class="nav-bar">
   <a href="index.html" class="nav-item"><i class="ti ti-home"></i><span>Home</span></a>

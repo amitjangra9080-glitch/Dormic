@@ -3,212 +3,200 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Dashboard — Dormic</title>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon.png"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-title" content="Dormic"/>
-<title>Admin — Dormic</title>
+<meta name="mobile-web-app-capable" content="yes"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
-.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
-.login-card{background:#fff;border-radius:20px;padding:32px 24px;width:100%;max-width:360px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.06);}
-.login-logo{font-size:24px;font-weight:700;background:linear-gradient(90deg,#6C3BE8,#E8398A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
-.login-sub{font-size:12px;color:#aaa;margin-bottom:24px;}
-.inp{width:100%;height:42px;border:0.5px solid #e5e5e5;border-radius:10px;background:#f9f9f9;font-size:14px;color:#262626;padding:0 13px;margin-bottom:12px;outline:none;font-family:inherit;}
-.inp:focus{border-color:#6C3BE8;}
-.btn{width:100%;height:42px;background:linear-gradient(90deg,#6C3BE8,#E8398A);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
-.btn:disabled{background:#e5e5e5;color:#aaa;}
-.err{color:#a32d2d;font-size:12px;background:#fee2e2;padding:8px 12px;border-radius:8px;margin-bottom:12px;display:none;}
-.top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;}
-.top-logo{font-size:16px;font-weight:600;background:linear-gradient(90deg,#6C3BE8,#E8398A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.logout-btn{font-size:13px;color:#E8398A;cursor:pointer;border:none;background:none;}
-.main{max-width:700px;margin:0 auto;padding:16px;}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
-.sc{background:#fff;border-radius:12px;padding:14px;text-align:center;}
-.sn{font-size:22px;font-weight:700;color:#6C3BE8;}
-.sl{font-size:11px;color:#aaa;margin-top:2px;}
-.tabs{display:flex;background:#fff;border-radius:10px;padding:3px;margin-bottom:14px;}
-.tab{flex:1;text-align:center;padding:8px;border-radius:8px;font-size:13px;font-weight:500;color:#aaa;cursor:pointer;}
-.tab.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;}
-.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
-.card-info{flex:1;}
-.card-name{font-size:14px;font-weight:500;color:#262626;margin-bottom:3px;}
-.card-sub{font-size:12px;color:#aaa;margin-bottom:6px;}
-.card-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:#aaa;}
-.badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;margin-right:4px;}
-.b-lost{background:#fee2e2;color:#a32d2d;}
-.b-found{background:#eaf3de;color:#3b6d11;}
-.b-msc{background:#ede9fe;color:#5b21b6;}
-.b-phd{background:#fce7f3;color:#9d174d;}
-.btns{display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
-.del-btn{background:#fee2e2;border:none;border-radius:8px;padding:6px 12px;color:#a32d2d;font-size:12px;cursor:pointer;}
-.res-btn{background:#eaf3de;border:none;border-radius:8px;padding:6px 10px;color:#3b6d11;font-size:11px;cursor:pointer;}
-.empty{text-align:center;padding:32px;color:#aaa;font-size:14px;}
-#admin-panel{display:none;}
+body{background:#0f0f1e;color:#e5e7eb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:40px;font-size:15px;}
+.top-bar{background:#1a1a2e;border-bottom:0.5px solid #2a2a42;height:54px;display:flex;align-items:center;gap:10px;padding:0 16px;position:sticky;top:0;z-index:100;}
+.back{font-size:22px;color:#e5e7eb;text-decoration:none;}
+.top-title{font-size:17px;font-weight:600;color:#fbbf24;display:flex;align-items:center;gap:8px;}
+.main{max-width:600px;margin:0 auto;padding:14px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+.scard{background:#1a1a2e;border:0.5px solid #2a2a42;border-radius:11px;padding:14px 10px;text-align:center;}
+.snum{font-size:22px;font-weight:700;color:#fbbf24;}
+.slbl{font-size:11px;color:#9ca3af;margin-top:4px;}
+.tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.tab{flex-shrink:0;padding:9px 16px;background:#1a1a2e;border:0.5px solid #2a2a42;border-radius:20px;font-size:13px;color:#9ca3af;cursor:pointer;font-family:inherit;}
+.tab.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border-color:transparent;}
+.panel{background:#1a1a2e;border:0.5px solid #2a2a42;border-radius:13px;padding:6px 0;display:none;}
+.panel.on{display:block;}
+.row{padding:11px 14px;border-bottom:0.5px solid #232342;}
+.row:last-child{border-bottom:none;}
+.r-name{font-size:14px;font-weight:600;color:#e5e7eb;}
+.r-sub{font-size:12px;color:#9ca3af;margin-top:3px;}
+.r-meta{font-size:11px;color:#6b7280;margin-top:4px;}
+.msg-card{padding:11px 14px;border-bottom:0.5px solid #232342;}
+.mc-head{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;}
+.mc-anon{font-size:13px;color:#a78bfa;font-weight:600;}
+.mc-real{font-size:11px;color:#fbbf24;background:rgba(251,191,36,0.1);padding:3px 7px;border-radius:6px;}
+.mc-body{font-size:13px;color:#d1d5db;line-height:1.5;}
+.mc-time{font-size:11px;color:#6b7280;margin-top:5px;}
+.empty{padding:30px;text-align:center;color:#6b7280;font-size:13px;}
 </style>
 </head>
 <body>
-
-<!-- LOGIN SCREEN -->
-<div id="login-screen" class="login-screen">
-  <div class="login-card">
-    <div class="login-logo">Dormic</div>
-    <div class="login-sub">Ajanta Hostel No. 3 — Admin access only</div>
-    <div class="err" id="admin-err"></div>
-    <input class="inp" type="email" id="admin-email" placeholder="Admin email" onkeydown="if(event.key==='Enter')adminLogin()"/>
-    <input class="inp" type="password" id="admin-pass" placeholder="Admin password" onkeydown="if(event.key==='Enter')adminLogin()"/>
-    <button class="btn" id="login-btn" onclick="adminLogin()">Access admin panel</button>
-  </div>
+<div class="top-bar">
+  <a href="more.html" class="back"><i class="ti ti-arrow-left"></i></a>
+  <span class="top-title"><i class="ti ti-shield-lock"></i> Admin Dashboard</span>
 </div>
 
-<!-- ADMIN PANEL -->
-<div id="admin-panel">
-  <div class="top-bar">
-    <span class="top-logo">Admin Panel — Ajanta Hostel No. 3</span>
-    <button class="logout-btn" onclick="adminLogout()">Log out</button>
+<div class="main" id="content" style="display:none;">
+  <div class="stats">
+    <div class="scard"><div class="snum" id="stat-users">0</div><div class="slbl">Users</div></div>
+    <div class="scard"><div class="snum" id="stat-posts">0</div><div class="slbl">Posts</div></div>
+    <div class="scard"><div class="snum" id="stat-ghost">0</div><div class="slbl">Ghost msgs</div></div>
   </div>
-  <div class="main">
-    <div class="stats">
-      <div class="sc"><div class="sn" id="a-users">0</div><div class="sl">Users</div></div>
-      <div class="sc"><div class="sn" id="a-posts">0</div><div class="sl">Posts</div></div>
-      <div class="sc"><div class="sn" id="a-resolved" style="color:#3b6d11;">0</div><div class="sl">Resolved</div></div>
-    </div>
-    <div class="tabs">
-      <div class="tab on" onclick="switchTab('posts',this)">All posts</div>
-      <div class="tab" onclick="switchTab('users',this)">All users</div>
-    </div>
-    <div id="posts-section">
-      <div id="posts-list" class="empty">Loading...</div>
-    </div>
-    <div id="users-section" style="display:none;">
-      <div id="users-list" class="empty">Loading...</div>
-    </div>
+
+  <div class="tabs">
+    <button class="tab on" onclick="switchTab('users',this)">Users</button>
+    <button class="tab" onclick="switchTab('ghost',this)">Ghost Box</button>
+    <button class="tab" onclick="switchTab('alerts',this)">Alerts</button>
+    <button class="tab" onclick="switchTab('ratings',this)">Mess Ratings</button>
   </div>
+
+  <div class="panel on" id="panel-users"><div class="empty">Loading...</div></div>
+  <div class="panel" id="panel-ghost"><div class="empty">Loading...</div></div>
+  <div class="panel" id="panel-alerts"><div class="empty">Loading...</div></div>
+  <div class="panel" id="panel-ratings"><div class="empty">Loading...</div></div>
+</div>
+
+<div id="not-admin" style="display:none;text-align:center;padding:80px 20px;">
+  <i class="ti ti-shield-x" style="font-size:48px;color:#a32d2d;"></i>
+  <div style="font-size:16px;margin-top:14px;color:#e5e7eb;">Access denied</div>
+  <div style="font-size:13px;margin-top:6px;color:#9ca3af;">Admin login required</div>
+  <a href="more.html" style="display:inline-block;margin-top:18px;color:#a78bfa;text-decoration:none;font-size:13px;">← Back</a>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
-const ADMIN_EMAIL = 'admin@hostelradar.com';
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-let allPosts = [], allUsers = [];
 
-onAuthStateChanged(auth, user => {
-  if(user && user.email === ADMIN_EMAIL) showPanel();
-  else if(user && user.email !== ADMIN_EMAIL) signOut(auth);
-});
+let usersMap = {};
+let anonIdMap = {};
 
-window.adminLogin = async function() {
-  const email = document.getElementById('admin-email').value.trim();
-  const pass = document.getElementById('admin-pass').value;
-  const err = document.getElementById('admin-err');
-  const btn = document.getElementById('login-btn');
-  err.style.display = 'none';
-  if(email !== ADMIN_EMAIL) { err.textContent = 'Access denied.'; err.style.display = 'block'; return; }
-  btn.disabled = true; btn.textContent = 'Logging in...';
-  try {
-    await signInWithEmailAndPassword(auth, email, pass);
-    showPanel();
-  } catch(e) {
-    err.textContent = 'Wrong email or password.'; err.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Access admin panel';
+window.switchTab = function(tab, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('panel-'+tab).classList.add('on');
+};
+
+function timeAgo(d){
+  if(!d) return '';
+  const sec = Math.floor((Date.now()-d.getTime())/1000);
+  if(sec<60) return 'Just now';
+  if(sec<3600) return Math.floor(sec/60)+'m ago';
+  if(sec<86400) return Math.floor(sec/3600)+'h ago';
+  return Math.floor(sec/86400)+'d ago';
+}
+
+async function loadAll(){
+  const usersSnap = await getDocs(collection(db,'users'));
+  document.getElementById('stat-users').textContent = usersSnap.size;
+  const usersPanel = document.getElementById('panel-users');
+  if(usersSnap.empty){ usersPanel.innerHTML='<div class="empty">No users</div>'; }
+  else {
+    usersPanel.innerHTML = usersSnap.docs.map(d=>{
+      const u = d.data();
+      usersMap[d.id] = u;
+      return `<div class="row">
+        <div class="r-name">${u.name||''} ${u.isDonor?'<span style="color:#a32d2d;font-size:11px;">🩸 donor</span>':''}</div>
+        <div class="r-sub">Room ${u.roomNo||''} · ${u.bloodGroup||''} · ${u.degree||''}</div>
+        <div class="r-meta">${u.admissionNo||''} · ${u.email||''} · ${u.phone||''}${u.pendingDelete?' · <span style="color:#a32d2d;">⚠ pending delete</span>':''}</div>
+      </div>`;
+    }).join('');
   }
-};
 
-window.adminLogout = async function() {
-  await signOut(auth);
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('admin-panel').style.display = 'none';
-};
+  const postsSnap = await getDocs(collection(db,'posts'));
+  document.getElementById('stat-posts').textContent = postsSnap.size;
 
-function showPanel() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('admin-panel').style.display = 'block';
-  loadData();
+  const anonSnap = await getDocs(collection(db,'anonIds'));
+  anonSnap.forEach(d=>{ anonIdMap[d.id] = d.data().anonId; });
+
+  const whispersSnap = await getDocs(query(collection(db,'whispers'), orderBy('createdAt','desc')));
+  document.getElementById('stat-ghost').textContent = whispersSnap.size;
+  const ghostPanel = document.getElementById('panel-ghost');
+  if(whispersSnap.empty){ ghostPanel.innerHTML='<div class="empty">No messages yet</div>'; }
+  else {
+    ghostPanel.innerHTML = whispersSnap.docs.map(d=>{
+      const m = d.data();
+      const anonId = anonIdMap[m.uid] || 'unknown';
+      const realName = usersMap[m.uid]?.name || 'unknown';
+      const room = usersMap[m.uid]?.roomNo || '?';
+      const time = m.createdAt?.toDate ? timeAgo(m.createdAt.toDate()) : '';
+      return `<div class="msg-card">
+        <div class="mc-head">
+          <span class="mc-anon">${anonId}</span>
+          <span class="mc-real">${realName} · Room ${room}</span>
+        </div>
+        <div class="mc-body">${m.text||''}</div>
+        <div class="mc-time">${time}${m.reportCount?' · '+m.reportCount+' reports':''}</div>
+      </div>`;
+    }).join('');
+  }
+
+  try {
+    const alertsSnap = await getDocs(query(collection(db,'alerts'), orderBy('createdAt','desc')));
+    const alertsPanel = document.getElementById('panel-alerts');
+    if(alertsSnap.empty){ alertsPanel.innerHTML='<div class="empty">No alerts</div>'; }
+    else {
+      alertsPanel.innerHTML = alertsSnap.docs.map(d=>{
+        const a = d.data();
+        const time = a.createdAt?.toDate ? timeAgo(a.createdAt.toDate()) : '';
+        return `<div class="row">
+          <div class="r-name">${a.posterName||''} · Room ${a.posterRoom||''}</div>
+          <div class="r-sub" style="margin-top:6px;color:#d1d5db;">${a.text||''}</div>
+          <div class="r-meta">${time}</div>
+        </div>`;
+      }).join('');
+    }
+  } catch(e){
+    document.getElementById('panel-alerts').innerHTML = '<div class="empty">No alerts yet</div>';
+  }
+
+  try {
+    const ratingsSnap = await getDocs(collection(db,'ratings'));
+    const ratingsPanel = document.getElementById('panel-ratings');
+    if(ratingsSnap.empty){ ratingsPanel.innerHTML='<div class="empty">No ratings</div>'; }
+    else {
+      const grouped = {};
+      ratingsSnap.forEach(d=>{
+        const r = d.data();
+        const key = `${r.date||'?'} · ${r.meal||'?'}`;
+        if(!grouped[key]) grouped[key] = {total:0, count:0};
+        grouped[key].total += r.rating || 0;
+        grouped[key].count += 1;
+      });
+      ratingsPanel.innerHTML = Object.entries(grouped)
+        .map(([k,v])=>`<div class="row">
+          <div class="r-name">${k}</div>
+          <div class="r-sub">⭐ ${(v.total/v.count).toFixed(1)} · ${v.count} ratings</div>
+        </div>`).join('');
+    }
+  } catch(e){
+    document.getElementById('panel-ratings').innerHTML = '<div class="empty">No ratings yet</div>';
+  }
 }
 
-function loadData() {
-  const pq = query(collection(db,'posts'), orderBy('createdAt','desc'));
-  onSnapshot(pq, snap => {
-    allPosts = snap.docs.map(d => ({id:d.id,...d.data()}));
-    document.getElementById('a-posts').textContent = allPosts.length;
-    document.getElementById('a-resolved').textContent = allPosts.filter(p=>p.status==='resolved').length;
-    renderPosts();
-  });
-  onSnapshot(collection(db,'users'), snap => {
-    allUsers = snap.docs.map(d => ({id:d.id,...d.data()}));
-    document.getElementById('a-users').textContent = allUsers.length;
-    renderUsers();
-  });
-}
-
-window.switchTab = function(tab, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
-  btn.classList.add('on');
-  document.getElementById('posts-section').style.display = tab==='posts' ? 'block' : 'none';
-  document.getElementById('users-section').style.display = tab==='users' ? 'block' : 'none';
-};
-
-function renderPosts() {
-  const el = document.getElementById('posts-list');
-  if(!allPosts.length) { el.innerHTML = '<div class="empty">No posts yet</div>'; return; }
-  el.innerHTML = allPosts.map(p => {
-    const time = p.createdAt ? new Date(p.createdAt.seconds*1000).toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
-    return `<div class="card">
-      <div class="card-top">
-        <div class="card-info">
-          <div class="card-name">${p.itemName||p.from||'Post'} <span class="badge b-${p.type}">${p.type}</span></div>
-          <div class="card-sub">${p.description||p.itemDesc||''}</div>
-          <div class="card-meta">
-            <span>${p.location||''}</span>
-            <span>${p.posterName||''} · ${p.posterAdmission||''}</span>
-            <span>${p.posterPhone||''}</span>
-            <span>${time}</span>
-          </div>
-        </div>
-        <div class="btns">
-          ${p.status!=='resolved'?`<button class="res-btn" onclick="resolvePost('${p.id}')">Resolve</button>`:''}
-          <button class="del-btn" onclick="deletePost('${p.id}')">Delete</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function renderUsers() {
-  const el = document.getElementById('users-list');
-  if(!allUsers.length) { el.innerHTML = '<div class="empty">No users yet</div>'; return; }
-  el.innerHTML = allUsers.map(u => `
-    <div class="card">
-      <div class="card-top">
-        <div class="card-info">
-          <div class="card-name">${u.name||'Unknown'} <span class="badge ${u.degree==='PhD'?'b-phd':'b-msc'}">${u.degree||''}</span></div>
-          <div class="card-sub">${u.admissionNo||''} — ${u.department||''}</div>
-          <div class="card-meta">
-            <span>${u.college||''}</span>
-            <span>Room ${u.roomNo||''}</span>
-            <span>${u.phone||''}</span>
-            <span>${u.bloodGroup||''}</span>
-          </div>
-        </div>
-        <div class="btns">
-          <button class="del-btn" onclick="deleteUser('${u.id}')">Delete</button>
-        </div>
-      </div>
-    </div>`).join('');
-}
-
-window.deletePost = async id => { if(confirm('Delete this post?')) await deleteDoc(doc(db,'posts',id)); };
-window.resolvePost = async id => { await updateDoc(doc(db,'posts',id),{status:'resolved'}); };
-window.deleteUser = async id => { if(confirm('Delete this user?')) await deleteDoc(doc(db,'users',id)); };
+onAuthStateChanged(auth, async user => {
+  if(!user){ window.location.href='login.html'; return; }
+  if(user.email !== 'admin@hostelradar.com'){
+    document.getElementById('not-admin').style.display = 'block';
+    return;
+  }
+  document.getElementById('content').style.display = 'block';
+  loadAll();
+});
 </script>
 </body>
 </html>

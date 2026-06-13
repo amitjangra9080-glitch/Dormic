@@ -8,12 +8,13 @@
 <link rel="apple-touch-icon" href="icon.png"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="Dormic"/>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:70px;font-size:16px;}
 .top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;}
-.top-name{font-size:17px;font-weight:500;color:#262626;}
+.top-logo{font-size:26px;font-weight:400;font-family:'Fredoka One',cursive;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.3px;}
 .top-ic{font-size:24px;color:#262626;cursor:pointer;background:none;border:none;}
 .main{max-width:500px;margin:0 auto;}
 .head-card{background:#fff;padding:22px 16px 16px;}
@@ -71,7 +72,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 </head>
 <body>
 <div class="top-bar">
-  <span class="top-name" id="top-uname">Profile</span>
+  <span class="top-logo">Dormic</span>
   <button class="top-ic" onclick="openSettings()"><i class="ti ti-settings"></i></button>
 </div>
 
@@ -106,6 +107,11 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <div class="srow" onclick="openEdit('donor')">
     <div class="s-ic" style="background:#fee2e2;color:#a32d2d;"><i class="ti ti-droplet"></i></div>
     <div><div class="s-label">Blood donor status</div><div class="s-sub" id="donor-status-sub">Loading...</div></div>
+    <span class="s-arr"><i class="ti ti-chevron-right"></i></span>
+  </div>
+  <div class="srow" style="color:#a32d2d;" onclick="openEdit('delete')">
+    <div class="s-ic" style="background:#fee2e2;color:#a32d2d;"><i class="ti ti-trash"></i></div>
+    <div><div class="s-label" style="color:#a32d2d;">Delete account</div><div class="s-sub">Schedule deletion (3 days)</div></div>
     <span class="s-arr"><i class="ti ti-chevron-right"></i></span>
   </div>
   <div class="srow" style="color:#E8398A;" onclick="logoutUser()">
@@ -167,7 +173,6 @@ onAuthStateChanged(auth, async user => {
 function renderProfile(){
   const avBg = avatarBgs[userData.avatarId||1];
   const avSymbol = avatarSymbols[userData.avatarId||1]||(userData.name||'?')[0].toUpperCase();
-  document.getElementById('top-uname').textContent = userData.admissionNo?.toLowerCase()||'Profile';
   document.getElementById('donor-status-sub').textContent = userData.isDonor?'Currently listed as donor':'Not listed as donor';
   document.getElementById('main-content').innerHTML=`
     <div class="head-card">
@@ -264,6 +269,33 @@ window.openEdit=function(type){
       </div>
       <button class="modal-btn" style="background:${isDonor?'#fee2e2':'linear-gradient(90deg,#6C3BE8,#E8398A)'};color:${isDonor?'#a32d2d':'#fff'}" onclick="saveDonor(${!isDonor})">${isDonor?'Remove me from donor list':'Yes, list me as willing donor'}</button>
     `;
+  }else if(type==='delete'){
+    title.textContent='Delete account';
+    const pending = userData.pendingDelete;
+    if(pending && userData.deleteAt){
+      const deleteDate = userData.deleteAt.toDate ? userData.deleteAt.toDate() : new Date(userData.deleteAt);
+      const daysLeft = Math.ceil((deleteDate - new Date())/(1000*60*60*24));
+      body.innerHTML = `
+        <div style="font-size:14px;color:#a32d2d;line-height:1.6;margin-bottom:14px;background:#fee2e2;padding:14px;border-radius:11px;">
+          Your account is scheduled for deletion in <strong>${daysLeft} day${daysLeft===1?'':'s'}</strong>.
+          All your data — posts, mess tracker, canteen tab — will be permanently removed.
+        </div>
+        <div style="font-size:13px;color:#8e8e8e;line-height:1.5;margin-bottom:16px;">
+          Changed your mind? You can cancel the deletion before the time runs out.
+        </div>
+        <button class="modal-btn" style="background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;" onclick="cancelDelete()">Cancel deletion</button>
+      `;
+    } else {
+      body.innerHTML = `
+        <div style="font-size:14px;color:#262626;line-height:1.6;margin-bottom:14px;">
+          We'll mark your account for deletion. After <strong>3 days</strong>, your data will be permanently removed.
+        </div>
+        <div style="font-size:13px;color:#8e8e8e;line-height:1.5;margin-bottom:16px;">
+          You can cancel anytime within these 3 days by opening the app and tapping "Cancel deletion."
+        </div>
+        <button class="modal-btn" style="background:#fee2e2;color:#a32d2d;" onclick="scheduleDelete()">Schedule deletion in 3 days</button>
+      `;
+    }
   }
   modal.classList.add('show');
 };
@@ -320,6 +352,30 @@ window.saveDonor=async function(state){
   document.getElementById('donor-status-sub').textContent = boolState ? 'Currently listed as donor' : 'Not listed as donor';
   closeModal();
 };
+window.scheduleDelete = async function(){
+  const deleteAt = new Date();
+  deleteAt.setDate(deleteAt.getDate() + 3);
+  await updateDoc(doc(db,'users',currentUser.uid),{
+    pendingDelete: true,
+    deleteAt: deleteAt
+  });
+  userData.pendingDelete = true;
+  userData.deleteAt = deleteAt;
+  alert('Your account will be deleted on ' + deleteAt.toLocaleDateString('en-IN') + '. You can cancel anytime before that.');
+  closeModal();
+};
+
+window.cancelDelete = async function(){
+  await updateDoc(doc(db,'users',currentUser.uid),{
+    pendingDelete: false,
+    deleteAt: null
+  });
+  userData.pendingDelete = false;
+  userData.deleteAt = null;
+  alert('Account deletion cancelled. Welcome back!');
+  closeModal();
+};
+
 window.logoutUser=async function(){
   await signOut(auth);
   window.location.href='login.html';

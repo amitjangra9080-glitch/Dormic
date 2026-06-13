@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Alerts — Dormic</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon.png"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Dormic"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:80px;font-size:16px;}
+.top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:54px;display:flex;align-items:center;gap:10px;padding:0 16px;position:sticky;top:0;z-index:100;}
+.back{font-size:23px;color:#262626;text-decoration:none;}
+.top-title{font-size:17px;font-weight:500;color:#262626;}
+.main{max-width:500px;margin:0 auto;}
+.intro{padding:14px 16px;background:#fff;border-bottom:0.5px solid #f0f0f0;font-size:13px;color:#8e8e8e;font-style:italic;text-align:center;}
+.compose{background:#fff;padding:14px 16px;border-bottom:0.5px solid #f0f0f0;}
+.compose textarea{width:100%;border:0.5px solid #e5e5e5;border-radius:11px;padding:11px 13px;font-size:14px;font-family:inherit;outline:none;min-height:70px;resize:vertical;}
+.compose textarea:focus{border-color:#6C3BE8;}
+.compose-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
+.char-count{font-size:12px;color:#aaa;}
+.post-btn{padding:9px 18px;background:linear-gradient(90deg,#6C3BE8,#E8398A);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.post-btn:disabled{background:#e0e0e0;cursor:not-allowed;}
+.alert-card{background:#fff;padding:14px 16px;border-bottom:0.5px solid #f7f7f7;}
+.ac-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.ac-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.ac-name{font-size:14px;font-weight:600;color:#262626;}
+.ac-room{font-size:12px;color:#aaa;}
+.ac-time{font-size:12px;color:#aaa;margin-left:auto;}
+.ac-body{font-size:14px;color:#262626;line-height:1.5;padding-left:42px;white-space:pre-wrap;}
+.empty{text-align:center;padding:60px 20px;color:#aaa;font-size:14px;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="more.html" class="back"><i class="ti ti-arrow-left"></i></a>
+  <span class="top-title">Alerts</span>
+</div>
+
+<div class="main">
+  <div class="intro">Quick alerts for the hostel — challan, gate, warden, anything important.</div>
+
+  <div class="compose">
+    <textarea id="alert-text" placeholder="What's the alert? e.g. Challan being done at 4 No. gate" maxlength="280" oninput="updateChars()"></textarea>
+    <div class="compose-row">
+      <span class="char-count" id="char-count">0 / 280</span>
+      <button class="post-btn" id="post-btn" onclick="postAlert()">Post alert</button>
+    </div>
+  </div>
+
+  <div id="alerts-feed"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const avatarBgs={1:'linear-gradient(135deg,#6C3BE8,#E8398A)',2:'linear-gradient(135deg,#E8398A,#F97316)',3:'linear-gradient(135deg,#4F46E5,#06B6D4)',4:'linear-gradient(135deg,#10B981,#059669)',5:'linear-gradient(135deg,#F59E0B,#EF4444)',6:'linear-gradient(135deg,#8B5CF6,#EC4899)',7:'linear-gradient(135deg,#06B6D4,#3B82F6)',8:'linear-gradient(135deg,#F97316,#FBBF24)',9:'linear-gradient(135deg,#3B82F6,#06B6D4)',10:'linear-gradient(135deg,#EF4444,#F97316)',11:'linear-gradient(135deg,#84CC16,#22C55E)',12:'linear-gradient(135deg,#7C3AED,#8B5CF6)',13:'linear-gradient(135deg,#EC4899,#F472B6)',14:'linear-gradient(135deg,#0EA5E9,#6366F1)',15:'linear-gradient(135deg,#F59E0B,#F97316)',16:'linear-gradient(135deg,#14B8A6,#22D3EE)',17:'linear-gradient(135deg,#A855F7,#D946EF)',18:'linear-gradient(135deg,#22C55E,#10B981)',19:'linear-gradient(135deg,#FB923C,#FBBF24)',20:'linear-gradient(135deg,#EF4444,#DC2626)'};
+const avatarSymbols={1:'⚽',2:'🏏',3:'🎮',4:'🏆',5:'🔑',6:'📚',7:'🎯',8:'💡',9:'🌍',10:'🚗',11:'✈️',12:'🎸',13:'🏋️',14:'🧪',15:'🔬',16:'💻',17:'🎲',18:'🏠',19:'⚡',20:'🔥'};
+
+let currentUser = null;
+let userData = null;
+
+window.updateChars = function(){
+  const len = document.getElementById('alert-text').value.length;
+  document.getElementById('char-count').textContent = `${len} / 280`;
+};
+
+window.postAlert = async function(){
+  const text = document.getElementById('alert-text').value.trim();
+  if(!text){ alert('Type something first'); return; }
+  const btn = document.getElementById('post-btn');
+  btn.disabled = true; btn.textContent = 'Posting...';
+  try {
+    await addDoc(collection(db,'alerts'),{
+      text,
+      posterUid: currentUser.uid,
+      posterName: userData.name,
+      posterRoom: userData.roomNo,
+      posterAvatarId: userData.avatarId,
+      createdAt: new Date()
+    });
+    document.getElementById('alert-text').value = '';
+    updateChars();
+    btn.textContent = 'Post alert';
+    btn.disabled = false;
+  } catch(e){
+    btn.disabled = false; btn.textContent = 'Post alert';
+    alert('Error: '+e.message);
+  }
+};
+
+function timeAgo(d){
+  const sec = Math.floor((Date.now()-d.getTime())/1000);
+  if(sec<60) return 'Just now';
+  if(sec<3600) return Math.floor(sec/60)+'m ago';
+  if(sec<86400) return Math.floor(sec/3600)+'h ago';
+  return Math.floor(sec/86400)+'d ago';
+}
+
+function renderAlerts(snap){
+  const feed = document.getElementById('alerts-feed');
+  if(snap.empty){
+    feed.innerHTML = '<div class="empty">No alerts yet. Be the first to post one.</div>';
+    return;
+  }
+  feed.innerHTML = snap.docs.map(doc=>{
+    const a = doc.data();
+    const avBg = avatarBgs[a.posterAvatarId||1];
+    const avSymbol = avatarSymbols[a.posterAvatarId||1]||(a.posterName||'?')[0].toUpperCase();
+    const time = a.createdAt?.toDate ? timeAgo(a.createdAt.toDate()) : '';
+    return `<div class="alert-card">
+      <div class="ac-head">
+        <div class="ac-av" style="background:${avBg}">${avSymbol}</div>
+        <div>
+          <div class="ac-name">${a.posterName||''}</div>
+          <div class="ac-room">Room ${a.posterRoom||''}</div>
+        </div>
+        <span class="ac-time">${time}</span>
+      </div>
+      <div class="ac-body">${a.text}</div>
+    </div>`;
+  }).join('');
+}
+
+onAuthStateChanged(auth, async user => {
+  if(!user){ window.location.href='login.html'; return; }
+  currentUser = user;
+  const us = await getDoc(doc(db,'users',user.uid));
+  if(us.exists()) userData = us.data();
+  const q = query(collection(db,'alerts'), orderBy('createdAt','desc'));
+  onSnapshot(q, renderAlerts);
+});
+</script>
+</body>
+</html>

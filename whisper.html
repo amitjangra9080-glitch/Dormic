@@ -92,7 +92,7 @@ body{background:#0f0f1e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 <div class="desc-bar">
   <i class="ti ti-shield-lock" style="font-size:13px;"></i>
-  Your thoughts, your voice, zero identity, even for admin
+  Your thoughts, your voice — anonymous to everyone in the hostel
 </div>
 
 <div class="chat-feed" id="chat-feed">
@@ -155,7 +155,8 @@ async function getOrCreateAnonId(uid){
   if(snap.exists()) return snap.data().anonId;
   const adj = adjectives[Math.floor(Math.random()*adjectives.length)];
   const animal = animals[Math.floor(Math.random()*animals.length)];
-  const id = `${adj} ${animal}`;
+  const num = Math.floor(Math.random()*90)+10; // 10-99
+  const id = `${adj}${animal}${num}`;
   await setDoc(ref,{anonId:id,uid,createdAt:new Date()});
   return id;
 }

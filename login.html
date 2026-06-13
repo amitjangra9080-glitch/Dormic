@@ -178,6 +178,16 @@ avatars.forEach(av => {
   if(el) el.addEventListener('change', ()=>{ el.style.border='0.5px solid #e5e5e5'; });
 });
 
+// Phone — numbers only
+document.getElementById('s-phone').addEventListener('input', function(){
+  this.value = this.value.replace(/\D/g,'').substring(0,10);
+});
+
+// Room — numbers only, max 3 digits
+document.getElementById('s-room').addEventListener('input', function(){
+  this.value = this.value.replace(/\D/g,'').substring(0,3);
+});
+
 let isRegistering = false;
 onAuthStateChanged(auth, user => { if(user && !isRegistering) window.location.href='index.html'; });
 
@@ -195,12 +205,24 @@ window.switchTab = function(tab) {
 window.validateAdmission = function() {
   const val = document.getElementById('s-admission').value.trim().toUpperCase();
   const hint = document.getElementById('admission-hint');
-  if(!val){hint.textContent='';return false;}
-  if(val.endsWith('M')){hint.className='hint ok';hint.textContent='MSc student';return true;}
-  if(val.endsWith('D')){hint.className='hint ok';hint.textContent='PhD student';return true;}
-  hint.className='hint err';hint.textContent='Invalid admission number';
-  return false;
+  hint.textContent='';
+  // Silent validation - no degree label shown
+  return isValidAdmission(val);
 };
+
+function isValidAdmission(val){
+  if(!val) return false;
+  // Must end with M or D
+  if(!val.endsWith('M') && !val.endsWith('D')) return false;
+  // Must contain a 4-digit year (2000-2099) somewhere
+  return /20\d{2}/.test(val);
+}
+
+function isValidEmail(val){
+  if(!val) return false;
+  // Basic email format check - any provider allowed
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+}
 
 window.loginUser = async function() {
   const email = document.getElementById('l-email').value.trim();
@@ -270,13 +292,22 @@ window.registerUser = async function() {
     return;
   }
 
-  if(!admission.endsWith('M')&&!admission.endsWith('D')){
+  if(!isValidAdmission(admission)){
     document.getElementById('s-admission').style.border='1.5px solid #e53935';
-    msg.className='msg error';msg.textContent='Invalid admission number.';return;
+    msg.className='msg error';msg.textContent='Invalid admission number. Must contain year (2020/2024 etc) and end with M or D.';return;
+  }
+  if(!isValidEmail(email)){
+    document.getElementById('s-email').style.border='1.5px solid #e53935';
+    msg.className='msg error';msg.textContent='Please enter a valid email address.';return;
   }
   if(phone.length!==10||!/^\d+$/.test(phone)){
     document.getElementById('s-phone').style.border='1.5px solid #e53935';
-    msg.className='msg error';msg.textContent='Enter a valid 10-digit WhatsApp number.';return;
+    msg.className='msg error';msg.textContent='WhatsApp number must be exactly 10 digits.';return;
+  }
+  const roomNum = parseInt(room);
+  if(isNaN(roomNum) || roomNum < 1 || roomNum > 169 || !/^\d+$/.test(room)){
+    document.getElementById('s-room').style.border='1.5px solid #e53935';
+    msg.className='msg error';msg.textContent='Room number must be between 1 and 169.';return;
   }
   if(password.length<6){
     document.getElementById('s-password').style.border='1.5px solid #e53935';
