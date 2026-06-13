@@ -111,7 +111,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   </div>
   <div class="srow" style="color:#a32d2d;" onclick="openEdit('delete')">
     <div class="s-ic" style="background:#fee2e2;color:#a32d2d;"><i class="ti ti-trash"></i></div>
-    <div><div class="s-label" style="color:#a32d2d;">Delete account</div><div class="s-sub">Schedule deletion (3 days)</div></div>
+    <div><div class="s-label" style="color:#a32d2d;">Delete account</div><div class="s-sub">Account will be deleted after 3 days</div></div>
     <span class="s-arr"><i class="ti ti-chevron-right"></i></span>
   </div>
   <div class="srow" style="color:#E8398A;" onclick="logoutUser()">
@@ -359,10 +359,9 @@ window.scheduleDelete = async function(){
     pendingDelete: true,
     deleteAt: deleteAt
   });
-  userData.pendingDelete = true;
-  userData.deleteAt = deleteAt;
-  alert('Your account will be deleted on ' + deleteAt.toLocaleDateString('en-IN') + '. You can cancel anytime before that.');
-  closeModal();
+  alert('Your account will be deleted in 3 days. You can cancel by logging back in.');
+  await signOut(auth);
+  window.location.href='login.html';
 };
 
 window.cancelDelete = async function(){
@@ -372,7 +371,6 @@ window.cancelDelete = async function(){
   });
   userData.pendingDelete = false;
   userData.deleteAt = null;
-  alert('Account deletion cancelled. Welcome back!');
   closeModal();
 };
 
