@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Goals — Dormic</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon.png"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Dormic"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:92px;color:#262626;}
+button,input,select{font-family:inherit;}
+input,select,textarea{font-size:16px!important;}
+.top-bar{height:54px;background:#fff;border-bottom:.5px solid #f0f0f0;display:flex;align-items:center;padding:0 16px;position:sticky;top:0;z-index:50;}
+.back{font-size:23px;color:#262626;text-decoration:none;}
+.top-title{font-size:17px;font-weight:600;margin-left:10px;}
+.add-top{margin-left:auto;border:0;background:none;color:#6C3BE8;font-size:25px;cursor:pointer;}
+.main{max-width:500px;margin:0 auto;}
+.intro{background:#fff;padding:14px 16px;border-bottom:.5px solid #f0f0f0;font-size:13px;color:#8e8e8e;text-align:center;font-style:italic;}
+.date-head{display:flex;align-items:center;justify-content:space-between;padding:15px 16px 10px;background:#fff;}
+.date-title{font-size:15px;font-weight:600;}
+.add-btn{border:0;border-radius:20px;padding:8px 13px;color:#fff;background:linear-gradient(90deg,#8B5CF6,#3B82F6);font-size:13px;font-weight:600;cursor:pointer;}
+.goals{background:#fff;padding:0 14px 8px;}
+.goal{border:.5px solid #ececf3;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.025);}
+.goal-head{display:flex;align-items:center;gap:11px;}
+.goal-icon{width:39px;height:39px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:19px;flex-shrink:0;}
+.goal-name{font-size:15px;font-weight:600;}
+.goal-sub{font-size:12px;color:#8e8e8e;margin-top:3px;}
+.goal-menu{margin-left:auto;border:0;background:none;color:#aaa;font-size:20px;padding:4px;cursor:pointer;}
+.progress-row{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin-top:13px;padding-top:12px;border-top:.5px solid #f2f2f2;}
+.progress-value{min-width:72px;text-align:center;font-size:14px;font-weight:600;color:#6C3BE8;}
+.circle-btn{width:31px;height:31px;border-radius:50%;border:.5px solid #ddd;background:#fff;color:#6C3BE8;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.done-btn{border:.5px solid #bbdfc3;background:#effaf1;color:#28833d;border-radius:20px;padding:8px 15px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.done-btn.on{background:#43a85a;color:#fff;border-color:#43a85a;}
+.week-title{font-size:12px;color:#aaa;text-transform:uppercase;letter-spacing:.4px;padding:15px 16px 8px;}
+.week-card{background:#fff;padding:14px 16px;margin-bottom:8px;}
+.week-goal{padding:9px 0;border-bottom:.5px solid #f3f3f3;}
+.week-goal:last-child{border-bottom:none;}
+.week-name{font-size:13px;font-weight:600;margin-bottom:9px;}
+.week-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;}
+.wday{font-size:10px;color:#aaa;}
+.wdot{width:25px;height:25px;border-radius:50%;margin:5px auto 0;display:flex;align-items:center;justify-content:center;background:#f3f3f3;color:#bbb;font-size:12px;}
+.wdot.done{background:#eaf6ec;color:#2d8d42;}
+.wdot.today{outline:2px solid #8B5CF6;outline-offset:1px;}
+.empty{text-align:center;background:#fff;padding:55px 24px;color:#aaa;}
+.empty i{font-size:50px;color:#c4b5fd;display:block;margin-bottom:12px;}
+.empty-title{font-size:16px;color:#262626;font-weight:600;margin-bottom:6px;}
+.empty-sub{font-size:13px;line-height:1.5;margin-bottom:18px;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;}
+.overlay.show{display:block;}
+.sheet{position:fixed;left:0;right:0;bottom:-100%;background:#fff;border-radius:20px 20px 0 0;padding:20px;z-index:101;transition:bottom .22s;max-height:88vh;overflow-y:auto;}
+.sheet.show{bottom:0;}
+.handle{width:40px;height:4px;background:#ddd;border-radius:5px;margin:0 auto 17px;}
+.sheet-title{font-size:18px;font-weight:700;margin-bottom:18px;}
+.lab{display:block;font-size:12px;color:#777;margin:0 0 6px 2px;font-weight:600;}
+.inp{width:100%;height:46px;border:.5px solid #ddd;border-radius:11px;background:#fafafa;padding:0 13px;margin-bottom:14px;outline:none;}
+.inp:focus{border-color:#8B5CF6;background:#fff;}
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.type{border:.5px solid #ddd;border-radius:11px;padding:12px 5px;background:#fff;text-align:center;font-size:12px;color:#666;cursor:pointer;}
+.type i{display:block;font-size:20px;margin-bottom:5px;}
+.type.on{border:1.5px solid #8B5CF6;color:#6C3BE8;background:#f7f5ff;}
+.target-row{display:flex;gap:8px;}
+.target-row .inp{flex:1;}
+.save{width:100%;height:47px;border:0;border-radius:11px;background:linear-gradient(90deg,#8B5CF6,#3B82F6);color:#fff;font-size:15px;font-weight:700;cursor:pointer;}
+.cancel{width:100%;height:42px;border:0;background:none;color:#888;font-size:14px;cursor:pointer;margin-top:6px;}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-around;height:62px;z-index:60;padding-bottom:env(safe-area-inset-bottom);}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ccc;font-size:22px;}
+.nav-item span{font-size:10px;color:#ccc;}
+.nav-item.on,.nav-item.on span{color:#B65CE0;}
+.nav-fab{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#F47B33,#EE4654);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="more.html" class="back"><i class="ti ti-arrow-left"></i></a>
+  <span class="top-title">My Goals</span>
+  <button class="add-top" onclick="openSheet()"><i class="ti ti-plus"></i></button>
+</div>
+<div class="main">
+  <div class="intro">Small daily progress adds up. Your goals are private.</div>
+  <div class="date-head">
+    <div class="date-title" id="today-label">Today</div>
+    <button class="add-btn" onclick="openSheet()"><i class="ti ti-plus"></i> Add goal</button>
+  </div>
+  <div class="goals" id="goals-list"><div class="empty">Loading...</div></div>
+  <div class="week-title">Last 7 days</div>
+  <div class="week-card" id="week-card"></div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet">
+  <div class="handle"></div>
+  <div class="sheet-title">Add a goal</div>
+  <label class="lab">Goal name</label>
+  <input class="inp" id="goal-name" maxlength="35" placeholder="e.g. Study, Gym, Read"/>
+  <label class="lab">How do you want to track it?</label>
+  <div class="types">
+    <button class="type on" data-type="yesno" onclick="chooseType(this)"><i class="ti ti-circle-check"></i>Done / Not done</button>
+    <button class="type" data-type="count" onclick="chooseType(this)"><i class="ti ti-list-numbers"></i>Count</button>
+    <button class="type" data-type="duration" onclick="chooseType(this)"><i class="ti ti-clock"></i>Duration</button>
+  </div>
+  <div id="target-wrap" style="display:none;">
+    <label class="lab">Daily target</label>
+    <div class="target-row">
+      <input class="inp" id="goal-target" type="number" min="1" step="0.5" placeholder="Target"/>
+      <input class="inp" id="goal-unit" maxlength="12" placeholder="Unit, e.g. pages"/>
+    </div>
+  </div>
+  <button class="save" id="save-btn" onclick="saveGoal()">Save goal</button>
+  <button class="cancel" onclick="closeSheet()">Cancel</button>
+</div>
+
+<nav class="nav-bar">
+  <a href="index.html" class="nav-item"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="whisper.html" class="nav-item"><i class="ti ti-ghost"></i><span>Ghost Box</span></a>
+  <a href="post.html" class="nav-fab"><i class="ti ti-plus"></i></a>
+  <a href="more.html" class="nav-item on"><i class="ti ti-layout-grid"></i><span>More</span></a>
+  <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
+</nav>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const todayKey=localDateKey(new Date());
+let currentUser=null;
+let goals=[];
+let selectedType='yesno';
+
+function localDateKey(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function sevenDays(){
+  const arr=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);arr.push(d);}return arr;
+}
+function esc(v=''){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function iconFor(type){return type==='duration'?'ti-clock':type==='count'?'ti-list-numbers':'ti-circle-check';}
+function gradientFor(i){const g=['linear-gradient(135deg,#8B5CF6,#3B82F6)','linear-gradient(135deg,#10B981,#06B6D4)','linear-gradient(135deg,#F97316,#EC4899)','linear-gradient(135deg,#F59E0B,#EF4444)'];return g[i%g.length];}
+function valueFor(g,date=todayKey){return Number((g.progress||{})[date]||0);}
+function completed(g,date){const v=valueFor(g,date);return g.type==='yesno'?v>=1:v>=Number(g.target||1);}
+
+onAuthStateChanged(auth,user=>{
+  if(!user){location.href='login.html';return;}
+  currentUser=user;
+  document.getElementById('today-label').textContent=`Today — ${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short'})}`;
+  const q=query(collection(db,'personalGoals',user.uid,'goals'),orderBy('createdAt','asc'));
+  onSnapshot(q,snap=>{goals=snap.docs.map(d=>({id:d.id,...d.data()}));render();},e=>{
+    document.getElementById('goals-list').innerHTML=`<div class="empty">Could not load goals.<br>${esc(e.message)}</div>`;
+  });
+});
+
+function render(){renderToday();renderWeek();}
+function renderToday(){
+  const el=document.getElementById('goals-list');
+  if(!goals.length){el.innerHTML=`<div class="empty"><i class="ti ti-target-arrow"></i><div class="empty-title">No goals yet</div><div class="empty-sub">Add your first personal goal and start tracking today.</div><button class="add-btn" onclick="openSheet()">Add goal</button></div>`;return;}
+  el.innerHTML=goals.map((g,i)=>{
+    const v=valueFor(g),done=completed(g,todayKey);
+    const unit=g.type==='duration'?(g.unit||'hours'):(g.unit||'');
+    const control=g.type==='yesno'
+      ? `<button class="done-btn ${done?'on':''}" onclick="toggleDone('${g.id}',${done})"><i class="ti ti-check"></i>${done?'Done':'Mark done'}</button>`
+      : `<button class="circle-btn" onclick="changeProgress('${g.id}',-1)">−</button><div class="progress-value">${v} / ${g.target} ${esc(unit)}</div><button class="circle-btn" onclick="changeProgress('${g.id}',1)">+</button>`;
+    return `<div class="goal"><div class="goal-head"><div class="goal-icon" style="background:${gradientFor(i)}"><i class="ti ${iconFor(g.type)}"></i></div><div><div class="goal-name">${esc(g.name)}</div><div class="goal-sub">${g.type==='yesno'?'Daily goal':`Target: ${g.target} ${esc(unit)}`}</div></div><button class="goal-menu" onclick="removeGoal('${g.id}','${esc(g.name)}')"><i class="ti ti-trash"></i></button></div><div class="progress-row">${control}</div></div>`;
+  }).join('');
+}
+function renderWeek(){
+  const el=document.getElementById('week-card');
+  if(!goals.length){el.innerHTML='<div style="text-align:center;color:#aaa;font-size:13px;padding:15px;">Your weekly progress will appear here.</div>';return;}
+  const days=sevenDays();
+  el.innerHTML=goals.map(g=>`<div class="week-goal"><div class="week-name">${esc(g.name)}</div><div class="week-days">${days.map(d=>{const k=localDateKey(d),done=completed(g,k);return `<div><div class="wday">${d.toLocaleDateString('en-IN',{weekday:'narrow'})}</div><div class="wdot ${done?'done':''} ${k===todayKey?'today':''}">${done?'<i class="ti ti-check"></i>':d.getDate()}</div></div>`;}).join('')}</div></div>`).join('');
+}
+
+window.openSheet=()=>{document.getElementById('overlay').classList.add('show');document.getElementById('sheet').classList.add('show');setTimeout(()=>document.getElementById('goal-name').focus(),250);};
+window.closeSheet=()=>{document.getElementById('overlay').classList.remove('show');document.getElementById('sheet').classList.remove('show');};
+window.chooseType=el=>{document.querySelectorAll('.type').forEach(x=>x.classList.remove('on'));el.classList.add('on');selectedType=el.dataset.type;document.getElementById('target-wrap').style.display=selectedType==='yesno'?'none':'block';document.getElementById('goal-unit').placeholder=selectedType==='duration'?'Unit, e.g. hours':'Unit, e.g. pages';};
+window.saveGoal=async()=>{
+  const name=document.getElementById('goal-name').value.trim();
+  const target=Number(document.getElementById('goal-target').value);
+  const unit=document.getElementById('goal-unit').value.trim();
+  if(!name){alert('Enter a goal name');return;}
+  if(selectedType!=='yesno'&&(!target||target<=0)){alert('Enter a valid daily target');return;}
+  const btn=document.getElementById('save-btn');btn.disabled=true;btn.textContent='Saving...';
+  try{await addDoc(collection(db,'personalGoals',currentUser.uid,'goals'),{name,type:selectedType,target:selectedType==='yesno'?1:target,unit:selectedType==='yesno'?'':unit,progress:{},createdAt:serverTimestamp()});document.getElementById('goal-name').value='';document.getElementById('goal-target').value='';document.getElementById('goal-unit').value='';closeSheet();}catch(e){alert('Could not save goal: '+e.message);}finally{btn.disabled=false;btn.textContent='Save goal';}
+};
+window.toggleDone=async(id,isDone)=>{await updateProgress(id,isDone?0:1);};
+window.changeProgress=async(id,dir)=>{const g=goals.find(x=>x.id===id);if(!g)return;const step=g.type==='duration'?0.5:1;await updateProgress(id,Math.max(0,valueFor(g)+dir*step));};
+async function updateProgress(id,value){try{await updateDoc(doc(db,'personalGoals',currentUser.uid,'goals',id),{[`progress.${todayKey}`]:value});}catch(e){alert('Could not update progress: '+e.message);}}
+window.removeGoal=async(id,name)=>{if(!confirm(`Delete "${name}"? Its history will also be removed.`))return;try{await deleteDoc(doc(db,'personalGoals',currentUser.uid,'goals',id));}catch(e){alert('Could not delete goal: '+e.message);}};
+</script>
+</body>
+</html>
