@@ -11,11 +11,11 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:40px;font-size:16px;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:40px;font-size:16px;overflow-x:hidden;}
 .top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:54px;display:flex;align-items:center;gap:10px;padding:0 16px;position:sticky;top:0;z-index:100;}
 .back{font-size:23px;color:#262626;text-decoration:none;}
 .top-title{font-size:17px;font-weight:500;color:#262626;}
-.main{max-width:500px;margin:0 auto;}
+.main{width:100%;max-width:500px;margin:0 auto;overflow-x:hidden;}
 .desc-note{font-size:14px;color:#8e8e8e;text-align:center;padding:13px 16px 10px;background:#fff;border-bottom:0.5px solid #f0f0f0;font-style:italic;}
 .summary{background:#fff;padding:18px 16px;border-bottom:0.5px solid #f0f0f0;display:flex;gap:14px;}
 .scard{flex:1;background:#f7f7f7;border-radius:12px;padding:14px;text-align:center;}
@@ -32,11 +32,11 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .cbtn:hover{background:#e9e9e9;}
 .cnum{font-size:15px;font-weight:600;color:#262626;min-width:20px;text-align:center;}
 .custom-section{background:#fff;margin-top:8px;padding:16px;}
-.custom-row{display:flex;gap:8px;}
-.custom-row input{flex:1;border:0.5px solid #e5e5e5;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;outline:none;}
+.custom-row{display:flex;gap:8px;width:100%;align-items:stretch;}
+.custom-row input{flex:1;min-width:0;border:0.5px solid #e5e5e5;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;outline:none;}
 .custom-row input:focus{border-color:#B65CE0;}
-.custom-row input[type="number"]{flex:0 0 80px;}
-.add-btn{padding:0 16px;height:42px;background:linear-gradient(90deg,#F47B33,#EE4654);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.custom-row input[type="number"]{flex:0 0 72px;min-width:0;}
+.add-btn{flex:0 0 auto;padding:0 14px;height:42px;background:linear-gradient(90deg,#F47B33,#EE4654);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
 .save-area{padding:16px;background:#fff;margin-top:8px;}
 .today-total{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#ede9fe;border-radius:11px;margin-bottom:12px;font-size:15px;font-weight:600;color:#B65CE0;}
 .save-btn{width:100%;height:46px;background:linear-gradient(90deg,#F47B33,#EE4654);border:none;border-radius:11px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;}
@@ -47,6 +47,26 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .custom-item .ci-name{flex:1;color:#262626;}
 .custom-item .ci-amt{color:#B65CE0;font-weight:600;}
 .custom-item .ci-del{color:#a32d2d;background:none;border:none;cursor:pointer;font-size:16px;}
+
+.history-section{background:#fff;margin-top:8px;padding-bottom:8px;}
+.history-list{padding:0 16px 8px;}
+.history-card{background:#f7f7f7;border-radius:11px;padding:12px 13px;margin-bottom:8px;}
+.history-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;}
+.history-date{font-size:14px;font-weight:600;color:#262626;}
+.history-total{font-size:14px;font-weight:700;color:#B65CE0;}
+.history-items{font-size:13px;color:#666;line-height:1.5;word-break:break-word;}
+.history-empty{text-align:center;padding:18px 16px 22px;color:#aaa;font-size:13px;}
+@media(max-width:380px){
+  .summary{padding:14px 12px;gap:10px;}
+  .scard{padding:12px 8px;}
+  .custom-section{padding:14px 12px;}
+  .custom-row{gap:6px;}
+  .custom-row input{padding:10px 10px;font-size:13px;}
+  .custom-row input[type="number"]{flex-basis:60px;}
+  .add-btn{padding:0 11px;font-size:13px;}
+  .item-row{padding:12px;gap:8px;}
+  .counter{gap:7px;}
+}
 </style>
 </head>
 <body>
@@ -69,9 +89,6 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     </div>
   </div>
 
-  <div class="section-lbl">Tap to add — today's order</div>
-  <div class="items-list" id="items-list"></div>
-
   <div class="section-lbl">Add a custom item</div>
   <div class="custom-section">
     <div class="custom-row">
@@ -82,9 +99,17 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <div class="custom-list" id="custom-list"></div>
   </div>
 
+  <div class="section-lbl">Tap to add — today's order</div>
+  <div class="items-list" id="items-list"></div>
+
   <div class="save-area">
     <div class="saved-badge" id="saved-badge">Saved today's tab</div>
     <button class="save-btn" id="save-btn" onclick="saveDay()">Save today's tab</button>
+  </div>
+
+  <div class="history-section">
+    <div class="section-lbl">Previous days</div>
+    <div class="history-list" id="history-list"><div class="history-empty">No previous tabs yet</div></div>
   </div>
 </div>
 
@@ -104,7 +129,6 @@ const items = [
   {name:'Tea (Large)', price:20},
   {name:'Coffee', price:15},
   {name:'Milk', price:33},
-  {name:'Cold Drink', price:20},
   {name:'Samosa', price:15},
   {name:'Pyaz Samosa', price:20},
   {name:'Dahi Samosa', price:25},
@@ -119,14 +143,14 @@ const items = [
   {name:'Boiled Egg', price:8},
   {name:'Banana Shake', price:30},
   {name:'Mango Shake', price:35},
-  {name:'Chips', price:10},
-  {name:'Biscuits', price:10},
-  {name:'Kurkure', price:10},
   {name:'Namkeen', price:10}
 ];
 
 const today = new Date();
-const todayStr = today.toISOString().split('T')[0];
+function localDateStr(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+const todayStr = localDateStr(today);
 const counts = {};
 let customItems = [];
 let currentUser = null;
@@ -204,24 +228,52 @@ window.saveDay = async function(){
     document.getElementById('saved-badge').style.display='block';
     btn.textContent = 'Saved!';
     setTimeout(()=>{ btn.textContent='Save today\'s tab'; btn.disabled=false; document.getElementById('saved-badge').style.display='none'; }, 2000);
-    await loadMonthTotal();
+    await loadCanteenSummary();
   } catch(e){
     btn.disabled = false; btn.textContent = 'Save today\'s tab';
     alert('Error: '+e.message);
   }
 };
 
-async function loadMonthTotal(){
-  let total = 0;
-  const daysInMonth = new Date(today.getFullYear(),today.getMonth()+1,0).getDate();
-  for(let i=1;i<=daysInMonth;i++){
-    const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-    try {
-      const snap = await getDoc(doc(db,'canteenTab',currentUser.uid,'days',dateStr));
-      if(snap.exists()) total += snap.data().total || 0;
-    } catch(e){}
+async function loadCanteenSummary(){
+  const history = document.getElementById('history-list');
+  try {
+    const snap = await getDocs(collection(db,'canteenTab',currentUser.uid,'days'));
+    const allDays = snap.docs.map(d=>d.data()).filter(d=>d.date);
+    const monthPrefix = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+    const monthTotal = allDays
+      .filter(d=>String(d.date).startsWith(monthPrefix))
+      .reduce((sum,d)=>sum+(Number(d.total)||0),0);
+    document.getElementById('month-total').textContent = '₹'+monthTotal;
+
+    const previous = allDays
+      .filter(d=>d.date < todayStr)
+      .sort((a,b)=>String(b.date).localeCompare(String(a.date)))
+      .slice(0,7);
+
+    if(!previous.length){
+      history.innerHTML = '<div class="history-empty">No previous tabs yet</div>';
+      return;
+    }
+
+    history.innerHTML = previous.map(day=>{
+      const dateObj = new Date(day.date+'T00:00:00');
+      const dateLabel = dateObj.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+      const regular = (day.items||[]).map(i=>`${i.name} ×${i.qty}`);
+      const custom = (day.customItems||[]).map(i=>i.name);
+      const itemText = [...regular,...custom].join(' · ') || 'No items recorded';
+      return `<div class="history-card">
+        <div class="history-head">
+          <span class="history-date">${dateLabel}</span>
+          <span class="history-total">₹${Number(day.total)||0}</span>
+        </div>
+        <div class="history-items">${itemText}</div>
+      </div>`;
+    }).join('');
+  } catch(e){
+    document.getElementById('month-total').textContent = '₹0';
+    history.innerHTML = '<div class="history-empty">Could not load previous tabs</div>';
   }
-  document.getElementById('month-total').textContent = '₹'+total;
 }
 
 async function loadTodayData(){
@@ -246,7 +298,7 @@ onAuthStateChanged(auth, async user => {
   renderItems();
   renderCustom();
   await loadTodayData();
-  await loadMonthTotal();
+  await loadCanteenSummary();
 });
 </script>
 </body>
