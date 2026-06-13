@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon.png"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="Dormic"/>
 <title>More — Dormic</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -18,18 +19,29 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .sec-lab{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:0.3px;padding:14px 16px 7px;}
 .row{display:flex;align-items:center;padding:13px 16px;border-bottom:0.5px solid #f7f7f7;background:#fff;gap:14px;text-decoration:none;cursor:pointer;}
 .row:active{background:#f9f9f9;}
-.ric{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.ric{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;color:#fff;}
 .rn{font-size:14px;font-weight:500;color:#262626;line-height:1.2;}
-.rs{font-size:12px;color:#aaa;margin-top:1px;}
+.rs{font-size:12px;color:#aaa;margin-top:2px;}
 .rarr{font-size:17px;color:#ccc;margin-left:auto;}
 .em-row{display:flex;align-items:center;padding:14px 16px;border-bottom:0.5px solid #f7f7f7;background:#fff5f5;gap:14px;text-decoration:none;cursor:pointer;}
-.em-ric{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#E8398A,#F97316);display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff;flex-shrink:0;}
+.em-ric{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#EE4654,#F47B33);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;flex-shrink:0;}
+/* Gradient variations using new palette: orange F47B33, red EE4654, purple B65CE0, blue 6B7BFA */
+.g1{background:linear-gradient(135deg,#F47B33,#EE4654);}
+.g2{background:linear-gradient(135deg,#EE4654,#B65CE0);}
+.g3{background:linear-gradient(135deg,#B65CE0,#6B7BFA);}
+.g4{background:linear-gradient(135deg,#6B7BFA,#B65CE0);}
+.g5{background:linear-gradient(135deg,#F47B33,#B65CE0);}
+.g6{background:linear-gradient(135deg,#EE4654,#6B7BFA);}
+.g7{background:linear-gradient(135deg,#6B7BFA,#F47B33);}
+.g8{background:linear-gradient(135deg,#B65CE0,#EE4654);}
+.g9{background:linear-gradient(135deg,#F47B33,#6B7BFA);}
+.g10{background:linear-gradient(135deg,#EE4654,#F47B33);}
 .nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-around;height:60px;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ccc;font-size:22px;}
 .nav-item span{font-size:10px;color:#ccc;}
-.nav-item.on{color:#6C3BE8;}
-.nav-item.on span{color:#6C3BE8;}
-.nav-fab{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
+.nav-item.on{color:#B65CE0;}
+.nav-item.on span{color:#B65CE0;}
+.nav-fab{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#F47B33,#EE4654,#B65CE0,#6B7BFA);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
 </style>
 </head>
 <body>
@@ -48,7 +60,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   </a>
 
   <a href="alerts.html" class="row">
-    <div class="ric" style="background:#fef3c7;color:#92400e;"><i class="ti ti-bell-ringing"></i></div>
+    <div class="ric g10"><i class="ti ti-bell-ringing"></i></div>
     <div><div class="rn">Alerts</div><div class="rs">Challan, gate, warden — community alerts</div></div>
     <span class="rarr"><i class="ti ti-chevron-right"></i></span>
   </a>
@@ -56,25 +68,25 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <div class="sec-lab">Hostel</div>
 
   <a href="menu.html" class="row">
-    <div class="ric" style="background:#fff3e0;color:#b45309;"><i class="ti ti-tools-kitchen-2"></i></div>
-    <div><div class="rn">Mess Menu</div><div class="rs">Today's menu · weekly view · ratings</div></div>
+    <div class="ric g1"><i class="ti ti-tools-kitchen-2"></i></div>
+    <div><div class="rn">Mess Menu</div><div class="rs" id="mess-live-label">Today's menu · weekly view · ratings</div></div>
     <span class="rarr"><i class="ti ti-chevron-right"></i></span>
   </a>
 
   <a href="tracker.html" class="row">
-    <div class="ric" style="background:#eaf3de;color:#3b6d11;"><i class="ti ti-calendar-stats"></i></div>
+    <div class="ric g2"><i class="ti ti-calendar-stats"></i></div>
     <div><div class="rn">Meal Tracker</div><div class="rs">Breakfast, lunch, dinner — keep count</div></div>
     <span class="rarr"><i class="ti ti-chevron-right"></i></span>
   </a>
 
   <a href="canteen.html" class="row">
-    <div class="ric" style="background:#ffe4e6;color:#9f1239;"><i class="ti ti-coffee"></i></div>
+    <div class="ric g3"><i class="ti ti-coffee"></i></div>
     <div><div class="rn">Canteen Tab</div><div class="rs">Your chai, snacks, and canteen खर्चा</div></div>
     <span class="rarr"><i class="ti ti-chevron-right"></i></span>
   </a>
 
   <a href="amenities.html" class="row">
-    <div class="ric" style="background:#ede9fe;color:#5b21b6;"><i class="ti ti-phone"></i></div>
+    <div class="ric g4"><i class="ti ti-phone"></i></div>
     <div><div class="rn">Amenities directory</div><div class="rs">Electrician, warden, carpenter...</div></div>
     <span class="rarr"><i class="ti ti-chevron-right"></i></span>
   </a>
@@ -82,31 +94,31 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <div class="sec-lab">Important links</div>
 
   <a href="https://drive.google.com/drive/folders/168QJ5ELekaDLtZk8t3TOMgYEOeeD28J6" target="_blank" class="row">
-    <div class="ric" style="background:#fce7f3;color:#9d174d;"><i class="ti ti-folder"></i></div>
+    <div class="ric g5"><i class="ti ti-folder"></i></div>
     <div><div class="rn">PGS Courses</div><div class="rs">Course material · Google Drive</div></div>
     <span class="rarr"><i class="ti ti-external-link"></i></span>
   </a>
 
   <a href="https://ssp.hauiums.in/" target="_blank" class="row">
-    <div class="ric" style="background:#dbeafe;color:#1e40af;"><i class="ti ti-school"></i></div>
+    <div class="ric g6"><i class="ti ti-school"></i></div>
     <div><div class="rn">CCS HAU Student Portal</div><div class="rs">Login · academic info</div></div>
     <span class="rarr"><i class="ti ti-external-link"></i></span>
   </a>
 
   <a href="https://hau.ac.in" target="_blank" class="row">
-    <div class="ric" style="background:#fef9c3;color:#854d0e;"><i class="ti ti-world"></i></div>
+    <div class="ric g7"><i class="ti ti-world"></i></div>
     <div><div class="rn">HAU Official Website</div><div class="rs">hau.ac.in · news, notices, departments</div></div>
     <span class="rarr"><i class="ti ti-external-link"></i></span>
   </a>
 
   <a href="https://icar.org.in" target="_blank" class="row">
-    <div class="ric" style="background:#dcfce7;color:#166534;"><i class="ti ti-leaf"></i></div>
+    <div class="ric g8"><i class="ti ti-leaf"></i></div>
     <div><div class="rn">ICAR</div><div class="rs">Indian Council of Agricultural Research</div></div>
     <span class="rarr"><i class="ti ti-external-link"></i></span>
   </a>
 
   <a href="https://dsssb.delhi.gov.in" target="_blank" class="row">
-    <div class="ric" style="background:#f3e8ff;color:#6b21a8;"><i class="ti ti-briefcase"></i></div>
+    <div class="ric g9"><i class="ti ti-briefcase"></i></div>
     <div><div class="rn">DSSSB</div><div class="rs">Govt jobs · recruitment notices</div></div>
     <span class="rarr"><i class="ti ti-external-link"></i></span>
   </a>
@@ -121,20 +133,6 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   </div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { firebaseConfig } from "./firebase-config.js";
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-onAuthStateChanged(auth, user => {
-  if(!user){window.location.href='login.html';return;}
-  if(user.email === 'admin@hostelradar.com'){
-    document.getElementById('admin-section').style.display='block';
-  }
-});
-</script>
-
 <nav class="nav-bar">
   <a href="index.html" class="nav-item"><i class="ti ti-home"></i><span>Home</span></a>
   <a href="whisper.html" class="nav-item"><i class="ti ti-ghost"></i><span>Ghost Box</span></a>
@@ -142,5 +140,64 @@ onAuthStateChanged(auth, user => {
   <a href="more.html" class="nav-item on"><i class="ti ti-layout-grid"></i><span>More</span></a>
   <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
 </nav>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Full weekly menu for live mess label
+const weeklyMenu = {
+  monday:    { breakfast:'Paratha, Aloo Sabzi, Tea', lunch:'Rajma, Rice, Roti, Salad', dinner:'Dal Tadka, Aloo Gobi, Roti' },
+  tuesday:   { breakfast:'Poori, Chole, Tea',         lunch:'Kadhi Pakora, Rice, Roti', dinner:'Mixed Veg, Dal, Roti' },
+  wednesday: { breakfast:'Bread Butter, Boiled Egg, Tea', lunch:'Chana Masala, Rice, Roti', dinner:'Paneer Bhurji, Dal, Roti' },
+  thursday:  { breakfast:'Paratha, Curd, Tea',        lunch:'Dal Makhani, Jeera Rice, Roti', dinner:'Bhindi, Dal, Roti' },
+  friday:    { breakfast:'Idli Sambhar, Tea',         lunch:'Sambhar, Rice, Roti, Papad', dinner:'Veg Pulao, Raita, Roti' },
+  saturday:  { breakfast:'Sandwich, Tea',             lunch:'Chicken Curry / Soya, Rice, Roti', dinner:'Aloo Matar, Dal, Roti' },
+  sunday:    { breakfast:'Puri Sabzi, Halwa, Tea',    lunch:'Chole Bhature, Salad', dinner:'Mix Veg, Dal Fry, Roti' }
+};
+
+function getCurrentMealLabel(){
+  const now = new Date();
+  const hour = now.getHours();
+  const min = now.getMinutes();
+  const time = hour*60+min;
+
+  const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+  let dayIdx = now.getDay();
+
+  // Breakfast: 10 PM yesterday to 9:30 AM today (1320–570 mins)
+  // If before 9:30 AM, show today's breakfast (but if before 6 AM, dayIdx is still "today")
+  if(time < 570){ // before 9:30 AM
+    const today = days[dayIdx];
+    return `Breakfast: ${weeklyMenu[today].breakfast}`;
+  }
+  // Lunch: 9:30 AM to 2:30 PM (570–870 mins)
+  if(time < 870){
+    const today = days[dayIdx];
+    return `Lunch: ${weeklyMenu[today].lunch}`;
+  }
+  // Dinner: 2:30 PM to 10 PM (870–1320 mins)
+  if(time < 1320){
+    const today = days[dayIdx];
+    return `Dinner: ${weeklyMenu[today].dinner}`;
+  }
+  // After 10 PM — show tomorrow's breakfast
+  const tomorrow = days[(dayIdx+1)%7];
+  return `Breakfast: ${weeklyMenu[tomorrow].breakfast}`;
+}
+
+document.getElementById('mess-live-label').textContent = getCurrentMealLabel();
+
+onAuthStateChanged(auth, user => {
+  if(!user){window.location.href='login.html';return;}
+  if(user.email === 'admin@hostelradar.com'){
+    document.getElementById('admin-section').style.display='block';
+  }
+});
+</script>
 </body>
 </html>

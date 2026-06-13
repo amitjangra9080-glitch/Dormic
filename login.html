@@ -16,21 +16,21 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .page{max-width:420px;margin:0 auto;padding:0 0 40px;}
 .illustration img{width:100%;display:block;max-height:200px;object-fit:cover;object-position:center 30%;}
 .card{background:#fff;padding:22px 20px 28px;}
-.logo{text-align:center;font-size:42px;font-weight:400;font-family:'Fredoka One',cursive;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.3px;margin-bottom:2px;}
+.logo{text-align:center;font-size:42px;font-weight:400;font-family:'Fredoka One',cursive;background:linear-gradient(90deg,#F47B33,#EE4654,#B65CE0,#6B7BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.3px;margin-bottom:2px;}
 .sub{text-align:center;font-size:14px;color:#8e8e8e;margin-bottom:20px;}
 .tabs{display:flex;background:#f7f7f7;border-radius:11px;padding:3px;margin-bottom:18px;}
 .tab{flex:1;text-align:center;font-size:15px;padding:9px;border-radius:9px;color:#aaa;cursor:pointer;font-weight:500;}
-.tab.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;}
+.tab.on{background:linear-gradient(90deg,#F47B33,#EE4654);color:#fff;}
 .lab{font-size:13px;color:#8e8e8e;margin:0 0 6px 2px;display:block;font-weight:500;}
 .inp{width:100%;height:46px;border:0.5px solid #e5e5e5;border-radius:11px;background:#f9f9f9;font-size:15px;color:#262626;padding:0 14px;margin-bottom:14px;outline:none;font-family:inherit;}
-.inp:focus{border-color:#6C3BE8;background:#fff;}
+.inp:focus{border-color:#B65CE0;background:#fff;}
 .inp::placeholder{color:#bbb;}
 select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:14px;}
 .row{display:flex;gap:10px;}
 .row>div{flex:1;}
-.btn{width:100%;height:48px;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);border:none;border-radius:11px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:6px;}
+.btn{width:100%;height:48px;background:linear-gradient(90deg,#F47B33,#EE4654,#B65CE0,#6B7BFA);border:none;border-radius:11px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:6px;}
 .btn:disabled{background:#e0e0e0;color:#aaa;cursor:not-allowed;}
-.forgot{text-align:center;font-size:14px;color:#6C3BE8;margin-top:14px;cursor:pointer;}
+.forgot{text-align:center;font-size:14px;color:#B65CE0;margin-top:14px;cursor:pointer;}
 .note{text-align:center;font-size:13px;color:#aaa;margin-top:12px;}
 .msg{padding:11px 14px;border-radius:10px;font-size:14px;margin-bottom:14px;display:none;}
 .msg.error{background:#fee2e2;color:#a32d2d;display:block;}
@@ -41,7 +41,7 @@ select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xm
 .av-label{font-size:13px;color:#8e8e8e;margin:0 0 10px 2px;display:block;font-weight:500;}
 .avatar-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;}
 .av-opt{width:52px;height:52px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all 0.15s;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
-.av-opt.selected{border-color:#6C3BE8;transform:scale(1.1);box-shadow:0 0 0 2px #fff,0 0 0 4px #6C3BE8;}
+.av-opt.selected{border-color:#B65CE0;transform:scale(1.1);box-shadow:0 0 0 2px #fff,0 0 0 4px #B65CE0;}
 </style>
 </head>
 <body>
@@ -72,8 +72,7 @@ select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xm
       <label class="lab">Full name</label>
       <input class="inp" id="s-name" type="text" placeholder="Your name"/>
       <label class="lab">Admission number</label>
-      <input class="inp" id="s-admission" type="text" placeholder="Your admission number" oninput="validateAdmission()" autocomplete="off"/>
-      <div class="hint" id="admission-hint"></div>
+      <input class="inp" id="s-admission" type="text" placeholder="Your admission number" autocomplete="off"/>
       <label class="lab">Email</label>
       <input class="inp" id="s-email" type="email" placeholder="Your real email address"/>
       <div class="hint ok" style="margin-top:-8px;margin-bottom:10px;font-size:12px;color:#8e8e8e;">Used for account recovery only — never shown to anyone</div>
@@ -107,9 +106,11 @@ select.inp{color:#262626;appearance:none;background-image:url("data:image/svg+xm
             <option>B+</option><option>B−</option>
             <option>O+</option><option>O−</option>
             <option>AB+</option><option>AB−</option>
+            <option value="Not sure">Not sure</option>
           </select>
         </div>
       </div>
+      <div class="hint ok" style="margin-top:-8px;margin-bottom:10px;font-size:12px;color:#8e8e8e;font-style:italic;">Helps hostel-mates find you when blood is needed in an emergency.</div>
       <label class="lab">Password</label>
       <input class="inp" id="s-password" type="password" placeholder="Min 6 characters"/>
       <label class="lab">Confirm password</label>
@@ -203,11 +204,8 @@ window.switchTab = function(tab) {
 };
 
 window.validateAdmission = function() {
-  const val = document.getElementById('s-admission').value.trim().toUpperCase();
-  const hint = document.getElementById('admission-hint');
-  hint.textContent='';
-  // Silent validation - no degree label shown
-  return isValidAdmission(val);
+  // Silent validation - no hint shown while typing
+  return true;
 };
 
 function isValidAdmission(val){
@@ -222,6 +220,26 @@ function isValidEmail(val){
   if(!val) return false;
   // Basic email format check - any provider allowed
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+}
+
+function isValidPhone(val){
+  if(!val) return false;
+  // Must be exactly 10 digits, no letters or symbols
+  if(!/^\d{10}$/.test(val)) return false;
+  // Reject all-same-digit numbers like 0000000000 or 1111111111
+  if(/^(\d)\1{9}$/.test(val)) return false;
+  // Reject obvious sequential like 0123456789 or 9876543210
+  if(val === '0123456789' || val === '9876543210') return false;
+  // Indian mobile numbers start with 6, 7, 8, or 9
+  if(!/^[6-9]/.test(val)) return false;
+  return true;
+}
+
+function isValidRoom(val){
+  if(!val) return false;
+  if(!/^\d+$/.test(val)) return false;
+  const num = parseInt(val);
+  return num >= 1 && num <= 169;
 }
 
 window.loginUser = async function() {
@@ -294,20 +312,19 @@ window.registerUser = async function() {
 
   if(!isValidAdmission(admission)){
     document.getElementById('s-admission').style.border='1.5px solid #e53935';
-    msg.className='msg error';msg.textContent='Invalid admission number. Must contain year (2020/2024 etc) and end with M or D.';return;
+    msg.className='msg error';msg.textContent='Invalid admission number.';return;
   }
   if(!isValidEmail(email)){
     document.getElementById('s-email').style.border='1.5px solid #e53935';
     msg.className='msg error';msg.textContent='Please enter a valid email address.';return;
   }
-  if(phone.length!==10||!/^\d+$/.test(phone)){
+  if(!isValidPhone(phone)){
     document.getElementById('s-phone').style.border='1.5px solid #e53935';
-    msg.className='msg error';msg.textContent='WhatsApp number must be exactly 10 digits.';return;
+    msg.className='msg error';msg.textContent='Invalid WhatsApp number.';return;
   }
-  const roomNum = parseInt(room);
-  if(isNaN(roomNum) || roomNum < 1 || roomNum > 169 || !/^\d+$/.test(room)){
+  if(!isValidRoom(room)){
     document.getElementById('s-room').style.border='1.5px solid #e53935';
-    msg.className='msg error';msg.textContent='Room number must be between 1 and 169.';return;
+    msg.className='msg error';msg.textContent='Invalid room number.';return;
   }
   if(password.length<6){
     document.getElementById('s-password').style.border='1.5px solid #e53935';

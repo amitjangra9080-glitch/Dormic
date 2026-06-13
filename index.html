@@ -17,12 +17,12 @@
 body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:70px;}
 .top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;padding:0 16px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .logo-wrap{display:flex;flex-direction:column;line-height:1;}
-.logo{font-size:30px;font-weight:400;font-family:'Fredoka One',cursive;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.3px;}
+.logo{font-size:30px;font-weight:400;font-family:'Fredoka One',cursive;background:linear-gradient(90deg,#F47B33,#EE4654,#B65CE0,#6B7BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.3px;}
 .logo-hostel{font-size:11px;font-weight:400;color:#aaa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-text-fill-color:#aaa;margin-top:1px;}
 .pills-wrap{background:#fff;border-bottom:0.5px solid #f0f0f0;padding:10px 14px;overflow-x:auto;display:flex;gap:7px;}
 .pills-wrap::-webkit-scrollbar{display:none;}
 .pill{font-size:12px;padding:6px 14px;border-radius:20px;background:#f7f7f7;border:0.5px solid #e8e8e8;color:#666;white-space:nowrap;cursor:pointer;transition:all 0.15s;}
-.pill.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;}
+.pill.on{background:linear-gradient(90deg,#F47B33,#EE4654);color:#fff;border:none;}
 .feed{max-width:600px;margin:0 auto;}
 .gap{height:8px;}
 .card{background:#fff;}
@@ -48,7 +48,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .city{font-size:14px;font-weight:500;color:#262626;}
 .r-date{font-size:13px;color:#8e8e8e;margin-left:auto;display:flex;align-items:center;gap:3px;}
 .card-actions{display:flex;align-items:center;justify-content:space-between;padding:9px 14px 4px;border-top:0.5px solid #f7f7f7;margin-top:6px;}
-.status-btn{font-size:12px;font-weight:500;color:#6C3BE8;border:0.5px solid #c4b5fd;border-radius:20px;padding:5px 13px;background:#ede9fe;cursor:pointer;}
+.status-btn{font-size:12px;font-weight:500;color:#B65CE0;border:0.5px solid #c4b5fd;border-radius:20px;padding:5px 13px;background:#ede9fe;cursor:pointer;}
 .wa-btn{font-size:13px;font-weight:500;color:#25D366;display:flex;align-items:center;gap:5px;text-decoration:none;}
 .time-line{padding:3px 14px 10px;font-size:12px;color:#bbb;letter-spacing:0.2px;}
 .empty-state{text-align:center;padding:48px 24px;}
@@ -61,12 +61,12 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-around;height:60px;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ccc;font-size:22px;}
 .nav-item span{font-size:10px;color:#ccc;}
-.nav-item.on{color:#6C3BE8;}
-.nav-item.on span{color:#6C3BE8;}
-.nav-fab{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
+.nav-item.on{color:#B65CE0;}
+.nav-item.on span{color:#B65CE0;}
+.nav-fab{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#F47B33,#EE4654);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
 .notify-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:600px;margin:0 auto;}
 .notify-txt{font-size:12px;color:#555;line-height:1.4;}
-.notify-btn{font-size:12px;font-weight:600;background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;border-radius:20px;padding:5px 14px;cursor:pointer;white-space:nowrap;}
+.notify-btn{font-size:12px;font-weight:600;background:linear-gradient(90deg,#F47B33,#EE4654);color:#fff;border:none;border-radius:20px;padding:5px 14px;cursor:pointer;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -97,7 +97,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <div style="font-size:13px;color:#8e8e8e;line-height:1.5;margin-bottom:20px;">
       All your posts, mess tracker, and canteen tab data will be permanently removed. You can cancel anytime before then.
     </div>
-    <button onclick="cancelDeletion()" style="width:100%;height:46px;background:linear-gradient(90deg,#6C3BE8,#E8398A);border:none;border-radius:11px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px;">Cancel deletion</button>
+    <button onclick="cancelDeletion()" style="width:100%;height:46px;background:linear-gradient(90deg,#F47B33,#EE4654);border:none;border-radius:11px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px;">Cancel deletion</button>
     <button onclick="proceedDeletion()" style="width:100%;height:42px;background:transparent;border:none;color:#8e8e8e;font-size:13px;cursor:pointer;font-family:inherit;">Proceed with deletion</button>
   </div>
 </div>
@@ -136,7 +136,7 @@ let currentUser = null;
 let allPosts = [];
 let currentFilter = 'all';
 
-const avatarBgs = ['','linear-gradient(135deg,#6C3BE8,#E8398A)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#F97316,#FBBF24)','linear-gradient(135deg,#3B82F6,#6C3BE8)','linear-gradient(135deg,#10B981,#3B82F6)','linear-gradient(135deg,#EF4444,#E8398A)','linear-gradient(135deg,#8B5CF6,#EC4899)','linear-gradient(135deg,#06B6D4,#3B82F6)','linear-gradient(135deg,#F59E0B,#EF4444)','linear-gradient(135deg,#10B981,#6C3BE8)','linear-gradient(135deg,#EC4899,#F97316)','linear-gradient(135deg,#6366F1,#8B5CF6)','linear-gradient(135deg,#14B8A6,#10B981)','linear-gradient(135deg,#F97316,#6C3BE8)','linear-gradient(135deg,#EF4444,#F97316)','linear-gradient(135deg,#3B82F6,#10B981)','linear-gradient(135deg,#A855F7,#3B82F6)','linear-gradient(135deg,#F43F5E,#6366F1)','linear-gradient(135deg,#0EA5E9,#6C3BE8)','linear-gradient(135deg,#84CC16,#10B981)'];
+const avatarBgs = ['','linear-gradient(135deg,#F47B33,#EE4654)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#F97316,#FBBF24)','linear-gradient(135deg,#3B82F6,#6C3BE8)','linear-gradient(135deg,#10B981,#3B82F6)','linear-gradient(135deg,#EF4444,#E8398A)','linear-gradient(135deg,#8B5CF6,#EC4899)','linear-gradient(135deg,#06B6D4,#3B82F6)','linear-gradient(135deg,#F59E0B,#EF4444)','linear-gradient(135deg,#10B981,#6C3BE8)','linear-gradient(135deg,#EC4899,#F97316)','linear-gradient(135deg,#6366F1,#8B5CF6)','linear-gradient(135deg,#14B8A6,#10B981)','linear-gradient(135deg,#F97316,#6C3BE8)','linear-gradient(135deg,#EF4444,#F97316)','linear-gradient(135deg,#3B82F6,#10B981)','linear-gradient(135deg,#A855F7,#3B82F6)','linear-gradient(135deg,#F43F5E,#6366F1)','linear-gradient(135deg,#0EA5E9,#6C3BE8)','linear-gradient(135deg,#84CC16,#10B981)'];
 const avatarSymbols = ['','⚽','🏏','🎮','🏆','🔑','📚','🎯','💡','🌍','🚗','✈️','🎸','🏋️','🧪','🔬','💻','🎲','🏠','⚡','🔥'];
 
 onAuthStateChanged(auth, async user => {

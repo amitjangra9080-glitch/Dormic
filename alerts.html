@@ -19,10 +19,10 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .intro{padding:14px 16px;background:#fff;border-bottom:0.5px solid #f0f0f0;font-size:13px;color:#8e8e8e;font-style:italic;text-align:center;}
 .compose{background:#fff;padding:14px 16px;border-bottom:0.5px solid #f0f0f0;}
 .compose textarea{width:100%;border:0.5px solid #e5e5e5;border-radius:11px;padding:11px 13px;font-size:14px;font-family:inherit;outline:none;min-height:70px;resize:vertical;}
-.compose textarea:focus{border-color:#6C3BE8;}
+.compose textarea:focus{border-color:#B65CE0;}
 .compose-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
 .char-count{font-size:12px;color:#aaa;}
-.post-btn{padding:9px 18px;background:linear-gradient(90deg,#6C3BE8,#E8398A);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.post-btn{padding:9px 18px;background:linear-gradient(90deg,#F47B33,#EE4654);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
 .post-btn:disabled{background:#e0e0e0;cursor:not-allowed;}
 .alert-card{background:#fff;padding:14px 16px;border-bottom:0.5px solid #f7f7f7;}
 .ac-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
@@ -64,7 +64,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const avatarBgs={1:'linear-gradient(135deg,#6C3BE8,#E8398A)',2:'linear-gradient(135deg,#E8398A,#F97316)',3:'linear-gradient(135deg,#4F46E5,#06B6D4)',4:'linear-gradient(135deg,#10B981,#059669)',5:'linear-gradient(135deg,#F59E0B,#EF4444)',6:'linear-gradient(135deg,#8B5CF6,#EC4899)',7:'linear-gradient(135deg,#06B6D4,#3B82F6)',8:'linear-gradient(135deg,#F97316,#FBBF24)',9:'linear-gradient(135deg,#3B82F6,#06B6D4)',10:'linear-gradient(135deg,#EF4444,#F97316)',11:'linear-gradient(135deg,#84CC16,#22C55E)',12:'linear-gradient(135deg,#7C3AED,#8B5CF6)',13:'linear-gradient(135deg,#EC4899,#F472B6)',14:'linear-gradient(135deg,#0EA5E9,#6366F1)',15:'linear-gradient(135deg,#F59E0B,#F97316)',16:'linear-gradient(135deg,#14B8A6,#22D3EE)',17:'linear-gradient(135deg,#A855F7,#D946EF)',18:'linear-gradient(135deg,#22C55E,#10B981)',19:'linear-gradient(135deg,#FB923C,#FBBF24)',20:'linear-gradient(135deg,#EF4444,#DC2626)'};
+const avatarBgs={1:'linear-gradient(135deg,#F47B33,#EE4654)',2:'linear-gradient(135deg,#E8398A,#F97316)',3:'linear-gradient(135deg,#4F46E5,#06B6D4)',4:'linear-gradient(135deg,#10B981,#059669)',5:'linear-gradient(135deg,#F59E0B,#EF4444)',6:'linear-gradient(135deg,#8B5CF6,#EC4899)',7:'linear-gradient(135deg,#06B6D4,#3B82F6)',8:'linear-gradient(135deg,#F97316,#FBBF24)',9:'linear-gradient(135deg,#3B82F6,#06B6D4)',10:'linear-gradient(135deg,#EF4444,#F97316)',11:'linear-gradient(135deg,#84CC16,#22C55E)',12:'linear-gradient(135deg,#7C3AED,#8B5CF6)',13:'linear-gradient(135deg,#EC4899,#F472B6)',14:'linear-gradient(135deg,#0EA5E9,#6366F1)',15:'linear-gradient(135deg,#F59E0B,#F97316)',16:'linear-gradient(135deg,#14B8A6,#22D3EE)',17:'linear-gradient(135deg,#A855F7,#D946EF)',18:'linear-gradient(135deg,#22C55E,#10B981)',19:'linear-gradient(135deg,#FB923C,#FBBF24)',20:'linear-gradient(135deg,#EF4444,#DC2626)'};
 const avatarSymbols={1:'⚽',2:'🏏',3:'🎮',4:'🏆',5:'🔑',6:'📚',7:'🎯',8:'💡',9:'🌍',10:'🚗',11:'✈️',12:'🎸',13:'🏋️',14:'🧪',15:'🔬',16:'💻',17:'🎲',18:'🏠',19:'⚡',20:'🔥'};
 
 let currentUser = null;

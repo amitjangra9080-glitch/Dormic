@@ -14,7 +14,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:70px;font-size:16px;}
 .top-bar{background:#fff;border-bottom:0.5px solid #f0f0f0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;}
-.top-logo{font-size:26px;font-weight:400;font-family:'Fredoka One',cursive;background:linear-gradient(90deg,#6C3BE8,#E8398A,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.3px;}
+.top-logo{font-size:26px;font-weight:400;font-family:'Fredoka One',cursive;background:linear-gradient(90deg,#F47B33,#EE4654,#B65CE0,#6B7BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.3px;}
 .top-ic{font-size:24px;color:#262626;cursor:pointer;background:none;border:none;}
 .main{max-width:500px;margin:0 auto;}
 .head-card{background:#fff;padding:22px 16px 16px;}
@@ -42,9 +42,9 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-around;height:62px;z-index:100;}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ccc;font-size:23px;}
 .nav-item span{font-size:11px;color:#ccc;}
-.nav-item.on{color:#6C3BE8;}
-.nav-item.on span{color:#6C3BE8;}
-.nav-fab{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;font-size:21px;color:#fff;text-decoration:none;}
+.nav-item.on{color:#B65CE0;}
+.nav-item.on span{color:#B65CE0;}
+.nav-fab{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#F47B33,#EE4654);display:flex;align-items:center;justify-content:center;font-size:21px;color:#fff;text-decoration:none;}
 .overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:200;}
 .overlay.show{display:block;}
 .settings-sheet{position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;padding:20px;z-index:201;max-height:85vh;overflow-y:auto;display:none;}
@@ -62,8 +62,8 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .modal-title{font-size:17px;font-weight:600;color:#262626;margin-bottom:18px;}
 .lab{font-size:13px;color:#8e8e8e;margin:0 0 6px 2px;display:block;font-weight:500;}
 .inp{width:100%;height:46px;border:0.5px solid #e5e5e5;border-radius:11px;background:#f9f9f9;font-size:15px;color:#262626;padding:0 14px;margin-bottom:14px;outline:none;font-family:inherit;}
-.inp:focus{border-color:#6C3BE8;}
-.modal-btn{width:100%;height:46px;background:linear-gradient(90deg,#6C3BE8,#E8398A);border:none;border-radius:11px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;margin-top:4px;}
+.inp:focus{border-color:#B65CE0;}
+.modal-btn{width:100%;height:46px;background:linear-gradient(90deg,#F47B33,#EE4654);border:none;border-radius:11px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;margin-top:4px;}
 .cancel-btn{width:100%;height:42px;background:none;border:0.5px solid #e0e0e0;border-radius:11px;color:#666;font-size:15px;cursor:pointer;margin-top:10px;}
 .msg{padding:10px 12px;border-radius:9px;font-size:14px;margin-bottom:12px;display:none;}
 .msg.error{background:#fee2e2;color:#a32d2d;display:block;}
@@ -147,7 +147,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const avatarBgs = ['','linear-gradient(135deg,#6C3BE8,#E8398A)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#F97316,#FBBF24)','linear-gradient(135deg,#3B82F6,#6C3BE8)','linear-gradient(135deg,#10B981,#3B82F6)','linear-gradient(135deg,#EF4444,#E8398A)','linear-gradient(135deg,#8B5CF6,#EC4899)','linear-gradient(135deg,#06B6D4,#3B82F6)','linear-gradient(135deg,#F59E0B,#EF4444)','linear-gradient(135deg,#10B981,#6C3BE8)','linear-gradient(135deg,#EC4899,#F97316)','linear-gradient(135deg,#6366F1,#8B5CF6)','linear-gradient(135deg,#14B8A6,#10B981)','linear-gradient(135deg,#F97316,#6C3BE8)','linear-gradient(135deg,#EF4444,#F97316)','linear-gradient(135deg,#3B82F6,#10B981)','linear-gradient(135deg,#A855F7,#3B82F6)','linear-gradient(135deg,#F43F5E,#6366F1)','linear-gradient(135deg,#0EA5E9,#6C3BE8)','linear-gradient(135deg,#84CC16,#10B981)'];
+const avatarBgs = ['','linear-gradient(135deg,#F47B33,#EE4654)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#F97316,#FBBF24)','linear-gradient(135deg,#3B82F6,#6C3BE8)','linear-gradient(135deg,#10B981,#3B82F6)','linear-gradient(135deg,#EF4444,#E8398A)','linear-gradient(135deg,#8B5CF6,#EC4899)','linear-gradient(135deg,#06B6D4,#3B82F6)','linear-gradient(135deg,#F59E0B,#EF4444)','linear-gradient(135deg,#10B981,#6C3BE8)','linear-gradient(135deg,#EC4899,#F97316)','linear-gradient(135deg,#6366F1,#8B5CF6)','linear-gradient(135deg,#14B8A6,#10B981)','linear-gradient(135deg,#F97316,#6C3BE8)','linear-gradient(135deg,#EF4444,#F97316)','linear-gradient(135deg,#3B82F6,#10B981)','linear-gradient(135deg,#A855F7,#3B82F6)','linear-gradient(135deg,#F43F5E,#6366F1)','linear-gradient(135deg,#0EA5E9,#6C3BE8)','linear-gradient(135deg,#84CC16,#10B981)'];
 const avatarSymbols = ['','⚽','🏏','🎮','🏆','🔑','📚','🎯','💡','🌍','🚗','✈️','🎸','🏋️','🧪','🔬','💻','🎲','🏠','⚡','🔥'];
 
 let currentUser = null;
@@ -211,7 +211,7 @@ function loadPosts(){
         const isResolved=p.status==='resolved';
         const bt=isResolved?'resolved':p.type;
         const bl=isResolved?'Resolved':(p.type.charAt(0).toUpperCase()+p.type.slice(1));
-        const resolveBtn=!isResolved?`<button onclick="resolveUserPost('${p.id}')" style="font-size:12px;color:#6C3BE8;border:0.5px solid #c4b5fd;border-radius:20px;padding:4px 11px;background:#ede9fe;cursor:pointer;margin-top:6px;font-family:inherit;">Mark as resolved</button>`:'';
+        const resolveBtn=!isResolved?`<button onclick="resolveUserPost('${p.id}')" style="font-size:12px;color:#B65CE0;border:0.5px solid #c4b5fd;border-radius:20px;padding:4px 11px;background:#ede9fe;cursor:pointer;margin-top:6px;font-family:inherit;">Mark as resolved</button>`:'';
         return `<div class="post-row">
           <div class="post-row-inner">
             <div class="post-ic"><i class="ti ${icons[p.type]||'ti-circle'}"></i></div>
@@ -267,7 +267,7 @@ window.openEdit=function(type){
           ? 'You are listed as a willing donor. Your name and room number are visible to hostel residents in emergencies.'
           : 'Not listed as a donor yet. Enable this and your name shows up when someone urgently needs ' + userData.bloodGroup + ' blood — you could literally save a life.'}
       </div>
-      <button class="modal-btn" style="background:${isDonor?'#fee2e2':'linear-gradient(90deg,#6C3BE8,#E8398A)'};color:${isDonor?'#a32d2d':'#fff'}" onclick="saveDonor(${!isDonor})">${isDonor?'Remove me from donor list':'Yes, list me as willing donor'}</button>
+      <button class="modal-btn" style="background:${isDonor?'#fee2e2':'linear-gradient(90deg,#F47B33,#EE4654)'};color:${isDonor?'#a32d2d':'#fff'}" onclick="saveDonor(${!isDonor})">${isDonor?'Remove me from donor list':'Yes, list me as willing donor'}</button>
     `;
   }else if(type==='delete'){
     title.textContent='Delete account';
@@ -283,7 +283,7 @@ window.openEdit=function(type){
         <div style="font-size:13px;color:#8e8e8e;line-height:1.5;margin-bottom:16px;">
           Changed your mind? You can cancel the deletion before the time runs out.
         </div>
-        <button class="modal-btn" style="background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;" onclick="cancelDelete()">Cancel deletion</button>
+        <button class="modal-btn" style="background:linear-gradient(90deg,#F47B33,#EE4654);color:#fff;" onclick="cancelDelete()">Cancel deletion</button>
       `;
     } else {
       body.innerHTML = `

@@ -25,11 +25,11 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .sec-lab{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:10px;}
 .blood-groups{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
 .bg-btn{font-size:13px;font-weight:600;padding:7px 14px;border-radius:20px;background:#fff;border:0.5px solid #e0e0e0;color:#262626;cursor:pointer;transition:all 0.15s;}
-.bg-btn.on{background:linear-gradient(90deg,#6C3BE8,#E8398A);color:#fff;border:none;}
+.bg-btn.on{background:linear-gradient(90deg,#F47B33,#EE4654);color:#fff;border:none;}
 .donors-list{background:#fff;border-radius:12px;overflow:hidden;}
 .donor{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:0.5px solid #f7f7f7;}
 .donor:last-child{border-bottom:none;}
-.av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:600;flex-shrink:0;}
+.av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F47B33,#EE4654);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:600;flex-shrink:0;}
 .dn{font-size:13px;font-weight:500;color:#262626;}
 .ds{font-size:11px;color:#aaa;}
 .dtag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:#fee2e2;color:#a32d2d;margin-left:auto;flex-shrink:0;}
@@ -39,7 +39,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .opt-sub{font-size:11px;color:#aaa;margin-top:2px;}
 .toggle{width:44px;height:24px;border-radius:20px;position:relative;cursor:pointer;flex-shrink:0;transition:background 0.2s;}
 .toggle.off{background:#e0e0e0;}
-.toggle.on-state{background:linear-gradient(90deg,#6C3BE8,#E8398A);}
+.toggle.on-state{background:linear-gradient(90deg,#F47B33,#EE4654);}
 .toggle::after{content:'';position:absolute;top:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
 .toggle.off::after{left:2px;}
 .toggle.on-state::after{left:22px;}
@@ -129,7 +129,7 @@ async function loadDonors(bg) {
     const q = query(collection(db,'users'), where('bloodGroup','==',bg), where('isDonor','==',true));
     const snap = await getDocs(q);
     if(snap.empty) { el.innerHTML = '<div class="empty-donors">No donors listed for ' + bg + '</div>'; return; }
-    const grads = ['linear-gradient(135deg,#6C3BE8,#E8398A)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#4c9c5e,#6C3BE8)'];
+    const grads = ['linear-gradient(135deg,#F47B33,#EE4654)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#4c9c5e,#6C3BE8)'];
     el.innerHTML = snap.docs.map((d,i) => {
       const u = d.data();
       const isOwn = currentUser && d.id === currentUser.uid;
