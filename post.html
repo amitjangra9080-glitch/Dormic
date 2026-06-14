@@ -28,7 +28,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 /* DESCRIPTION */
 .cat-desc{font-size:13px;color:#B65CE0;background:#ede9fe;border-radius:10px;padding:10px 13px;margin-bottom:16px;line-height:1.5;display:none;}
 .cat-desc.show{display:block;}
-.inp{width:100%;border:0.5px solid #e5e5e5;border-radius:10px;background:#fff;font-size:15px;color:#262626;padding:12px 14px;margin-bottom:14px;outline:none;font-family:inherit;}
+.inp{width:100%;border:0.5px solid #e5e5e5;border-radius:10px;background:#fff;font-size:16px;color:#262626;padding:12px 14px;margin-bottom:14px;outline:none;font-family:inherit;}
 .inp:focus{border-color:#B65CE0;}
 .inp::placeholder{color:#bbb;}
 .inp.error{border-color:#e53935 !important;}
@@ -46,7 +46,10 @@ textarea.inp{min-height:80px;resize:none;}
 .msg.error{background:#fee2e2;color:#a32d2d;display:block;}
 .section-div{font-size:11px;color:#B65CE0;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin:16px 0 12px;padding-bottom:6px;border-bottom:0.5px solid #ede9fe;}
 
-.post-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);background:#1f7a3a;color:#fff;padding:11px 17px;border-radius:22px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:400}.post-toast.show{opacity:1;transform:translate(-50%,0)}.btn.success{background:linear-gradient(90deg,#10B981,#22C55E);animation:btnPop .4s ease}@keyframes btnPop{50%{transform:scale(1.03)}}
+.post-success-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);background:#18763a;color:#fff;padding:11px 17px;border-radius:22px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.28s;z-index:500;box-shadow:0 8px 25px rgba(0,0,0,.18)}
+.post-success-toast.show{opacity:1;transform:translate(-50%,0)}
+.btn.post-success{background:linear-gradient(90deg,#10B981,#22C55E);animation:postButtonPop .45s ease}
+@keyframes postButtonPop{50%{transform:scale(1.035)}}
 </style>
 </head>
 <body>
@@ -55,8 +58,8 @@ textarea.inp{min-height:80px;resize:none;}
   <span class="top-title">New post</span>
   <span></span>
 </div>
+<div class="post-success-toast" id="post-success-toast"><i class="ti ti-check"></i> Posted to the hostel</div>
 <div class="main">
-  <div class="post-toast" id="post-toast"><i class="ti ti-check"></i> Posted to the hostel</div>
   <div class="msg" id="post-msg"></div>
 
   <label class="lab">Category</label>
@@ -421,7 +424,13 @@ window.submitPost = async function(){
         createdAt:serverTimestamp()
       });
     }
-    btn.classList.add('success');btn.innerHTML='<i class="ti ti-check"></i> Posted';const toast=document.getElementById('post-toast');toast.classList.add('show');navigator.vibrate?.(30);sessionStorage.setItem('dormic_post_just_added','1');setTimeout(()=>{window.location.href='index.html';},850);
+    btn.classList.add('post-success');
+    btn.innerHTML='<i class="ti ti-check"></i> Posted';
+    const toast=document.getElementById('post-success-toast');
+    toast.classList.add('show');
+    navigator.vibrate?.(30);
+    sessionStorage.setItem('dormic_post_just_added','1');
+    setTimeout(()=>{window.location.href='index.html';},1000);
   }catch(e){
     msg.className='msg error';msg.textContent='Error: '+e.message;
     btn.disabled=false;btn.textContent='Post';

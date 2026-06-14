@@ -55,7 +55,12 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .saved-badge{text-align:center;font-size:13px;color:#3b6d11;padding:10px;background:#eaf3de;border-radius:10px;margin-bottom:10px;display:none;}
 .disabled-tog{opacity:0.5;pointer-events:none;}
 
-.cdot.saved-pop{animation:dotPop .5s ease}.saved-badge.fade-in{animation:fadeSaved .45s ease}.snum.count-pop{animation:numPop .4s ease}@keyframes dotPop{40%{transform:scale(1.25)}}@keyframes fadeSaved{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:none}}@keyframes numPop{50%{transform:scale(1.12)}}
+.cdot.tracker-save-pop{animation:trackerDotPop .55s ease;}
+.saved-badge.tracker-fade{display:block!important;animation:trackerFade .5s ease;}
+.snum.tracker-count-pop{animation:trackerCount .45s ease;}
+@keyframes trackerDotPop{40%{transform:scale(1.28);box-shadow:0 0 0 7px rgba(108,59,232,.12)}}
+@keyframes trackerFade{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes trackerCount{50%{transform:scale(1.15)}}
 </style>
 </head>
 <body>
@@ -79,7 +84,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <div class="day-label" id="day-label">Today</div>
   <div class="tracker-meals">
     <div class="tmeal">
-      <span class="tmic" style="background:#e8a445;"><i class="ti ti-coffee"></i></span>
+      <span class="tmic" style="background:linear-gradient(135deg,#F59E0B,#EF4444);"><i class="ti ti-coffee"></i></span>
       <div><div class="tmeal-name">Breakfast</div><div class="tmeal-time">8:00 – 9:00 AM</div></div>
       <div class="tright">
         <div class="tog" id="tog-b"><span class="tp" id="bp" onclick="setP('b')">Present</span><span class="ta" id="ba" onclick="setA('b')">Absent</span></div>
@@ -87,7 +92,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       </div>
     </div>
     <div class="tmeal">
-      <span class="tmic" style="background:#4c9c5e;"><i class="ti ti-tools-kitchen-2"></i></span>
+      <span class="tmic" style="background:linear-gradient(135deg,#14B8A6,#84CC16);"><i class="ti ti-tools-kitchen-2"></i></span>
       <div><div class="tmeal-name">Lunch</div><div class="tmeal-time">1:00 – 2:00 PM</div></div>
       <div class="tright">
         <div class="tog" id="tog-l"><span class="tp" id="lp" onclick="setP('l')">Present</span><span class="ta" id="la" onclick="setA('l')">Absent</span></div>
@@ -95,7 +100,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       </div>
     </div>
     <div class="tmeal">
-      <span class="tmic" style="background:#6C3BE8;"><i class="ti ti-moon"></i></span>
+      <span class="tmic" style="background:linear-gradient(135deg,#6366F1,#A855F7);"><i class="ti ti-moon"></i></span>
       <div><div class="tmeal-name">Dinner</div><div class="tmeal-time">8:00 – 9:00 PM</div></div>
       <div class="tright">
         <div class="tog" id="tog-d"><span class="tp" id="dp" onclick="setP('d')">Present</span><span class="ta" id="da" onclick="setA('d')">Absent</span></div>
@@ -259,7 +264,7 @@ function lockForm(){
   document.querySelectorAll('.cbtn').forEach(b=>b.style.pointerEvents='none');
   document.getElementById('submit-btn').style.display='none';
   document.getElementById('edit-btn').style.display='block';
-  document.getElementById('saved-badge').style.display='block';
+  const savedBadge=document.getElementById('saved-badge');savedBadge.style.display='block';savedBadge.classList.remove('tracker-fade');void savedBadge.offsetWidth;savedBadge.classList.add('tracker-fade');
 }
 
 function unlockForm(){
@@ -286,7 +291,7 @@ window.submitTracker=async function(){
       breakfastGuests:counts.bg,lunchGuests:counts.lg,dinnerGuests:counts.dg,
       savedAt:new Date()
     });
-    lockForm();updateSummary();
+    lockForm();await updateSummary();
     // Refresh dot colour
     const dot=document.getElementById(`dot-${selectedDateStr}`);
     if(dot){
@@ -296,7 +301,7 @@ window.submitTracker=async function(){
       else if(pc>0)dot.classList.add('part');
       else dot.classList.add('miss');
       dot.textContent=pc;
-      dot.classList.add('saved-pop');setTimeout(()=>dot.classList.remove('saved-pop'),550);
+      dot.classList.remove('tracker-save-pop');void dot.offsetWidth;dot.classList.add('tracker-save-pop');setTimeout(()=>dot.classList.remove('tracker-save-pop'),600);
     }
   }catch(e){
     btn.disabled=false;btn.textContent='Save';
@@ -327,6 +332,7 @@ async function updateSummary(){
   document.getElementById('s-meals').textContent=totalMeals;
   document.getElementById('s-absent').textContent=totalAbsent;
   document.getElementById('s-guests').textContent=totalGuests;
+  ['s-meals','s-absent','s-guests'].forEach(id=>{const el=document.getElementById(id);el.classList.remove('tracker-count-pop');void el.offsetWidth;el.classList.add('tracker-count-pop');setTimeout(()=>el.classList.remove('tracker-count-pop'),500);});
 }
 </script>
 </body>
