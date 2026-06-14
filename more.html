@@ -151,13 +151,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const weeklyMenu = {
-  monday:    { breakfast:'Paratha, Aloo Sabzi, Tea', lunch:'Rajma, Rice, Roti, Salad', dinner:'Dal Tadka, Aloo Gobi, Roti' },
-  tuesday:   { breakfast:'Poori, Chole, Tea',         lunch:'Kadhi Pakora, Rice, Roti', dinner:'Mixed Veg, Dal, Roti' },
-  wednesday: { breakfast:'Bread Butter, Boiled Egg, Tea', lunch:'Chana Masala, Rice, Roti', dinner:'Paneer Bhurji, Dal, Roti' },
-  thursday:  { breakfast:'Paratha, Curd, Tea',        lunch:'Dal Makhani, Jeera Rice, Roti', dinner:'Bhindi, Dal, Roti' },
-  friday:    { breakfast:'Idli Sambhar, Tea',         lunch:'Sambhar, Rice, Roti, Papad', dinner:'Veg Pulao, Raita, Roti' },
-  saturday:  { breakfast:'Sandwich, Tea',             lunch:'Chicken Curry / Soya, Rice, Roti', dinner:'Aloo Matar, Dal, Roti' },
-  sunday:    { breakfast:'Puri Sabzi, Halwa, Tea',    lunch:'Chole Bhature, Salad', dinner:'Mix Veg, Dal Fry, Roti' }
+  monday:    { breakfast:'Potato Sabzi with Parathas', lunch:'Classic Rajma with Rice', dinner:'Mixed Vegetable with Dal' },
+  tuesday:   { breakfast:'Light & Savoury Poha', lunch:'Potato & Peas with Fried Rice', dinner:'Dal Makhani with Custard' },
+  wednesday: { breakfast:'Potato-Onion Stuffed Parathas', lunch:'Kabuli Chickpeas', dinner:'Paneer' },
+  thursday:  { breakfast:'Paneer Stuffed Parathas', lunch:'Kadhi Pakora', dinner:'Seasonal Vegetable with Dal' },
+  friday:    { breakfast:'Desi Chickpeas with Parathas', lunch:'Dal with Fried Rice', dinner:'Sev Bhaji' },
+  saturday:  { breakfast:'Potato-Onion Parathas', lunch:'Desi Chickpeas with Potato', dinner:'Dal' },
+  sunday:    { breakfast:'Chole Kulche / Pav Bhaji', lunch:'Chole Puri', dinner:'Seasonal Vegetable with Dal' }
 };
 
 function getCurrentMealLabel(){
