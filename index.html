@@ -137,7 +137,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc, setDoc, deleteDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc, setDoc, deleteDoc, getDocs, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
@@ -234,9 +234,27 @@ document.querySelectorAll('.pill').forEach(pill => {
   });
 });
 
+const RESOLVED_FEED_LIFETIME_MS = 3 * 24 * 60 * 60 * 1000;
+
+function timestampToMillis(value){
+  if(!value) return null;
+  if(typeof value.toMillis === 'function') return value.toMillis();
+  if(typeof value.seconds === 'number') return value.seconds * 1000;
+  const parsed = new Date(value).getTime();
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function shouldShowInPublicFeed(post){
+  if(post.status !== 'resolved') return true;
+  const resolvedTime = timestampToMillis(post.resolvedAt);
+  // Older resolved posts without a timestamp stay visible for compatibility.
+  if(!resolvedTime) return true;
+  return Date.now() - resolvedTime < RESOLVED_FEED_LIFETIME_MS;
+}
+
 function renderFeed() {
   const feed = document.getElementById('feed');
-  let posts = allPosts;
+  let posts = allPosts.filter(shouldShowInPublicFeed);
   if(currentFilter === 'lost-found') posts = posts.filter(p => ['lost','found'].includes(p.type));
   else if(currentFilter === 'donate-need') posts = posts.filter(p => ['have','donate','need'].includes(p.type));
   else if(currentFilter === 'sell-buy') posts = posts.filter(p => ['sell','buy'].includes(p.type));
@@ -350,7 +368,7 @@ function buildCard(p, isResolved) {
 }
 
 window.resolvePost = async function(id) {
-  await updateDoc(doc(db,'posts',id), {status:'resolved'});
+  await updateDoc(doc(db,'posts',id), {status:'resolved', resolvedAt:serverTimestamp()});
 };
 
 window.requestNotify = function() {

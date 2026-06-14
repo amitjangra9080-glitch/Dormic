@@ -140,7 +140,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc, collection, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
@@ -380,7 +380,7 @@ window.logoutUser=async function(){
 };
 window.resolveUserPost=async function(id){
   try {
-    await updateDoc(doc(db,'posts',id),{status:'resolved'});
+    await updateDoc(doc(db,'posts',id),{status:'resolved',resolvedAt:serverTimestamp()});
     // onSnapshot will auto-refresh the list
   } catch(e){ alert('Error: '+e.message); }
 };

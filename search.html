@@ -71,6 +71,22 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 let allPosts = [];
+const RESOLVED_FEED_LIFETIME_MS = 3 * 24 * 60 * 60 * 1000;
+
+function timestampToMillis(value){
+  if(!value) return null;
+  if(typeof value.toMillis === 'function') return value.toMillis();
+  if(typeof value.seconds === 'number') return value.seconds * 1000;
+  const parsed = new Date(value).getTime();
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function shouldShowPublicly(post){
+  if(post.status !== 'resolved') return true;
+  const resolvedTime = timestampToMillis(post.resolvedAt);
+  if(!resolvedTime) return true;
+  return Date.now() - resolvedTime < RESOLVED_FEED_LIFETIME_MS;
+}
 onAuthStateChanged(auth, user => { if(!user) window.location.href = 'login.html'; });
 const q = query(collection(db,'posts'), orderBy('createdAt','desc'));
 onSnapshot(q, snap => { allPosts = snap.docs.map(d => ({id:d.id,...d.data()})); });
@@ -78,7 +94,7 @@ window.doSearch = function() {
   const term = document.getElementById('search-inp').value.trim().toLowerCase();
   const el = document.getElementById('results');
   if(!term) { el.innerHTML = '<div class="empty">Type to search posts</div>'; return; }
-  const found = allPosts.filter(p =>
+  const found = allPosts.filter(shouldShowPublicly).filter(p =>
     p.itemName?.toLowerCase().includes(term) ||
     p.description?.toLowerCase().includes(term) ||
     p.location?.toLowerCase().includes(term) ||
