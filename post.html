@@ -46,11 +46,7 @@ textarea.inp{min-height:80px;resize:none;}
 .msg.error{background:#fee2e2;color:#a32d2d;display:block;}
 .section-div{font-size:11px;color:#B65CE0;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin:16px 0 12px;padding-bottom:6px;border-bottom:0.5px solid #ede9fe;}
 
-@media (max-width: 768px){
-  input, textarea, select, [contenteditable="true"]{
-    font-size:16px !important;
-  }
-}
+.post-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#262626;color:#fff;padding:11px 17px;border-radius:24px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;z-index:500;transition:.25s}.post-toast.show{opacity:1;transform:translate(-50%,0)}.btn.posted{background:#22c55e;transform:scale(1.02);transition:.25s}
 </style>
 </head>
 <body>
@@ -174,6 +170,7 @@ textarea.inp{min-height:80px;resize:none;}
   <button class="btn" id="submit-btn" onclick="submitPost()" style="display:none;">Post</button>
 </div>
 
+<div class="post-toast" id="post-toast"><i class="ti ti-check"></i> Posted to the hostel</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -424,7 +421,7 @@ window.submitPost = async function(){
         createdAt:serverTimestamp()
       });
     }
-    window.location.href='index.html';
+    btn.classList.add('posted');btn.innerHTML='<i class="ti ti-check"></i> Posted';const toast=document.getElementById('post-toast');toast.classList.add('show');if(navigator.vibrate)navigator.vibrate(30);sessionStorage.setItem('dormic_post_just_added','1');setTimeout(()=>{window.location.href='index.html';},850);
   }catch(e){
     msg.className='msg error';msg.textContent='Error: '+e.message;
     btn.disabled=false;btn.textContent='Post';
