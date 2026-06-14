@@ -11,29 +11,31 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#f6f6fb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:74px;color:#111827;font-size:16px;overflow-x:hidden;}
-.top{height:64px;background:linear-gradient(100deg,#6C3BE8 0%,#8B5CF6 38%,#E8398A 72%,#F47B33 100%);display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:40;color:#fff;box-shadow:0 8px 24px rgba(108,59,232,.22);}
-.back{width:38px;height:38px;border-radius:12px;color:#fff;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:23px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);}
-.top-title{font-size:19px;font-weight:800;display:flex;align-items:center;gap:8px;letter-spacing:.1px;}
-.top-title i{font-size:24px;}
-.top-add{width:40px;height:40px;border:0;border-radius:13px;background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(59,130,246,.28);cursor:pointer;}
+body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:74px;color:#111827;font-size:16px;overflow-x:hidden;}
+.top{height:54px;background:#fff;border-bottom:.5px solid #f0f0f0;display:flex;align-items:center;justify-content:center;padding:0 16px;position:sticky;top:0;z-index:40;color:#262626;}
+.back{position:absolute;left:14px;width:34px;height:34px;border-radius:10px;color:#262626;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:24px;background:transparent;}
+.top-title{font-size:17px;font-weight:700;display:flex;align-items:center;gap:7px;letter-spacing:.1px;}
+.top-title i{font-size:20px;color:#7C3AED;}
+.top-add{display:none;}
 .main{max-width:500px;margin:0 auto;padding:0 14px 18px;}
 .confetti-strip{height:0;overflow:visible;position:relative;z-index:25;pointer-events:none;}
 .confetti-strip i{position:absolute;top:-3px;width:7px;height:11px;border-radius:2px;opacity:0;animation:dropConfetti 1s ease-out forwards;}
-.privacy-note{margin:14px 0 12px;padding:11px 14px;border-radius:22px;background:linear-gradient(90deg,rgba(108,59,232,.09),rgba(232,57,138,.09),rgba(244,123,51,.08));color:#6C3BE8;font-size:13px;font-weight:600;text-align:center;display:flex;align-items:center;justify-content:center;gap:7px;}
+.privacy-note{margin:14px 0 12px;padding:11px 14px;border-radius:18px;background:#fff;color:#7c7c86;font-size:13px;font-weight:600;text-align:center;display:flex;align-items:center;justify-content:center;gap:7px;border:.5px solid #f0f0f0;}
 .hero{background:#fff;border-radius:22px;padding:18px 18px 20px;box-shadow:0 10px 30px rgba(17,24,39,.08);border:.5px solid rgba(108,59,232,.08);margin-bottom:16px;}
 .hero-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;}
 .date{font-size:22px;font-weight:800;line-height:1.15;color:#111827;}
 .motivation{font-size:14px;color:#6C3BE8;font-weight:700;margin-top:6px;}
-.add-btn{height:42px;border:0;border-radius:21px;background:linear-gradient(90deg,#7C3AED,#EC4899,#3B82F6);color:#fff;font-size:15px;font-weight:800;padding:0 16px;display:flex;align-items:center;gap:7px;white-space:nowrap;box-shadow:0 10px 22px rgba(124,58,237,.24);cursor:pointer;}
+.add-btn{height:42px;border:0;border-radius:21px;background:linear-gradient(90deg,#7C3AED,#3B82F6);color:#fff;font-size:15px;font-weight:800;padding:0 16px;display:flex;align-items:center;gap:7px;white-space:nowrap;box-shadow:0 8px 18px rgba(124,58,237,.18);cursor:pointer;}
 .progress-row{display:grid;grid-template-columns:118px 1fr;align-items:center;gap:18px;}
-.ring{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#E8398A 0deg,#8B5CF6 calc(var(--p)*1%),#3B82F6 calc(var(--p)*1%),#edf0f6 0);position:relative;transition:background .45s ease;}
+.ring{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(from -90deg,#7C3AED 0deg,#3B82F6 var(--deg,0deg),#edf0f6 var(--deg,0deg),#edf0f6 360deg);position:relative;transition:filter .25s ease,transform .25s ease;}
 .ring:before{content:'';position:absolute;width:82px;height:82px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.03);}
-.ring span{position:relative;font-size:27px;font-weight:900;color:#111827;}
+.ring span{position:relative;font-size:27px;font-weight:900;color:#111827;transition:transform .22s ease;}
+.ring.animate{animation:ringPulse .55s ease;filter:drop-shadow(0 0 16px rgba(124,58,237,.22));}
+.ring.animate span{transform:scale(1.08);}
 .sum-title{font-size:20px;font-weight:850;color:#111827;margin-bottom:5px;}
 .sum-sub{font-size:15px;color:#7b7b86;font-weight:600;}
 .progress-bar{height:10px;border-radius:20px;background:#edf0f6;margin-top:14px;overflow:hidden;}
-.progress-fill{height:100%;width:0%;border-radius:20px;background:linear-gradient(90deg,#8B5CF6,#E8398A,#3B82F6);transition:width .45s ease;}
+.progress-fill{height:100%;width:0%;border-radius:20px;background:linear-gradient(90deg,#7C3AED,#3B82F6);transition:width .45s ease;}
 .sec-row{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 10px;}
 .sec{font-size:13px;font-weight:850;color:#7C3AED;text-transform:uppercase;letter-spacing:.5px;}
 .sec-meta{font-size:13px;color:#7C3AED;font-weight:700;}
@@ -42,7 +44,7 @@ body{background:#f6f6fb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .goal.done{background:linear-gradient(135deg,#f3fff8 0%,#f8fffb 100%);border-color:#b7efce;}
 .goal.pop{animation:cardPop .48s ease;}
 .goal-inner{display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:12px;}
-.gicon{width:54px;height:54px;border-radius:17px;background:linear-gradient(135deg,#9333EA,#EC4899,#0EA5E9);color:#fff;display:grid;place-items:center;font-size:27px;box-shadow:0 10px 18px rgba(147,51,234,.22);}
+.gicon{width:54px;height:54px;border-radius:17px;background:linear-gradient(135deg,#7C3AED,#3B82F6);color:#fff;display:grid;place-items:center;font-size:27px;box-shadow:0 8px 16px rgba(124,58,237,.18);}
 .gname{font-size:17px;font-weight:850;color:#151515;line-height:1.2;}
 .gdesc{font-size:13px;color:#84848d;margin-top:5px;line-height:1.35;}
 .week-mini{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;}
@@ -53,17 +55,17 @@ body{background:#f6f6fb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .check{width:58px;height:58px;border-radius:50%;border:1.5px solid #dde1ea;background:#fff;color:#c7c7cf;font-size:31px;display:grid;place-items:center;cursor:pointer;transition:transform .2s ease,background .2s ease,color .2s ease,border-color .2s ease;}
 .check.on{background:linear-gradient(135deg,#10B981,#22C55E);border-color:transparent;color:#fff;box-shadow:0 10px 20px rgba(16,185,129,.22);}
 .check:active{transform:scale(.94);}
-.graphs{display:grid;grid-template-columns:1fr 1.15fr;gap:12px;margin-bottom:16px;}
+.graphs{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px;}
 .graph-card{background:#fff;border-radius:20px;padding:16px 16px 15px;box-shadow:0 8px 24px rgba(17,24,39,.06);border:.5px solid rgba(108,59,232,.06);min-height:132px;}
 .gtitle{font-size:15px;font-weight:800;color:#656575;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
 .gtitle i{color:#8B5CF6;font-size:20px;}
-.big-percent{font-size:38px;font-weight:950;line-height:1;background:linear-gradient(90deg,#7C3AED,#EC4899,#3B82F6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:5px;}
+.big-percent{font-size:38px;font-weight:950;line-height:1;background:linear-gradient(90deg,#7C3AED,#3B82F6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:5px;}
 .small-label{font-size:14px;color:#767681;font-weight:650;}
 .mini-track{height:9px;background:#edf0f6;border-radius:20px;overflow:hidden;margin-top:16px;}
-.mini-fill{height:100%;width:0%;border-radius:20px;background:linear-gradient(90deg,#7C3AED,#EC4899,#3B82F6);transition:width .45s ease;}
+.mini-fill{height:100%;width:0%;border-radius:20px;background:linear-gradient(90deg,#7C3AED,#3B82F6);transition:width .45s ease;}
 .bars{height:86px;display:flex;align-items:flex-end;gap:9px;margin-top:4px;}
 .bcol{flex:1;text-align:center;}
-.bar{width:100%;max-width:24px;height:4px;margin:0 auto;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,#EC4899,#8B5CF6,#3B82F6);transition:height .45s ease;box-shadow:0 6px 14px rgba(124,58,237,.18);}
+.bar{width:100%;max-width:24px;height:4px;margin:0 auto;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,#7C3AED,#3B82F6);transition:height .45s ease;box-shadow:0 6px 14px rgba(124,58,237,.14);}
 .blabel{font-size:11px;color:#a1a1aa;margin-top:6px;font-weight:800;}
 .blabel.today{color:#7C3AED;}
 .history{margin-bottom:20px;}
@@ -107,6 +109,7 @@ textarea.inp{resize:none;line-height:1.45;}
 .nav-item span{font-size:10px;color:#ccc;}.nav-item.on,.nav-item.on span{color:#B65CE0;}.nav-fab{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#F47B33,#EE4654);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
 @keyframes targetPulse{50%{transform:scale(1.08);opacity:.72;}}
 @keyframes cardPop{0%{transform:scale(1)}45%{transform:scale(1.025)}100%{transform:scale(1)}}
+@keyframes ringPulse{0%{transform:scale(1)}42%{transform:scale(1.06)}100%{transform:scale(1)}}
 @keyframes dropConfetti{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(var(--fall)) translateX(var(--drift)) rotate(420deg)}}
 @media(max-width:420px){.main{padding-left:12px;padding-right:12px}.progress-row{grid-template-columns:96px 1fr;gap:14px}.ring{width:94px;height:94px}.ring:before{width:68px;height:68px}.ring span{font-size:23px}.hero{padding:16px}.date{font-size:20px}.add-btn{height:40px;padding:0 13px}.goal-inner{grid-template-columns:50px 1fr auto}.gicon{width:50px;height:50px}.check{width:52px;height:52px}.graphs{grid-template-columns:1fr}.day-card{grid-template-columns:50px 1fr auto}.privacy-note{font-size:12.5px}}
 </style>
@@ -115,7 +118,6 @@ textarea.inp{resize:none;line-height:1.45;}
 <div class="top">
   <a href="more.html" class="back"><i class="ti ti-arrow-left"></i></a>
   <span class="top-title"><i class="ti ti-target-arrow"></i> My Goals</span>
-  <button class="top-add" onclick="openAdd()"><i class="ti ti-plus"></i></button>
 </div>
 <div class="confetti-strip" id="confetti-strip"></div>
 <div class="main">
@@ -130,7 +132,7 @@ textarea.inp{resize:none;line-height:1.45;}
       <button class="add-btn" onclick="openAdd()"><i class="ti ti-plus"></i> Add goal</button>
     </div>
     <div class="progress-row">
-      <div class="ring" id="ring" style="--p:0"><span id="ringText">0%</span></div>
+      <div class="ring" id="ring" style="--deg:0deg"><span id="ringText">0%</span></div>
       <div>
         <div class="sum-title">Today’s progress</div>
         <div class="sum-sub" id="sumText">No goals scheduled</div>
@@ -144,12 +146,6 @@ textarea.inp{resize:none;line-height:1.45;}
 
   <div class="sec-row"><div class="sec">Progress graphs</div></div>
   <div class="graphs">
-    <div class="graph-card">
-      <div class="gtitle"><i class="ti ti-target-arrow"></i> Today’s goals</div>
-      <div class="big-percent" id="bigPercent">0%</div>
-      <div class="small-label">Complete</div>
-      <div class="mini-track"><div class="mini-fill" id="todayFill"></div></div>
-    </div>
     <div class="graph-card">
       <div class="gtitle"><i class="ti ti-trending-up"></i> Weekly progress</div>
       <div class="bars" id="bars"></div>
@@ -212,8 +208,6 @@ const els = {
   heroFill: document.getElementById('heroFill'),
   todayMeta: document.getElementById('todayMeta'),
   goalsList: document.getElementById('goalsList'),
-  bigPercent: document.getElementById('bigPercent'),
-  todayFill: document.getElementById('todayFill'),
   bars: document.getElementById('bars'),
   historyList: document.getElementById('historyList'),
   overlay: document.getElementById('overlay'),
@@ -299,15 +293,36 @@ function renderAll(){
   renderHistory();
 }
 
+function animateRing(targetPercent){
+  const start = Number(els.ring.dataset.percent || 0);
+  const end = Math.max(0, Math.min(100, Number(targetPercent) || 0));
+  const duration = 620;
+  const startTime = performance.now();
+  els.ring.classList.remove('animate');
+  void els.ring.offsetWidth;
+  els.ring.classList.add('animate');
+  function frame(now){
+    const t = Math.min(1, (now - startTime) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const value = Math.round(start + (end - start) * eased);
+    const deg = value * 3.6;
+    els.ring.style.setProperty('--deg', deg + 'deg');
+    els.ringText.textContent = value + '%';
+    if(t < 1) requestAnimationFrame(frame);
+    else {
+      els.ring.dataset.percent = String(end);
+      setTimeout(() => els.ring.classList.remove('animate'), 260);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
 function renderToday(){
   const {scheduled, completed, percent} = getProgressForDate(today);
-  els.ring.style.setProperty('--p', percent);
-  els.ringText.textContent = percent + '%';
+  animateRing(percent);
   els.sumText.textContent = scheduled.length ? `${completed} of ${scheduled.length} completed` : 'No goals scheduled';
   els.todayMeta.textContent = scheduled.length ? `${completed} of ${scheduled.length} completed` : 'No goals today';
   els.heroFill.style.width = percent + '%';
-  els.bigPercent.textContent = percent + '%';
-  els.todayFill.style.width = percent + '%';
   els.motivation.textContent = percent === 100 && scheduled.length ? 'Good job! Keep going 🚀' : 'Build your streak 🚀';
 
   if(!scheduled.length){
