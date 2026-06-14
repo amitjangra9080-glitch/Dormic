@@ -55,8 +55,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .saved-badge{text-align:center;font-size:13px;color:#3b6d11;padding:10px;background:#eaf3de;border-radius:10px;margin-bottom:10px;display:none;}
 .disabled-tog{opacity:0.5;pointer-events:none;}
 
-.cdot{transition:background .35s ease,color .35s ease,transform .3s ease}.cdot.dot-fill{animation:dotFill .55s ease}.snum.num-rise{animation:numRise .42s ease}.saved-badge{transition:opacity .3s ease,transform .3s ease}.saved-badge.badge-in{display:block!important;animation:badgeFade .42s ease}
-@keyframes dotFill{45%{transform:scale(1.22)}}@keyframes numRise{50%{transform:translateY(-4px);font-size:20px}}@keyframes badgeFade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.cdot.saved-pop{animation:dotPop .5s ease}.saved-badge.fade-in{animation:fadeSaved .45s ease}.snum.count-pop{animation:numPop .4s ease}@keyframes dotPop{40%{transform:scale(1.25)}}@keyframes fadeSaved{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:none}}@keyframes numPop{50%{transform:scale(1.12)}}
 </style>
 </head>
 <body>
@@ -287,7 +286,7 @@ window.submitTracker=async function(){
       breakfastGuests:counts.bg,lunchGuests:counts.lg,dinnerGuests:counts.dg,
       savedAt:new Date()
     });
-    lockForm();await updateSummary();document.getElementById('saved-badge').classList.add('badge-in');['s-meals','s-absent','s-guests'].forEach(id=>{const el=document.getElementById(id);el.classList.remove('num-rise');requestAnimationFrame(()=>el.classList.add('num-rise'));setTimeout(()=>el.classList.remove('num-rise'),500);});
+    lockForm();updateSummary();
     // Refresh dot colour
     const dot=document.getElementById(`dot-${selectedDateStr}`);
     if(dot){
@@ -296,7 +295,8 @@ window.submitTracker=async function(){
       if(pc===3)dot.classList.add('full');
       else if(pc>0)dot.classList.add('part');
       else dot.classList.add('miss');
-      dot.textContent=pc;dot.classList.add('dot-fill');setTimeout(()=>dot.classList.remove('dot-fill'),600);
+      dot.textContent=pc;
+      dot.classList.add('saved-pop');setTimeout(()=>dot.classList.remove('saved-pop'),550);
     }
   }catch(e){
     btn.disabled=false;btn.textContent='Save';
