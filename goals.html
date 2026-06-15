@@ -26,12 +26,37 @@ button,input,textarea{font-family:inherit;} input,textarea{font-size:16px!import
 .nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-around;height:62px;z-index:60;padding-bottom:env(safe-area-inset-bottom)}.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ccc;font-size:22px}.nav-item span{font-size:10px;color:#ccc}.nav-item.on,.nav-item.on span{color:#B65CE0}.nav-fab{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#F47B33,#EE4654);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none}
 @media(max-width:360px){.summary-grid{grid-template-columns:1fr}.bars{gap:5px}.bar-track{width:19px}}
 
-.theme-transition-layer{position:fixed;inset:0;z-index:12000;pointer-events:none;opacity:0;transition:opacity .34s ease;background:#0f0f1e}.theme-transition-layer.light{background:#fff}.theme-transition-layer.active{opacity:1}@media(prefers-reduced-motion:reduce){.theme-transition-layer{transition:none}}
 
 
 .discard-modal{position:fixed;inset:0;background:rgba(17,24,39,.48);z-index:13000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}.discard-modal.show{display:flex}.discard-card{width:min(360px,100%);background:#fff;border-radius:20px;padding:24px 20px 18px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.22);animation:discardPop .22s ease}.discard-icon{width:54px;height:54px;border-radius:17px;margin:0 auto 13px;display:grid;place-items:center;font-size:27px;color:#fff;background:linear-gradient(135deg,#F47B33,#EE4654,#B65CE0,#6B7BFA)}.discard-title{font-size:19px;font-weight:800;color:#202124;margin-bottom:7px}.discard-copy{font-size:14px;line-height:1.5;color:#74747d;margin-bottom:19px}.discard-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.discard-keep,.discard-leave{height:44px;border-radius:12px;font:600 14px inherit;cursor:pointer}.discard-keep{background:#fff;border:1px solid #dedee5;color:#333}.discard-leave{border:0;color:#fff;background:linear-gradient(90deg,#EE4654,#B65CE0)}@keyframes discardPop{from{opacity:0;transform:scale(.94) translateY(8px)}to{opacity:1;transform:none}}
 
-.pending-save{display:none;padding:0 14px 14px}.pending-save.show{display:block}.pending-save button{width:100%;height:46px;border:0;border-radius:12px;background:linear-gradient(90deg,#6C3BE8,#B65CE0,#EE4654);color:#fff;font-size:15px;font-weight:750;cursor:pointer;box-shadow:0 9px 22px rgba(108,59,232,.16)}.pending-save button:disabled{opacity:.55}.ring-pop{animation:ringPop .5s cubic-bezier(.2,.8,.2,1)}@keyframes ringPop{45%{transform:scale(1.08);filter:drop-shadow(0 8px 14px rgba(108,59,232,.28))}}
+
+/* Unified bottom navigation + subtle Ghost Mode transition */
+.nav-bar{height:60px!important;padding:0 6px env(safe-area-inset-bottom)!important;box-sizing:content-box!important;justify-content:center!important;align-items:center!important;}
+.nav-bar>.nav-item,.nav-bar>.nav-fab{width:20%!important;min-width:0!important;height:60px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;}
+.nav-bar>.nav-item{flex-direction:column!important;gap:2px!important;font-size:22px!important;}
+.nav-bar>.nav-item span{font-size:10px!important;line-height:1!important;}
+.nav-bar>.nav-fab{border-radius:0!important;background:none!important;font-size:20px!important;}
+.nav-bar>.nav-fab i{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#F47B33,#EE4654);display:grid;place-items:center;color:#fff;}
+body{transition:opacity .22s ease,transform .22s ease,filter .22s ease;transform-origin:center bottom;}
+body.ghost-leave{opacity:.42;transform:translateY(5px) scale(.992);filter:saturate(.72) brightness(.9);}
+body.ghost-arrive{animation:lightReturn .30s cubic-bezier(.2,.8,.2,1);}
+@keyframes lightReturn{from{opacity:.35;transform:translateY(5px) scale(.992);filter:saturate(.75)}to{opacity:1;transform:none;filter:none}}
+@media(prefers-reduced-motion:reduce){body{transition:none!important}body.ghost-arrive{animation:none!important}}
+
+
+@property --p{syntax:"<percentage>";inherits:false;initial-value:0%;}
+.summary-grid{grid-template-columns:1fr!important;}
+.summary-card{min-height:126px!important;}
+.ring-wrap{display:grid!important;grid-template-columns:92px minmax(0,1fr)!important;align-items:center!important;gap:16px!important;}
+.ring{width:88px!important;height:88px!important;transition:--p .78s cubic-bezier(.2,.8,.2,1),transform .28s ease,box-shadow .28s ease!important;box-shadow:0 8px 20px rgba(108,59,232,.12);}
+.ring:after{width:64px!important;height:64px!important;}
+.ring-value{font-size:20px!important;}
+.ring.ring-animate{animation:ringPulse .54s cubic-bezier(.2,.8,.2,1);}
+@keyframes ringPulse{0%{transform:scale(.94);box-shadow:0 0 0 rgba(108,59,232,0)}55%{transform:scale(1.045);box-shadow:0 12px 28px rgba(108,59,232,.22)}100%{transform:scale(1);box-shadow:0 8px 20px rgba(108,59,232,.12)}}
+@media(min-width:700px){.summary-grid{grid-template-columns:1fr 1fr!important}.ring-wrap{grid-template-columns:92px minmax(0,1fr)!important}}
+@media(max-width:360px){.ring-wrap{grid-template-columns:82px minmax(0,1fr)!important;gap:12px!important}.ring{width:78px!important;height:78px!important}.ring:after{width:57px!important;height:57px!important}.summary-card{padding:13px!important}}
+
 </style>
 </head>
 <body>
@@ -41,7 +66,6 @@ button,input,textarea{font-family:inherit;} input,textarea{font-size:16px!import
   <div class="section-head"><div class="section-title" id="today-label">Today</div><button class="add-btn" onclick="openGoalSheet()"><i class="ti ti-plus"></i> Add goal</button></div>
   <div class="summary-grid"><div class="summary-card"><div class="summary-label">Today's progress</div><div class="ring-wrap"><div class="ring" id="today-ring" style="--p:0%"><span class="ring-value" id="today-percent">0%</span></div><div class="summary-copy" id="today-copy">No goals scheduled</div></div></div><div class="summary-card"><div class="summary-label">This week</div><div class="week-big" id="week-percent">0%</div><div class="week-sub" id="week-copy">Your weekly completion</div></div></div>
   <div class="goals" id="goals-list"><div class="empty">Loading...</div></div>
-  <div class="pending-save" id="pending-save"><button id="save-progress-btn" onclick="saveProgressChanges()">Save progress changes</button></div>
   <div class="card"><div class="card-title">Weekly goal graph</div><div class="card-sub">Completion percentage for each of the last 7 days.</div><div class="bars" id="weekly-bars"></div></div>
   <div class="section-head" style="margin-top:8px"><div class="section-title">Previous days</div></div>
   <div class="edit-note">You can correct entries for today and the previous 3 days only. Older days remain view-only to keep your history reliable.</div>
@@ -55,13 +79,6 @@ button,input,textarea{font-family:inherit;} input,textarea{font-size:16px!import
 <nav class="nav-bar"><a href="index.html" class="nav-item"><i class="ti ti-home"></i><span>Home</span></a><a href="whisper.html" class="nav-item"><i class="ti ti-ghost"></i><span>Ghost Box</span></a><a href="post.html" class="nav-fab"><i class="ti ti-plus"></i></a><a href="more.html" class="nav-item on"><i class="ti ti-layout-grid"></i><span>More</span></a><a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a></nav>
 
 
-<div id="theme-transition-layer" class="theme-transition-layer"></div>
-<script>
-(function(){const layer=document.getElementById('theme-transition-layer');const mode=sessionStorage.getItem('dormicThemeTransition');if(mode==='from-dark'){layer.classList.add('light','active');requestAnimationFrame(()=>requestAnimationFrame(()=>layer.classList.remove('active')));sessionStorage.removeItem('dormicThemeTransition');}
-window.DormicNavigate=function(href){if(/whisper\.html(?:$|[?#])/.test(href)){layer.classList.remove('light');layer.classList.add('active');sessionStorage.setItem('dormicThemeTransition','to-dark');setTimeout(()=>location.href=href,340);}else location.href=href;};
-document.addEventListener('click',e=>{const a=e.target.closest('a[href="whisper.html"]');if(!a||e.defaultPrevented)return;e.preventDefault();window.DormicNavigate(a.href);},true);})();
-</script>
-
 
 <div class="discard-modal" id="discard-modal"><div class="discard-card"><div class="discard-icon"><i class="ti ti-alert-triangle"></i></div><div class="discard-title">Discard changes?</div><div class="discard-copy">Your unsaved changes will be lost.</div><div class="discard-actions"><button class="discard-keep" id="discard-keep" type="button">Keep editing</button><button class="discard-leave" id="discard-leave" type="button">Discard</button></div></div></div>
 <script>
@@ -73,6 +90,28 @@ window.addEventListener('popstate',()=>{if(bypass){bypass=false;return}if(dirty)
 document.getElementById('discard-keep').onclick=()=>{const hist=pending?.type==='history';hide();if(hist)history.pushState({dormicGuard:true},'',location.href)};document.getElementById('discard-leave').onclick=()=>{const x=pending;dirty=false;hide();if(x?.type==='link'){window.DormicNavigate?window.DormicNavigate(x.href):location.href=x.href}else if(x?.type==='history'){bypass=true;history.back()}};modal.onclick=e=>{if(e.target===modal)document.getElementById('discard-keep').click()};window.DormicUnsaved={markDirty:()=>dirty=true,markSaved,setDirty,isDirty:()=>dirty};})();
 </script>
 
+<script>
+(function(){
+  if(sessionStorage.getItem('dormicThemeTransition')==='from-dark'){
+    document.body.classList.add('ghost-arrive');
+    sessionStorage.removeItem('dormicThemeTransition');
+    setTimeout(()=>document.body.classList.remove('ghost-arrive'),360);
+  }
+  window.DormicNavigate=function(href){
+    document.body.classList.add('ghost-leave');
+    sessionStorage.setItem('dormicThemeTransition','to-dark');
+    setTimeout(()=>location.href=href,220);
+  };
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href]');
+    if(!a||e.defaultPrevented||a.target==='_blank')return;
+    const h=a.getAttribute('href');
+    if(!h||!h.endsWith('whisper.html'))return;
+    e.preventDefault(); window.DormicNavigate(a.href);
+  },true);
+})();
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -81,14 +120,13 @@ import { firebaseConfig } from "./firebase-config.js";
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const dayLabels=['S','M','T','W','T','F','S'];
 const todayKey=localDateKey(new Date());
-let currentUser=null,goals=[],editingGoalId=null,editingDate=null,dayDraft={},pendingProgress={};
+let currentUser=null,goals=[],editingGoalId=null,editingDate=null,dayDraft={};
 function localDateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function dateFromKey(k){const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)}
 function esc(v=''){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function gradientFor(i){const g=['linear-gradient(135deg,#8B5CF6,#3B82F6)','linear-gradient(135deg,#10B981,#06B6D4)','linear-gradient(135deg,#F97316,#EC4899)','linear-gradient(135deg,#F59E0B,#EF4444)'];return g[i%g.length]}
 function isScheduled(g,d){const days=Array.isArray(g.days)&&g.days.length?g.days:[0,1,2,3,4,5,6];return days.includes(d.getDay())}
-function isDone(g,k){const pk=g.id+'|'+k;if(Object.prototype.hasOwnProperty.call(pendingProgress,pk))return Number(pendingProgress[pk]||0)===1;return Number((g.progress||{})[k]||0)===1}
-function syncPending(){const has=Object.keys(pendingProgress).length>0;document.getElementById('pending-save')?.classList.toggle('show',has);window.DormicUnsaved?.setDirty(has||window.DormicUnsaved?.isDirty())}
+function isDone(g,k){return Number((g.progress||{})[k]||0)===1}
 function pctForDate(d){const scheduled=goals.filter(g=>isScheduled(g,d));if(!scheduled.length)return 0;const done=scheduled.filter(g=>isDone(g,localDateKey(d))).length;return Math.round(done/scheduled.length*100)}
 function recentDays(n){const a=[];for(let i=n-1;i>=0;i--){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-i);a.push(d)}return a}
 function editableDate(k){const d=dateFromKey(k);const t=new Date();t.setHours(0,0,0,0);const diff=Math.floor((t-d)/(86400000));return diff>=0&&diff<=3}
@@ -97,22 +135,21 @@ function allHistoryDates(){const keys=new Set([todayKey]);goals.forEach(g=>Objec
 
 onAuthStateChanged(auth,user=>{if(!user){location.href='login.html';return}currentUser=user;document.getElementById('today-label').textContent=`Today — ${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short'})}`;const q=query(collection(db,'personalGoals',user.uid,'goals'),orderBy('createdAt','asc'));onSnapshot(q,s=>{goals=s.docs.map(d=>({id:d.id,...d.data()}));renderAll()},e=>document.getElementById('goals-list').innerHTML=`<div class="empty">Could not load goals.<br>${esc(e.message)}</div>`)});
 
-function renderAll(){renderSummary();renderToday();renderWeekly();renderHistory();syncPending()}
-function renderSummary(){const p=pctForDate(new Date());document.getElementById('today-ring').style.setProperty('--p',p+'%');document.getElementById('today-percent').textContent=p+'%';const scheduled=goals.filter(g=>isScheduled(g,new Date()));const done=scheduled.filter(g=>isDone(g,todayKey)).length;document.getElementById('today-copy').textContent=scheduled.length?`${done} of ${scheduled.length} goals completed`:'No goals scheduled';const days=recentDays(7),sum=days.reduce((a,d)=>a+pctForDate(d),0),wp=Math.round(sum/7);document.getElementById('week-percent').textContent=wp+'%';document.getElementById('week-copy').textContent='Average completion across 7 days'}
+function renderAll(){renderSummary();renderToday();renderWeekly();renderHistory()}
+function renderSummary(){const p=pctForDate(new Date()),ring=document.getElementById('today-ring'),num=document.getElementById('today-percent'),oldP=parseInt(num.dataset.value||'0',10);ring.classList.remove('ring-animate');void ring.offsetWidth;ring.style.setProperty('--p',p+'%');ring.classList.add('ring-animate');num.dataset.value=p;const start=performance.now(),dur=620;function tick(t){const k=Math.min(1,(t-start)/dur),v=Math.round(oldP+(p-oldP)*(1-Math.pow(1-k,3)));num.textContent=v+'%';if(k<1)requestAnimationFrame(tick)}requestAnimationFrame(tick);const scheduled=goals.filter(g=>isScheduled(g,new Date()));const done=scheduled.filter(g=>isDone(g,todayKey)).length;document.getElementById('today-copy').textContent=scheduled.length?`${done} of ${scheduled.length} goals completed`:'No goals scheduled';const days=recentDays(7),sum=days.reduce((a,d)=>a+pctForDate(d),0),wp=Math.round(sum/7);document.getElementById('week-percent').textContent=wp+'%';document.getElementById('week-copy').textContent='Average completion across 7 days'}
 function renderToday(){const el=document.getElementById('goals-list');if(!goals.length){el.innerHTML=`<div class="empty"><i class="ti ti-target-arrow"></i><div class="empty-title">No goals yet</div><div class="empty-sub">Add your first personal goal and start tracking today.</div><button class="add-btn" onclick="openGoalSheet()">Add goal</button></div>`;return}el.innerHTML=goals.map((g,i)=>{const scheduled=isScheduled(g,new Date()),done=isDone(g,todayKey);return `<div class="goal"><div class="goal-head"><div class="goal-icon" style="background:${gradientFor(i)}"><i class="ti ti-target-arrow"></i></div><div><div class="goal-name">${esc(g.name)}</div><div class="goal-sub">${esc(g.description||'Daily yes/no goal')}<br>${activeDayNames(g)}</div></div><div class="goal-actions"><button class="icon-btn" onclick="openGoalSheet('${g.id}')"><i class="ti ti-pencil"></i></button><button class="icon-btn" onclick="quickDelete('${g.id}')"><i class="ti ti-trash"></i></button></div></div><div class="check-row"><span class="schedule-note">${scheduled?'Scheduled today':'Not scheduled today'}</span>${scheduled?`<button class="done-btn ${done?'on':''}" onclick="toggleToday('${g.id}',${done})"><i class="ti ti-check"></i>${done?'Done':'Mark done'}</button>`:`<button class="done-btn offday" disabled>Rest day</button>`}</div></div>`}).join('')}
 function renderWeekly(){const days=recentDays(7);document.getElementById('weekly-bars').innerHTML=days.map(d=>{const p=pctForDate(d);return `<div class="bar-col"><div class="bar-pct">${p}%</div><div class="bar-track"><div class="bar-fill" style="height:${p}%"></div></div><div class="bar-day">${d.toLocaleDateString('en-IN',{weekday:'narrow'})}<br>${d.getDate()}</div></div>`}).join('')}
 function renderHistory(){const el=document.getElementById('history-list'),dates=allHistoryDates();if(!goals.length||!dates.length){el.innerHTML='<div class="empty" style="padding:28px">No saved history yet.</div>';return}el.innerHTML=dates.map(k=>{const d=dateFromKey(k),scheduled=goals.filter(g=>isScheduled(g,d)),done=scheduled.filter(g=>isDone(g,k)),p=scheduled.length?Math.round(done.length/scheduled.length*100):0;const chips=goals.map(g=>{if(!isScheduled(g,d))return `<span class="hist-chip skip">${esc(g.name)} · off</span>`;return `<span class="hist-chip ${isDone(g,k)?'done':''}">${esc(g.name)} · ${isDone(g,k)?'done':'not done'}</span>`}).join('');return `<div class="history-row"><div class="history-top"><div class="history-date">${d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</div><div class="history-score">${p}%</div></div><div class="history-items">${chips}</div>${editableDate(k)?`<button class="edit-day" onclick="openDaySheet('${k}')"><i class="ti ti-pencil"></i> Edit this day</button>`:''}</div>`}).join('')}
 
-window.toggleToday=(id,done)=>{pendingProgress[id+'|'+todayKey]=done?0:1;window.DormicUnsaved?.markDirty();renderAll();const ring=document.getElementById('today-ring');ring?.classList.remove('ring-pop');void ring?.offsetWidth;ring?.classList.add('ring-pop');if(!done){navigator.vibrate?.(35)}};
-window.saveProgressChanges=async()=>{const btn=document.getElementById('save-progress-btn');if(!currentUser||!Object.keys(pendingProgress).length)return;btn.disabled=true;btn.textContent='Saving...';try{const grouped={};for(const [key,value] of Object.entries(pendingProgress)){const i=key.indexOf('|'),id=key.slice(0,i),date=key.slice(i+1);(grouped[id]??={})['progress.'+date]=value}await Promise.all(Object.entries(grouped).map(([id,data])=>updateDoc(doc(db,'personalGoals',currentUser.uid,'goals',id),data)));pendingProgress={};window.DormicUnsaved?.markSaved();syncPending()}catch(e){alert('Could not save progress: '+e.message)}finally{btn.disabled=false;btn.textContent='Save progress changes'}};
+window.toggleToday=async(id,done)=>{try{await updateDoc(doc(db,'personalGoals',currentUser.uid,'goals',id),{[`progress.${todayKey}`]:done?0:1})}catch(e){alert('Could not update goal: '+e.message)}};
 window.openGoalSheet=id=>{editingGoalId=id||null;const g=goals.find(x=>x.id===id);document.getElementById('goal-sheet-title').textContent=g?'Edit goal':'Add a goal';document.getElementById('goal-name').value=g?.name||'';document.getElementById('goal-desc').value=g?.description||'';document.getElementById('delete-goal-btn').style.display=g?'block':'none';buildDayPicker(g?.days||[0,1,2,3,4,5,6]);showSheet('goal-sheet');setTimeout(()=>document.getElementById('goal-name').focus(),250)};
-function buildDayPicker(selected){document.getElementById('days-pick').innerHTML=dayLabels.map((l,i)=>`<button type="button" class="day-pick ${selected.includes(i)?'on':''}" data-day="${i}" onclick="this.classList.toggle('on');window.DormicUnsaved?.markDirty()">${l}</button>`).join('')}
-window.saveGoal=async()=>{const name=document.getElementById('goal-name').value.trim(),description=document.getElementById('goal-desc').value.trim(),days=[...document.querySelectorAll('.day-pick.on')].map(x=>Number(x.dataset.day));if(!name){alert('Enter a goal name');return}if(!days.length){alert('Select at least one active day');return}const btn=document.getElementById('save-btn');btn.disabled=true;btn.textContent='Saving...';try{if(editingGoalId)await updateDoc(doc(db,'personalGoals',currentUser.uid,'goals',editingGoalId),{name,description,days,type:'yesno'});else await addDoc(collection(db,'personalGoals',currentUser.uid,'goals'),{name,description,days,type:'yesno',progress:{},createdAt:serverTimestamp()});closeAllSheets();window.DormicUnsaved?.setDirty(Object.keys(pendingProgress).length>0)}catch(e){alert('Could not save goal: '+e.message)}finally{btn.disabled=false;btn.textContent='Save goal'}};
+function buildDayPicker(selected){document.getElementById('days-pick').innerHTML=dayLabels.map((l,i)=>`<button type="button" class="day-pick ${selected.includes(i)?'on':''}" data-day="${i}" onclick="this.classList.toggle('on')">${l}</button>`).join('')}
+window.saveGoal=async()=>{const name=document.getElementById('goal-name').value.trim(),description=document.getElementById('goal-desc').value.trim(),days=[...document.querySelectorAll('.day-pick.on')].map(x=>Number(x.dataset.day));if(!name){alert('Enter a goal name');return}if(!days.length){alert('Select at least one active day');return}const btn=document.getElementById('save-btn');btn.disabled=true;btn.textContent='Saving...';try{if(editingGoalId)await updateDoc(doc(db,'personalGoals',currentUser.uid,'goals',editingGoalId),{name,description,days,type:'yesno'});else await addDoc(collection(db,'personalGoals',currentUser.uid,'goals'),{name,description,days,type:'yesno',progress:{},createdAt:serverTimestamp()});closeAllSheets()}catch(e){alert('Could not save goal: '+e.message)}finally{btn.disabled=false;btn.textContent='Save goal'}};
 window.quickDelete=id=>{editingGoalId=id;deleteCurrentGoal()};
 window.deleteCurrentGoal=async()=>{const g=goals.find(x=>x.id===editingGoalId);if(!g)return;if(!confirm(`Delete "${g.name}" and all its saved history?`))return;try{await deleteDoc(doc(db,'personalGoals',currentUser.uid,'goals',g.id));closeAllSheets()}catch(e){alert('Could not delete goal: '+e.message)}};
 window.openDaySheet=k=>{if(!editableDate(k))return;editingDate=k;const d=dateFromKey(k);document.getElementById('day-sheet-title').textContent=`Edit ${d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})}`;dayDraft={};goals.forEach(g=>dayDraft[g.id]=isDone(g,k));document.getElementById('day-edit-list').innerHTML=goals.map(g=>{const scheduled=isScheduled(g,d);return `<div class="day-edit-row"><div><div class="day-edit-name">${esc(g.name)}</div><div class="goal-sub">${scheduled?'Scheduled':'Not scheduled on this day'}</div></div><button class="mini-check ${dayDraft[g.id]?'on':''}" ${scheduled?'':'disabled'} onclick="toggleDayDraft('${g.id}',this)"><i class="ti ti-check"></i></button></div>`}).join('');showSheet('day-sheet')};
-window.toggleDayDraft=(id,el)=>{dayDraft[id]=!dayDraft[id];el.classList.toggle('on',dayDraft[id]);window.DormicUnsaved?.markDirty()};
-window.saveDayEdits=async()=>{try{await Promise.all(goals.map(g=>updateDoc(doc(db,'personalGoals',currentUser.uid,'goals',g.id),{[`progress.${editingDate}`]:dayDraft[g.id]?1:0})));closeAllSheets();window.DormicUnsaved?.setDirty(Object.keys(pendingProgress).length>0)}catch(e){alert('Could not save changes: '+e.message)}};
+window.toggleDayDraft=(id,el)=>{dayDraft[id]=!dayDraft[id];el.classList.toggle('on',dayDraft[id])};
+window.saveDayEdits=async()=>{try{await Promise.all(goals.map(g=>updateDoc(doc(db,'personalGoals',currentUser.uid,'goals',g.id),{[`progress.${editingDate}`]:dayDraft[g.id]?1:0})));closeAllSheets()}catch(e){alert('Could not save changes: '+e.message)}};
 function showSheet(id){document.getElementById('overlay').classList.add('show');document.getElementById(id).classList.add('show')}
 window.closeAllSheets=()=>{document.getElementById('overlay').classList.remove('show');document.querySelectorAll('.sheet').forEach(x=>x.classList.remove('show'));editingGoalId=null;editingDate=null};
 </script>

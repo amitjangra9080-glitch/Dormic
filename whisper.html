@@ -80,7 +80,20 @@ body{background:#0f0f1e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   }
 }
 
-.theme-transition-layer{position:fixed;inset:0;z-index:12000;pointer-events:none;opacity:0;transition:opacity .34s ease;background:#0f0f1e}.theme-transition-layer.light{background:#fff}.theme-transition-layer.active{opacity:1}@media(prefers-reduced-motion:reduce){.theme-transition-layer{transition:none}}
+
+
+/* Unified bottom navigation + subtle Ghost Mode transition */
+.nav-bar{height:60px!important;padding:0 6px env(safe-area-inset-bottom)!important;box-sizing:content-box!important;justify-content:center!important;align-items:center!important;}
+.nav-bar>.nav-item,.nav-bar>.nav-fab{width:20%!important;min-width:0!important;height:60px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;}
+.nav-bar>.nav-item{flex-direction:column!important;gap:2px!important;font-size:22px!important;}
+.nav-bar>.nav-item span{font-size:10px!important;line-height:1!important;}
+.nav-bar>.nav-fab{border-radius:0!important;background:none!important;font-size:20px!important;}
+.nav-bar>.nav-fab i{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:grid;place-items:center;color:#fff;}
+body{transition:opacity .22s ease,transform .22s ease,filter .22s ease;transform-origin:center bottom;}
+body.ghost-arrive{animation:ghostArrive .32s cubic-bezier(.2,.8,.2,1);}
+body.ghost-leave{opacity:.38;transform:translateY(5px) scale(.992);filter:brightness(1.18) saturate(.65);}
+@keyframes ghostArrive{from{opacity:.28;transform:translateY(7px) scale(.99);filter:brightness(1.35) saturate(.55)}to{opacity:1;transform:none;filter:none}}
+@media(prefers-reduced-motion:reduce){body{transition:none!important}body.ghost-arrive{animation:none!important}}
 
 </style>
 </head>
@@ -101,7 +114,7 @@ body{background:#0f0f1e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 <div class="desc-bar">
   <i class="ti ti-shield-lock" style="font-size:13px;"></i>
-  Your thoughts, your voice — anonymous to everyone in the hostel
+  No names. No judgement. Just hostel thoughts after lights-out 👻
 </div>
 
 <div class="chat-feed" id="chat-feed">
@@ -114,7 +127,7 @@ body{background:#0f0f1e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <button class="reply-ctx-close" onclick="cancelReply()"><i class="ti ti-x"></i></button>
   </div>
   <div class="input-row">
-    <div class="msg-input" id="msg-input" contenteditable="true" data-placeholder="Say something anonymously..." oninput="updateCharCount()"></div>
+    <div class="msg-input" id="msg-input" contenteditable="true" data-placeholder="Drop the thought your group chat isn’t ready for..." oninput="updateCharCount()"></div>
     <button class="send-btn" id="send-btn" onclick="sendMessage()"><i class="ti ti-send"></i></button>
   </div>
   <div class="char-count" id="char-count">0 / 200 words</div>
@@ -129,11 +142,26 @@ body{background:#0f0f1e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 </nav>
 
 
-<div id="theme-transition-layer" class="theme-transition-layer"></div>
 <script>
-(function(){const layer=document.getElementById('theme-transition-layer');const mode=sessionStorage.getItem('dormicThemeTransition');if(mode==='to-dark'){layer.classList.add('active');requestAnimationFrame(()=>requestAnimationFrame(()=>layer.classList.remove('active')));sessionStorage.removeItem('dormicThemeTransition');}
-window.DormicNavigate=function(href){layer.classList.add('light','active');sessionStorage.setItem('dormicThemeTransition','from-dark');setTimeout(()=>location.href=href,340);};
-document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a||e.defaultPrevented||a.target==='_blank')return;const h=a.getAttribute('href');if(!h||h==='whisper.html'||h.startsWith('#')||h.startsWith('javascript:')||/^https?:/i.test(h))return;e.preventDefault();window.DormicNavigate(a.href);},true);})();
+(function(){
+  if(sessionStorage.getItem('dormicThemeTransition')==='to-dark'){
+    document.body.classList.add('ghost-arrive');
+    sessionStorage.removeItem('dormicThemeTransition');
+    setTimeout(()=>document.body.classList.remove('ghost-arrive'),380);
+  }
+  window.DormicNavigate=function(href){
+    document.body.classList.add('ghost-leave');
+    sessionStorage.setItem('dormicThemeTransition','from-dark');
+    setTimeout(()=>location.href=href,220);
+  };
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href]');
+    if(!a||e.defaultPrevented||a.target==='_blank')return;
+    const h=a.getAttribute('href');
+    if(!h||h==='whisper.html'||h.startsWith('#')||h.startsWith('javascript:')||/^https?:/i.test(h))return;
+    e.preventDefault(); window.DormicNavigate(a.href);
+  },true);
+})();
 </script>
 
 <script type="module">
