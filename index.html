@@ -68,17 +68,18 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .notify-txt{font-size:12px;color:#555;line-height:1.4;}
 .notify-btn{font-size:12px;font-weight:600;background:linear-gradient(90deg,#F47B33,#EE4654);color:#fff;border:none;border-radius:20px;padding:5px 14px;cursor:pointer;white-space:nowrap;}
 
-.loading{display:flex;flex-direction:column;align-items:center;gap:9px;}
-.feed-loading-logo{font-family:'Fredoka One',cursive;font-size:28px;background:linear-gradient(90deg,#F47B33,#EE4654,#B65CE0,#6B7BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:feedLogoFloat 1.5s ease-in-out infinite;}
-.loading-dots{display:flex;gap:5px}.loading-dots i{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#F47B33,#6B7BFA);animation:feedDot 1s infinite}.loading-dots i:nth-child(2){animation-delay:.15s}.loading-dots i:nth-child(3){animation-delay:.3s}
-.card.new-post-card{animation:newPostSlide .6s cubic-bezier(.2,.8,.2,1)}
-.empty-anim{font-size:48px;color:#B65CE0;margin-bottom:14px;display:inline-block}.empty-anim.search{animation:emptySearch 1.8s ease-in-out infinite}.empty-anim.bus{animation:emptyBus 2s ease-in-out infinite}.empty-anim.float{animation:emptyFloat 1.8s ease-in-out infinite}.empty-img{animation:emptyFloat 2.2s ease-in-out infinite}
-@keyframes feedLogoFloat{50%{transform:translateY(-5px) scale(1.02)}}
-@keyframes feedDot{50%{transform:translateY(-5px);opacity:.55}}
-@keyframes newPostSlide{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
-@keyframes emptySearch{50%{transform:translate(6px,-4px) rotate(-8deg)}}
-@keyframes emptyBus{50%{transform:translateX(18px)}}
-@keyframes emptyFloat{50%{transform:translateY(-7px)}}
+.loading-logo{width:54px;height:54px;margin:0 auto 10px;animation:logoFloat 1.35s ease-in-out infinite}.loading-dots{display:flex;justify-content:center;gap:5px}.loading-dots i{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#F47B33,#B65CE0);animation:dotBounce 1s infinite}.loading-dots i:nth-child(2){animation-delay:.14s}.loading-dots i:nth-child(3){animation-delay:.28s}.card.posted-in{animation:postSlide .48s cubic-bezier(.2,.8,.2,1)}.empty-motion{font-size:48px;margin-bottom:13px;color:#B65CE0;display:inline-block}.empty-motion.searching{animation:searchMove 1.8s ease-in-out infinite}.empty-motion.bus{animation:busMove 2s ease-in-out infinite}.empty-motion.box{animation:boxBob 1.8s ease-in-out infinite}.feed-toast{position:fixed;left:50%;bottom:76px;transform:translate(-50%,18px);background:#262626;color:#fff;padding:10px 16px;border-radius:22px;font-size:13px;opacity:0;z-index:300;transition:.25s}.feed-toast.show{opacity:1;transform:translate(-50%,0)}
+@keyframes logoFloat{50%{transform:translateY(-5px) rotate(-2deg)}}@keyframes dotBounce{50%{transform:translateY(-6px);opacity:.55}}@keyframes postSlide{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}@keyframes searchMove{50%{transform:translateX(8px) rotate(8deg)}}@keyframes busMove{0%,100%{transform:translateX(-8px)}50%{transform:translateX(8px)}}@keyframes boxBob{50%{transform:translateY(-6px)}}
+
+/* Dormic light/dark page transition */
+.theme-transition-layer{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0;transition:opacity .34s ease;background:#0f0f1e;}
+.theme-transition-layer.light{background:#fff;}
+.theme-transition-layer.active{opacity:1;}
+@media (prefers-reduced-motion:reduce){.theme-transition-layer{transition:none;}}
+
+
+.theme-transition-layer{position:fixed;inset:0;z-index:12000;pointer-events:none;opacity:0;transition:opacity .34s ease;background:#0f0f1e}.theme-transition-layer.light{background:#fff}.theme-transition-layer.active{opacity:1}@media(prefers-reduced-motion:reduce){.theme-transition-layer{transition:none}}
+
 </style>
 </head>
 <body>
@@ -123,9 +124,10 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 </div>
 
 <div class="feed" id="feed">
-  <div class="loading"><div class="feed-loading-logo">Dormic</div><div class="loading-dots"><i></i><i></i><i></i></div><span>Loading posts...</span></div>
+  <div class="loading"><img src="icon.png" class="loading-logo" alt="Dormic"/><div>Refreshing hostel feed</div><div class="loading-dots"><i></i><i></i><i></i></div></div>
 </div>
 
+<div class="feed-toast" id="feed-toast">Posted to the hostel</div>
 <nav class="nav-bar">
   <a href="index.html" class="nav-item on"><i class="ti ti-home"></i><span>Home</span></a>
   <a href="whisper.html" class="nav-item"><i class="ti ti-ghost"></i><span>Ghost Box</span></a>
@@ -134,10 +136,18 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
 </nav>
 
+
+<div id="theme-transition-layer" class="theme-transition-layer"></div>
+<script>
+(function(){const layer=document.getElementById('theme-transition-layer');const mode=sessionStorage.getItem('dormicThemeTransition');if(mode==='from-dark'){layer.classList.add('light','active');requestAnimationFrame(()=>requestAnimationFrame(()=>layer.classList.remove('active')));sessionStorage.removeItem('dormicThemeTransition');}
+window.DormicNavigate=function(href){if(/whisper\.html(?:$|[?#])/.test(href)){layer.classList.remove('light');layer.classList.add('active');sessionStorage.setItem('dormicThemeTransition','to-dark');setTimeout(()=>location.href=href,340);}else location.href=href;};
+document.addEventListener('click',e=>{const a=e.target.closest('a[href="whisper.html"]');if(!a||e.defaultPrevented)return;e.preventDefault();window.DormicNavigate(a.href);},true);})();
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc, setDoc, deleteDoc, getDocs, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc, setDoc, deleteDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
@@ -234,27 +244,9 @@ document.querySelectorAll('.pill').forEach(pill => {
   });
 });
 
-const RESOLVED_FEED_LIFETIME_MS = 3 * 24 * 60 * 60 * 1000;
-
-function timestampToMillis(value){
-  if(!value) return null;
-  if(typeof value.toMillis === 'function') return value.toMillis();
-  if(typeof value.seconds === 'number') return value.seconds * 1000;
-  const parsed = new Date(value).getTime();
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
-function shouldShowInPublicFeed(post){
-  if(post.status !== 'resolved') return true;
-  const resolvedTime = timestampToMillis(post.resolvedAt);
-  // Older resolved posts without a timestamp stay visible for compatibility.
-  if(!resolvedTime) return true;
-  return Date.now() - resolvedTime < RESOLVED_FEED_LIFETIME_MS;
-}
-
 function renderFeed() {
   const feed = document.getElementById('feed');
-  let posts = allPosts.filter(shouldShowInPublicFeed);
+  let posts = allPosts;
   if(currentFilter === 'lost-found') posts = posts.filter(p => ['lost','found'].includes(p.type));
   else if(currentFilter === 'donate-need') posts = posts.filter(p => ['have','donate','need'].includes(p.type));
   else if(currentFilter === 'sell-buy') posts = posts.filter(p => ['sell','buy'].includes(p.type));
@@ -264,16 +256,7 @@ function renderFeed() {
   const resolved = posts.filter(p => p.status === 'resolved');
 
   if(posts.length === 0) {
-    const emptyByFilter={
-      'lost-found':['ti-search','search','Nothing lost or found yet','Be the first to help the hostel find something.'],
-      'sell-buy':['ti-tag','float','No marketplace posts yet','Buy or sell something within the hostel.'],
-      'donate-need':['ti-package','float','No donate or need posts yet','Ask the hostel or pass something useful forward.'],
-      'travel':['ti-bus','bus','No travel posts yet','Add a route, parcel, or travel request.']
-    };
-    const e=emptyByFilter[currentFilter];
-    feed.innerHTML=e
-      ? `<div class="empty-state"><i class="ti ${e[0]} empty-anim ${e[1]}"></i><div class="empty-title">${e[2]}</div><div class="empty-sub">${e[3]}</div></div>`
-      : `<div class="empty-state"><img src="ajanta-illustration.png" class="empty-img" alt="Ajanta Hostel No. 3"/><div class="empty-title">No posts yet</div><div class="empty-sub">Be the first to post something</div></div>`;
+    const emptyByFilter={'lost-found':['ti-search','searching','Nothing lost or found yet'],'travel':['ti-bus','bus','No travel updates yet'],'sell-buy':['ti-shopping-bag','box','No buy or sell posts yet'],'donate-need':['ti-package','box','No donate or need posts yet'],'all':['ti-home-heart','box','No hostel posts yet']};const e=emptyByFilter[currentFilter]||emptyByFilter.all;feed.innerHTML=`<div class="empty-state"><i class="ti ${e[0]} empty-motion ${e[1]}"></i><div class="empty-title">${e[2]}</div><div class="empty-sub">Be the first to post something</div></div>`;
     return;
   }
 
@@ -283,12 +266,7 @@ function renderFeed() {
     html += `<div class="resolved-label">Resolved</div>`;
     resolved.forEach(p => { html += buildCard(p, true); });
   }
-  feed.innerHTML = html;
-  if(sessionStorage.getItem('dormic_post_just_added')){
-    const firstCard=feed.querySelector('.card:not(.resolved-section)');
-    if(firstCard){firstCard.classList.add('new-post-card');setTimeout(()=>firstCard.classList.remove('new-post-card'),700);}
-    sessionStorage.removeItem('dormic_post_just_added');
-  }
+  feed.innerHTML = html;if(sessionStorage.getItem('dormic_post_just_added')==='1'){sessionStorage.removeItem('dormic_post_just_added');const first=feed.querySelector('.card');first?.classList.add('posted-in');const toast=document.getElementById('feed-toast');toast?.classList.add('show');setTimeout(()=>toast?.classList.remove('show'),1800);}
 }
 
 function buildCard(p, isResolved) {
@@ -368,7 +346,7 @@ function buildCard(p, isResolved) {
 }
 
 window.resolvePost = async function(id) {
-  await updateDoc(doc(db,'posts',id), {status:'resolved', resolvedAt:serverTimestamp()});
+  await updateDoc(doc(db,'posts',id), {status:'resolved'});
 };
 
 window.requestNotify = function() {
@@ -493,5 +471,28 @@ function timeAgo(ms) {
   return new Date(ms).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
 }
 </script>
+
+<div id="theme-transition-layer" class="theme-transition-layer"></div>
+<script>
+(function(){
+  const layer=document.getElementById('theme-transition-layer');
+  const mode=sessionStorage.getItem('dormicThemeTransition');
+  if(mode==='from-dark'){
+    layer.classList.add('light','active');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>layer.classList.remove('active')));
+    sessionStorage.removeItem('dormicThemeTransition');
+  }
+  document.addEventListener('click',function(e){
+    const link=e.target.closest('a[href="whisper.html"]');
+    if(!link || e.defaultPrevented) return;
+    e.preventDefault();
+    layer.classList.remove('light');
+    layer.classList.add('active');
+    sessionStorage.setItem('dormicThemeTransition','to-dark');
+    setTimeout(()=>{location.href=link.href;},340);
+  },true);
+})();
+</script>
+
 </body>
 </html>

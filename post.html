@@ -28,7 +28,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 /* DESCRIPTION */
 .cat-desc{font-size:13px;color:#B65CE0;background:#ede9fe;border-radius:10px;padding:10px 13px;margin-bottom:16px;line-height:1.5;display:none;}
 .cat-desc.show{display:block;}
-.inp{width:100%;border:0.5px solid #e5e5e5;border-radius:10px;background:#fff;font-size:16px;color:#262626;padding:12px 14px;margin-bottom:14px;outline:none;font-family:inherit;}
+.inp{width:100%;border:0.5px solid #e5e5e5;border-radius:10px;background:#fff;font-size:15px;color:#262626;padding:12px 14px;margin-bottom:14px;outline:none;font-family:inherit;}
 .inp:focus{border-color:#B65CE0;}
 .inp::placeholder{color:#bbb;}
 .inp.error{border-color:#e53935 !important;}
@@ -46,10 +46,17 @@ textarea.inp{min-height:80px;resize:none;}
 .msg.error{background:#fee2e2;color:#a32d2d;display:block;}
 .section-div{font-size:11px;color:#B65CE0;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin:16px 0 12px;padding-bottom:6px;border-bottom:0.5px solid #ede9fe;}
 
-.post-success-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);background:#18763a;color:#fff;padding:11px 17px;border-radius:22px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.28s;z-index:500;box-shadow:0 8px 25px rgba(0,0,0,.18)}
-.post-success-toast.show{opacity:1;transform:translate(-50%,0)}
-.btn.post-success{background:linear-gradient(90deg,#10B981,#22C55E);animation:postButtonPop .45s ease}
-@keyframes postButtonPop{50%{transform:scale(1.035)}}
+@media (max-width: 768px){
+  input, textarea, select, [contenteditable="true"]{
+    font-size:16px !important;
+  }
+}
+
+.theme-transition-layer{position:fixed;inset:0;z-index:12000;pointer-events:none;opacity:0;transition:opacity .34s ease;background:#0f0f1e}.theme-transition-layer.light{background:#fff}.theme-transition-layer.active{opacity:1}@media(prefers-reduced-motion:reduce){.theme-transition-layer{transition:none}}
+
+
+.discard-modal{position:fixed;inset:0;background:rgba(17,24,39,.48);z-index:13000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}.discard-modal.show{display:flex}.discard-card{width:min(360px,100%);background:#fff;border-radius:20px;padding:24px 20px 18px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.22);animation:discardPop .22s ease}.discard-icon{width:54px;height:54px;border-radius:17px;margin:0 auto 13px;display:grid;place-items:center;font-size:27px;color:#fff;background:linear-gradient(135deg,#F47B33,#EE4654,#B65CE0,#6B7BFA)}.discard-title{font-size:19px;font-weight:800;color:#202124;margin-bottom:7px}.discard-copy{font-size:14px;line-height:1.5;color:#74747d;margin-bottom:19px}.discard-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.discard-keep,.discard-leave{height:44px;border-radius:12px;font:600 14px inherit;cursor:pointer}.discard-keep{background:#fff;border:1px solid #dedee5;color:#333}.discard-leave{border:0;color:#fff;background:linear-gradient(90deg,#EE4654,#B65CE0)}@keyframes discardPop{from{opacity:0;transform:scale(.94) translateY(8px)}to{opacity:1;transform:none}}
+
 </style>
 </head>
 <body>
@@ -58,7 +65,6 @@ textarea.inp{min-height:80px;resize:none;}
   <span class="top-title">New post</span>
   <span></span>
 </div>
-<div class="post-success-toast" id="post-success-toast"><i class="ti ti-check"></i> Posted to the hostel</div>
 <div class="main">
   <div class="msg" id="post-msg"></div>
 
@@ -173,6 +179,25 @@ textarea.inp{min-height:80px;resize:none;}
 
   <button class="btn" id="submit-btn" onclick="submitPost()" style="display:none;">Post</button>
 </div>
+
+
+<div id="theme-transition-layer" class="theme-transition-layer"></div>
+<script>
+(function(){const layer=document.getElementById('theme-transition-layer');const mode=sessionStorage.getItem('dormicThemeTransition');if(mode==='from-dark'){layer.classList.add('light','active');requestAnimationFrame(()=>requestAnimationFrame(()=>layer.classList.remove('active')));sessionStorage.removeItem('dormicThemeTransition');}
+window.DormicNavigate=function(href){if(/whisper\.html(?:$|[?#])/.test(href)){layer.classList.remove('light');layer.classList.add('active');sessionStorage.setItem('dormicThemeTransition','to-dark');setTimeout(()=>location.href=href,340);}else location.href=href;};
+document.addEventListener('click',e=>{const a=e.target.closest('a[href="whisper.html"]');if(!a||e.defaultPrevented)return;e.preventDefault();window.DormicNavigate(a.href);},true);})();
+</script>
+
+
+<div class="discard-modal" id="discard-modal"><div class="discard-card"><div class="discard-icon"><i class="ti ti-alert-triangle"></i></div><div class="discard-title">Discard changes?</div><div class="discard-copy">Your unsaved changes will be lost.</div><div class="discard-actions"><button class="discard-keep" id="discard-keep" type="button">Keep editing</button><button class="discard-leave" id="discard-leave" type="button">Discard</button></div></div></div>
+<script>
+(function(){let dirty=false,pending=null,bypass=false;const modal=document.getElementById('discard-modal');history.replaceState({dormicBase:true},'',location.href);history.pushState({dormicGuard:true},'',location.href);
+function show(x){pending=x;modal.classList.add('show')}function hide(){modal.classList.remove('show');pending=null}function setDirty(v=true){dirty=!!v}function markSaved(){dirty=false}
+document.addEventListener('input',e=>{if(e.target.matches('input,textarea,select'))dirty=true},true);document.addEventListener('change',e=>{if(e.target.matches('input,textarea,select'))dirty=true},true);document.addEventListener('click',e=>{if(e.target.closest('.group-chip,.sub-chip,.star,.photo-box,.cbtn,.tp,.ta,.check,.chip.editable,.pick,.done-btn,.circle-btn,.type,.mini-check,.day-pick'))dirty=true},true);
+document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a||!dirty||e.defaultPrevented||a.target==='_blank')return;const h=a.getAttribute('href');if(!h||h.startsWith('#')||h.startsWith('javascript:'))return;e.preventDefault();e.stopImmediatePropagation();show({type:'link',href:a.href})},true);
+window.addEventListener('popstate',()=>{if(bypass){bypass=false;return}if(dirty)show({type:'history'});else{bypass=true;history.back()}});window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
+document.getElementById('discard-keep').onclick=()=>{const hist=pending?.type==='history';hide();if(hist)history.pushState({dormicGuard:true},'',location.href)};document.getElementById('discard-leave').onclick=()=>{const x=pending;dirty=false;hide();if(x?.type==='link'){window.DormicNavigate?window.DormicNavigate(x.href):location.href=x.href}else if(x?.type==='history'){bypass=true;history.back()}};modal.onclick=e=>{if(e.target===modal)document.getElementById('discard-keep').click()};window.DormicUnsaved={markDirty:()=>dirty=true,markSaved,setDirty,isDirty:()=>dirty};})();
+</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -424,13 +449,7 @@ window.submitPost = async function(){
         createdAt:serverTimestamp()
       });
     }
-    btn.classList.add('post-success');
-    btn.innerHTML='<i class="ti ti-check"></i> Posted';
-    const toast=document.getElementById('post-success-toast');
-    toast.classList.add('show');
-    navigator.vibrate?.(30);
-    sessionStorage.setItem('dormic_post_just_added','1');
-    setTimeout(()=>{window.location.href='index.html';},1000);
+    window.location.href='index.html';
   }catch(e){
     msg.className='msg error';msg.textContent='Error: '+e.message;
     btn.disabled=false;btn.textContent='Post';

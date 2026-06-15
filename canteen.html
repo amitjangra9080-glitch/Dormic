@@ -33,7 +33,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .cnum{font-size:15px;font-weight:600;color:#262626;min-width:20px;text-align:center;}
 .custom-section{background:#fff;margin-top:8px;padding:16px;}
 .custom-row{display:flex;gap:8px;width:100%;align-items:stretch;}
-.custom-row input{flex:1;min-width:0;border:0.5px solid #e5e5e5;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;outline:none;}
+.custom-row input{flex:1;min-width:0;border:0.5px solid #e5e5e5;border-radius:10px;padding:11px 13px;font-size:16px;font-family:inherit;outline:none;}
 .custom-row input:focus{border-color:#B65CE0;}
 .custom-row input[type="number"]{flex:0 0 72px;min-width:0;}
 .add-btn{flex:0 0 auto;padding:0 14px;height:42px;background:linear-gradient(90deg,#F47B33,#EE4654);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
@@ -61,18 +61,15 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   .scard{padding:12px 8px;}
   .custom-section{padding:14px 12px;}
   .custom-row{gap:6px;}
-  .custom-row input{padding:10px 10px;font-size:13px;}
+  .custom-row input{padding:10px 10px;font-size:16px;}
   .custom-row input[type="number"]{flex-basis:60px;}
   .add-btn{padding:0 11px;font-size:13px;}
   .item-row{padding:12px;gap:8px;}
   .counter{gap:7px;}
 }
 
-.item-row.canteen-item-glow{animation:canteenGlow .48s ease}.cnum.canteen-count-pop{animation:canteenCount .3s ease}.snum.canteen-total-pop{animation:canteenTotal .38s ease}.saved-badge.canteen-receipt{display:block!important;animation:canteenReceipt .52s cubic-bezier(.2,.8,.2,1)}
-@keyframes canteenGlow{50%{background:#fff7ed;box-shadow:inset 4px 0 #F47B33}}
-@keyframes canteenCount{50%{transform:scale(1.35);color:#E8398A}}
-@keyframes canteenTotal{50%{transform:scale(1.1)}}
-@keyframes canteenReceipt{from{opacity:0;transform:translateY(-12px) rotate(-1deg)}to{opacity:1;transform:none}}
+.discard-modal{position:fixed;inset:0;background:rgba(17,24,39,.48);z-index:13000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}.discard-modal.show{display:flex}.discard-card{width:min(360px,100%);background:#fff;border-radius:20px;padding:24px 20px 18px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.22);animation:discardPop .22s ease}.discard-icon{width:54px;height:54px;border-radius:17px;margin:0 auto 13px;display:grid;place-items:center;font-size:27px;color:#fff;background:linear-gradient(135deg,#F47B33,#EE4654,#B65CE0,#6B7BFA)}.discard-title{font-size:19px;font-weight:800;color:#202124;margin-bottom:7px}.discard-copy{font-size:14px;line-height:1.5;color:#74747d;margin-bottom:19px}.discard-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.discard-keep,.discard-leave{height:44px;border-radius:12px;font:600 14px inherit;cursor:pointer}.discard-keep{background:#fff;border:1px solid #dedee5;color:#333}.discard-leave{border:0;color:#fff;background:linear-gradient(90deg,#EE4654,#B65CE0)}@keyframes discardPop{from{opacity:0;transform:scale(.94) translateY(8px)}to{opacity:1;transform:none}}
+
 </style>
 </head>
 <body>
@@ -119,6 +116,17 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   </div>
 </div>
 
+
+<div class="discard-modal" id="discard-modal"><div class="discard-card"><div class="discard-icon"><i class="ti ti-alert-triangle"></i></div><div class="discard-title">Discard changes?</div><div class="discard-copy">Your unsaved changes will be lost.</div><div class="discard-actions"><button class="discard-keep" id="discard-keep" type="button">Keep editing</button><button class="discard-leave" id="discard-leave" type="button">Discard</button></div></div></div>
+<script>
+(function(){let dirty=false,pending=null,bypass=false;const modal=document.getElementById('discard-modal');history.replaceState({dormicBase:true},'',location.href);history.pushState({dormicGuard:true},'',location.href);
+function show(x){pending=x;modal.classList.add('show')}function hide(){modal.classList.remove('show');pending=null}function setDirty(v=true){dirty=!!v}function markSaved(){dirty=false}
+document.addEventListener('input',e=>{if(e.target.matches('input,textarea,select'))dirty=true},true);document.addEventListener('change',e=>{if(e.target.matches('input,textarea,select'))dirty=true},true);document.addEventListener('click',e=>{if(e.target.closest('.group-chip,.sub-chip,.star,.photo-box,.cbtn,.tp,.ta,.check,.chip.editable,.pick,.done-btn,.circle-btn,.type,.mini-check,.day-pick'))dirty=true},true);
+document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a||!dirty||e.defaultPrevented||a.target==='_blank')return;const h=a.getAttribute('href');if(!h||h.startsWith('#')||h.startsWith('javascript:'))return;e.preventDefault();e.stopImmediatePropagation();show({type:'link',href:a.href})},true);
+window.addEventListener('popstate',()=>{if(bypass){bypass=false;return}if(dirty)show({type:'history'});else{bypass=true;history.back()}});window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
+document.getElementById('discard-keep').onclick=()=>{const hist=pending?.type==='history';hide();if(hist)history.pushState({dormicGuard:true},'',location.href)};document.getElementById('discard-leave').onclick=()=>{const x=pending;dirty=false;hide();if(x?.type==='link'){window.DormicNavigate?window.DormicNavigate(x.href):location.href=x.href}else if(x?.type==='history'){bypass=true;history.back()}};modal.onclick=e=>{if(e.target===modal)document.getElementById('discard-keep').click()};window.DormicUnsaved={markDirty:()=>dirty=true,markSaved,setDirty,isDirty:()=>dirty};})();
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -160,12 +168,51 @@ const todayStr = localDateStr(today);
 const counts = {};
 let customItems = [];
 let currentUser = null;
+let savedOtherDaysMonthTotal = 0;
+let isLoadingInitialData = true;
+
+function draftKey(){
+  return currentUser ? `dormic_canteen_draft_${currentUser.uid}_${todayStr}` : null;
+}
+
+function saveDraft(){
+  const key = draftKey();
+  if(!key || isLoadingInitialData) return;
+  const draft = {
+    counts: Object.fromEntries(Object.entries(counts)),
+    customItems,
+    updatedAt: Date.now()
+  };
+  localStorage.setItem(key, JSON.stringify(draft));
+}
+
+function loadDraft(){
+  const key = draftKey();
+  if(!key) return false;
+  try {
+    const raw = localStorage.getItem(key);
+    if(!raw) return false;
+    const draft = JSON.parse(raw);
+    if(draft.counts){
+      Object.keys(counts).forEach(i=>{ counts[i] = Number(draft.counts[i]) || 0; });
+    }
+    customItems = Array.isArray(draft.customItems) ? draft.customItems.map(c=>({name:String(c.name||''),price:Number(c.price)||0})).filter(c=>c.name&&c.price>0) : [];
+    return true;
+  } catch(e){
+    return false;
+  }
+}
+
+function clearDraft(){
+  const key = draftKey();
+  if(key) localStorage.removeItem(key);
+}
 
 items.forEach((_,i)=>counts[i]=0);
 
 function renderItems(){
   document.getElementById('items-list').innerHTML = items.map((item,i)=>`
-    <div class="item-row" id="canteen-row-${i}">
+    <div class="item-row">
       <span class="item-name">${item.name}</span>
       <span class="item-price">₹${item.price}</span>
       <div class="counter">
@@ -180,7 +227,7 @@ function renderItems(){
 
 function renderCustom(){
   const list = document.getElementById('custom-list');
-  if(!customItems.length){ list.innerHTML = ''; return; }
+  if(!customItems.length){ list.innerHTML = ''; updateTodayTotal(); return; }
   list.innerHTML = customItems.map((c,i)=>`
     <div class="custom-item">
       <span class="ci-name">${c.name}</span>
@@ -191,8 +238,8 @@ function renderCustom(){
   updateTodayTotal();
 }
 
-window.inc = i => { counts[i]++; document.getElementById(`c-${i}`).textContent=counts[i]; updateTodayTotal(); };
-window.dec = i => { if(counts[i]>0){counts[i]--; document.getElementById(`c-${i}`).textContent=counts[i]; updateTodayTotal();} };
+window.inc = i => { counts[i]++; document.getElementById(`c-${i}`).textContent=counts[i]; updateTodayTotal(); saveDraft(); };
+window.dec = i => { if(counts[i]>0){counts[i]--; document.getElementById(`c-${i}`).textContent=counts[i]; updateTodayTotal(); saveDraft();} };
 
 window.addCustom = function(){
   const name = document.getElementById('custom-name').value.trim();
@@ -202,20 +249,22 @@ window.addCustom = function(){
   document.getElementById('custom-name').value='';
   document.getElementById('custom-price').value='';
   renderCustom();
+  saveDraft();
 };
 
 window.removeCustom = function(i){
   customItems.splice(i,1);
   renderCustom();
+  saveDraft();
 };
 
-function animateCanteenItem(i,num){const row=document.getElementById(`canteen-row-${i}`);[row,num].forEach(el=>{if(!el)return;const c=el===row?'canteen-item-glow':'canteen-count-pop';el.classList.remove(c);void el.offsetWidth;el.classList.add(c);setTimeout(()=>el.classList.remove(c),520);});}
-function pulseCanteenTotals(){['today-total','month-total'].forEach(id=>{const el=document.getElementById(id);el.classList.remove('canteen-total-pop');void el.offsetWidth;el.classList.add('canteen-total-pop');setTimeout(()=>el.classList.remove('canteen-total-pop'),430);});}
-function updateTodayTotal(animate=false){
+function updateTodayTotal(){
   let total = 0;
   items.forEach((item,i)=> total += item.price * counts[i]);
   customItems.forEach(c=> total += c.price);
   document.getElementById('today-total').textContent = '₹'+total;
+  document.getElementById('month-total').textContent = '₹'+(savedOtherDaysMonthTotal + total);
+  return total;
 }
 
 window.saveDay = async function(){
@@ -233,9 +282,10 @@ window.saveDay = async function(){
       total,
       savedAt: new Date()
     });
-    const badge=document.getElementById('saved-badge');badge.style.display='block';badge.classList.remove('canteen-receipt');void badge.offsetWidth;badge.classList.add('canteen-receipt');softCanteenSound();navigator.vibrate?.(30);
+    clearDraft();
+    document.getElementById('saved-badge').style.display='block';
     btn.textContent = 'Saved!';
-    setTimeout(()=>{ btn.textContent='Save today\'s tab'; btn.disabled=false; document.getElementById('saved-badge').style.display='none';document.getElementById('saved-badge').classList.remove('canteen-receipt'); }, 2000);
+    setTimeout(()=>{ btn.textContent='Save today\'s tab'; btn.disabled=false; document.getElementById('saved-badge').style.display='none'; }, 2000);
     await loadCanteenSummary();
   } catch(e){
     btn.disabled = false; btn.textContent = 'Save today\'s tab';
@@ -249,14 +299,15 @@ async function loadCanteenSummary(){
     const snap = await getDocs(collection(db,'canteenTab',currentUser.uid,'days'));
     const allDays = snap.docs.map(d=>d.data()).filter(d=>d.date);
     const monthPrefix = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
-    const monthTotal = allDays
-      .filter(d=>String(d.date).startsWith(monthPrefix))
+    savedOtherDaysMonthTotal = allDays
+      .filter(d=>String(d.date).startsWith(monthPrefix) && d.date !== todayStr)
       .reduce((sum,d)=>sum+(Number(d.total)||0),0);
-    document.getElementById('month-total').textContent = '₹'+monthTotal;
+    updateTodayTotal();
 
     const previous = allDays
       .filter(d=>d.date < todayStr)
-      .sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+      .sort((a,b)=>String(b.date).localeCompare(String(a.date)))
+      .slice(0,7);
 
     if(!previous.length){
       history.innerHTML = '<div class="history-empty">No previous tabs yet</div>';
@@ -267,7 +318,7 @@ async function loadCanteenSummary(){
       const dateObj = new Date(day.date+'T00:00:00');
       const dateLabel = dateObj.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
       const regular = (day.items||[]).map(i=>`${i.name} ×${i.qty}`);
-      const custom = (day.customItems||[]).map(i=>i.name);
+      const custom = (day.customItems||[]).map(i=>`${i.name} (₹${Number(i.price)||0})`);
       const itemText = [...regular,...custom].join(' · ') || 'No items recorded';
       return `<div class="history-card">
         <div class="history-head">
@@ -278,36 +329,42 @@ async function loadCanteenSummary(){
       </div>`;
     }).join('');
   } catch(e){
-    document.getElementById('month-total').textContent = '₹0';
+    updateTodayTotal();
     history.innerHTML = '<div class="history-empty">Could not load previous tabs</div>';
   }
 }
 
 async function loadTodayData(){
+  let loadedFromCloud = false;
   try {
     const snap = await getDoc(doc(db,'canteenTab',currentUser.uid,'days',todayStr));
     if(snap.exists()){
       const d = snap.data();
+      Object.keys(counts).forEach(i=>counts[i]=0);
       (d.items||[]).forEach(saved=>{
         const idx = items.findIndex(it=>it.name===saved.name);
-        if(idx>=0) counts[idx] = saved.qty;
+        if(idx>=0) counts[idx] = Number(saved.qty)||0;
       });
-      customItems = d.customItems || [];
-      renderItems();
-      renderCustom();
+      customItems = Array.isArray(d.customItems)
+        ? d.customItems.map(c=>({name:String(c.name||''),price:Number(c.price)||0})).filter(c=>c.name&&c.price>0)
+        : [];
+      loadedFromCloud = true;
     }
   } catch(e){}
-}
 
-function softCanteenSound(){try{const C=window.AudioContext||window.webkitAudioContext,c=new C(),o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.setValueAtTime(680,c.currentTime);o.frequency.exponentialRampToValueAtTime(1040,c.currentTime+.09);g.gain.setValueAtTime(.035,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.16);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.16)}catch(e){}}
+  const loadedDraft = loadDraft();
+  renderItems();
+  renderCustom();
+  return loadedFromCloud || loadedDraft;
+}
 
 onAuthStateChanged(auth, async user => {
   if(!user){ window.location.href='login.html'; return; }
   currentUser = user;
-  renderItems();
-  renderCustom();
   await loadTodayData();
   await loadCanteenSummary();
+  isLoadingInitialData = false;
+  updateTodayTotal();
 });
 </script>
 </body>
