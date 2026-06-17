@@ -150,7 +150,7 @@ body{background:#0f0f1e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <script>
 requestAnimationFrame(()=>document.body.classList.add('ghost-page-ready'));
 setTimeout(()=>document.getElementById('ghost-entry-veil')?.remove(),620);
-document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a||e.defaultPrevented||a.target==='_blank')return;const href=a.getAttribute('href');if(!href||href.startsWith('#')||href.endsWith('whisper.html'))return;e.preventDefault();document.body.classList.add('ghost-page-leave');setTimeout(()=>location.href=a.href,280)},true);
+document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a||e.defaultPrevented||a.target==='_blank')return;const href=a.getAttribute('href');if(!href||href.startsWith('#')||href.endsWith('whisper.html'))return;e.preventDefault();sessionStorage.setItem('dormicThemeTransition','from-dark');document.body.classList.add('ghost-page-leave');setTimeout(()=>location.href=a.href,280)},true);
 </script>
 
 <script type="module">

@@ -69,9 +69,12 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .notify-btn{font-size:12px;font-weight:600;background:linear-gradient(90deg,#F47B33,#EE4654);color:#fff;border:none;border-radius:20px;padding:5px 14px;cursor:pointer;white-space:nowrap;}
 
 .loading{display:flex;flex-direction:column;align-items:center;gap:9px;}
-.feed-skeleton{padding:14px 12px 24px;background:#f7f7f7}.feed-refresh-label{font-size:12px;color:#9a9a9a;text-align:center;margin:2px 0 12px;display:flex;justify-content:center;align-items:center;gap:8px}.feed-refresh-label .mini-dots{display:flex;gap:4px}.feed-refresh-label .mini-dots i{width:5px;height:5px;border-radius:50%;background:linear-gradient(135deg,#F47B33,#B65CE0,#6B7BFA);animation:feedDotTravel .85s ease-in-out infinite}.feed-refresh-label .mini-dots i:nth-child(2){animation-delay:.13s}.feed-refresh-label .mini-dots i:nth-child(3){animation-delay:.26s}.skeleton-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,.025);overflow:hidden}.sk-row{display:flex;align-items:center;gap:10px}.sk-avatar{width:35px;height:35px;border-radius:50%;flex:0 0 auto}.sk-lines{flex:1}.sk-line{height:9px;border-radius:9px;margin:7px 0}.sk-line.short{width:35%}.sk-line.medium{width:62%}.sk-line.long{width:92%}.sk-block{height:72px;border-radius:10px;margin-top:12px}.sk-avatar,.sk-line,.sk-block{background:linear-gradient(90deg,#f0f0f0 20%,#fafafa 45%,#f0f0f0 70%);background-size:220% 100%;animation:skeletonShimmer 1.25s linear infinite}.feed.is-refreshing{opacity:.72;transition:opacity .18s ease}.feed-mini-loader{position:sticky;top:116px;z-index:20;width:max-content;margin:8px auto -2px;padding:7px 12px;border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 7px 20px rgba(0,0,0,.08);font-size:11px;color:#8e8e8e;display:flex;align-items:center;gap:7px}.feed-mini-loader i{font-size:16px;color:#EE4654;animation:refreshTilt .75s ease-in-out infinite}.card.feed-arrive{animation:feedCardArrive .42s cubic-bezier(.2,.8,.2,1) both}.card.new-post-card{animation:newPostSlide .6s cubic-bezier(.2,.8,.2,1)}
+.feed-skeleton{padding:34px 14px 28px;background:#f7f7f7;display:flex;flex-direction:column;align-items:center;gap:14px}.home-loader-mark{width:74px;height:74px;border-radius:22px;background:#fff;display:grid;place-items:center;position:relative;box-shadow:0 14px 32px rgba(38,38,38,.07);overflow:hidden}.home-loader-mark::before{content:'';position:absolute;inset:-22px;background:conic-gradient(from 0deg,#F47B33,#EE4654,#B65CE0,#6B7BFA,#F47B33);animation:homeSpin 1.7s linear infinite}.home-loader-mark::after{content:'';position:absolute;inset:4px;border-radius:18px;background:#fff}.home-loader-mark i{position:relative;z-index:1;font-size:32px;color:#EE4654;animation:homePulse 1.2s ease-in-out infinite}.feed-refresh-label{font-size:13px;color:#8e8e8e;text-align:center;display:flex;justify-content:center;align-items:center;gap:8px}.home-loader-cards{width:100%;max-width:440px;display:flex;flex-direction:column;gap:9px}.home-loader-card{height:54px;border-radius:12px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.025);position:relative;overflow:hidden}.home-loader-card::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(238,70,84,.08),transparent);transform:translateX(-100%);animation:homeSweep 1.25s ease-in-out infinite}.home-loader-card:nth-child(2){width:86%;align-self:center;animation-delay:.1s}.home-loader-card:nth-child(3){width:72%;align-self:center;animation-delay:.2s}.feed.is-refreshing{opacity:.72;transition:opacity .18s ease}.feed-mini-loader{position:sticky;top:116px;z-index:20;width:max-content;margin:8px auto -2px;padding:7px 12px;border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 7px 20px rgba(0,0,0,.08);font-size:11px;color:#8e8e8e;display:flex;align-items:center;gap:7px}.feed-mini-loader i{font-size:16px;color:#EE4654;animation:refreshTilt .75s ease-in-out infinite}.card.feed-arrive{animation:feedCardArrive .42s cubic-bezier(.2,.8,.2,1) both}.card.new-post-card{animation:newPostSlide .6s cubic-bezier(.2,.8,.2,1)}
 .empty-anim{font-size:48px;color:#B65CE0;margin-bottom:14px;display:inline-block}.empty-anim.search{animation:emptySearch 1.8s ease-in-out infinite}.empty-anim.bus{animation:emptyBus 2s ease-in-out infinite}.empty-anim.float{animation:emptyFloat 1.8s ease-in-out infinite}.empty-img{animation:emptyFloat 2.2s ease-in-out infinite}
 @keyframes skeletonShimmer{from{background-position:200% 0}to{background-position:-20% 0}}
+@keyframes homeSpin{to{transform:rotate(1turn)}}
+@keyframes homePulse{50%{transform:scale(1.08);color:#B65CE0}}
+@keyframes homeSweep{to{transform:translateX(100%)}}
 @keyframes feedDotTravel{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-4px);opacity:1}}
 @keyframes refreshTilt{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(12deg)}}
 @keyframes feedCardArrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -79,7 +82,11 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 @keyframes emptySearch{50%{transform:translate(6px,-4px) rotate(-8deg)}}
 @keyframes emptyBus{50%{transform:translateX(18px)}}
 @keyframes emptyFloat{50%{transform:translateY(-7px)}}
-@media(prefers-reduced-motion:reduce){.sk-avatar,.sk-line,.sk-block,.feed-refresh-label .mini-dots i,.feed-mini-loader i,.card.feed-arrive{animation:none!important}}
+body{transition:opacity .24s ease,transform .24s ease,filter .24s ease;transform-origin:center bottom;}
+body.ghost-leave{opacity:.35;transform:translateY(8px) scale(.99);filter:saturate(.72) brightness(.86);}
+body.ghost-arrive{animation:lightReturn .32s cubic-bezier(.2,.8,.2,1);}
+@keyframes lightReturn{from{opacity:.35;transform:translateY(8px) scale(.99);filter:saturate(.75)}to{opacity:1;transform:none;filter:none}}
+@media(prefers-reduced-motion:reduce){.home-loader-mark::before,.home-loader-mark i,.home-loader-card::before,.feed-mini-loader i,.card.feed-arrive,body.ghost-arrive{animation:none!important}body{transition:none!important}}
 </style>
 </head>
 <body>
@@ -125,10 +132,9 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 <div class="feed" id="feed">
   <div class="feed-skeleton" aria-label="Refreshing hostel feed">
-    <div class="feed-refresh-label">Refreshing hostel feed <span class="mini-dots"><i></i><i></i><i></i></span></div>
-    <div class="skeleton-card"><div class="sk-row"><div class="sk-avatar"></div><div class="sk-lines"><div class="sk-line medium"></div><div class="sk-line short"></div></div></div><div class="sk-line long"></div><div class="sk-line medium"></div></div>
-    <div class="skeleton-card"><div class="sk-row"><div class="sk-avatar"></div><div class="sk-lines"><div class="sk-line medium"></div><div class="sk-line short"></div></div></div><div class="sk-block"></div><div class="sk-line medium"></div></div>
-    <div class="skeleton-card"><div class="sk-row"><div class="sk-avatar"></div><div class="sk-lines"><div class="sk-line medium"></div><div class="sk-line short"></div></div></div><div class="sk-line long"></div><div class="sk-line long"></div></div>
+    <div class="home-loader-mark"><i class="ti ti-home-heart"></i></div>
+    <div class="feed-refresh-label">Loading hostel feed</div>
+    <div class="home-loader-cards"><div class="home-loader-card"></div><div class="home-loader-card"></div><div class="home-loader-card"></div></div>
   </div>
 </div>
 
@@ -139,6 +145,24 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <a href="more.html" class="nav-item"><i class="ti ti-layout-grid"></i><span>More</span></a>
   <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
 </nav>
+
+<script>
+(function(){
+  if(sessionStorage.getItem('dormicThemeTransition')==='from-dark'){
+    document.body.classList.add('ghost-arrive');
+    sessionStorage.removeItem('dormicThemeTransition');
+    setTimeout(()=>document.body.classList.remove('ghost-arrive'),360);
+  }
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href="whisper.html"]');
+    if(!a||e.defaultPrevented)return;
+    e.preventDefault();
+    document.body.classList.add('ghost-leave');
+    sessionStorage.setItem('dormicThemeTransition','to-dark');
+    setTimeout(()=>location.href=a.href,240);
+  },true);
+})();
+</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
