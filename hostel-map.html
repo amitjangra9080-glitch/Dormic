@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hostel 3D Map - Dormic</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Dormic"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#10131a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;color:#f8fafc;overflow:hidden;}
+.top-bar{height:54px;background:rgba(17,24,39,.96);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px;padding:0 14px;position:fixed;top:0;left:0;right:0;z-index:20;backdrop-filter:blur(12px);}
+.back-btn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#e5e7eb;text-decoration:none;font-size:22px;background:rgba(255,255,255,.06);}
+.title-wrap{line-height:1.1;min-width:0;}
+.title{font-size:16px;font-weight:700;white-space:nowrap;}
+.sub{font-size:11px;color:#9ca3af;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.map-shell{position:fixed;inset:54px 0 60px;background:linear-gradient(180deg,#182033,#10131a);}
+#hostel-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.controls{position:absolute;left:12px;right:12px;top:12px;z-index:10;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;pointer-events:none;}
+.search-box{height:42px;border:1px solid rgba(255,255,255,.12);background:rgba(15,23,42,.88);border-radius:12px;display:flex;align-items:center;gap:9px;padding:0 12px;box-shadow:0 10px 28px rgba(0,0,0,.24);pointer-events:auto;}
+.search-box i{font-size:18px;color:#a78bfa;}
+.search-box input{flex:1;min-width:0;background:none;border:none;outline:none;color:#fff;font-size:14px;font-family:inherit;}
+.search-box input::placeholder{color:#737b8d;}
+.floor-tabs{display:flex;gap:6px;background:rgba(15,23,42,.84);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:4px;pointer-events:auto;}
+.floor-tabs button{height:34px;min-width:42px;border:none;border-radius:9px;background:transparent;color:#9ca3af;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;}
+.floor-tabs button.on{background:#a78bfa;color:#111827;}
+.legend{position:absolute;left:12px;bottom:12px;z-index:10;background:rgba(15,23,42,.86);border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;font-size:11px;color:#cbd5e1;box-shadow:0 14px 32px rgba(0,0,0,.22);pointer-events:none;}
+.leg{display:flex;align-items:center;gap:7px;white-space:nowrap;}
+.dot{width:10px;height:10px;border-radius:3px;display:inline-block;}
+.info{position:absolute;right:12px;bottom:12px;z-index:10;width:min(290px,calc(100vw - 24px));background:rgba(15,23,42,.9);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;box-shadow:0 14px 32px rgba(0,0,0,.26);}
+.info-title{font-size:13px;font-weight:800;margin-bottom:5px;color:#fff;}
+.info-copy{font-size:11px;line-height:1.45;color:#aeb8ca;}
+.room-result{margin-top:8px;font-size:12px;color:#c4b5fd;font-weight:700;min-height:16px;}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-around;height:60px;z-index:30;padding-bottom:env(safe-area-inset-bottom);}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#ccc;font-size:22px;}
+.nav-item span{font-size:10px;color:#ccc;}
+.nav-item.on{color:#B65CE0;}
+.nav-item.on span{color:#B65CE0;}
+.nav-fab{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#F47B33,#EE4654,#B65CE0,#6B7BFA);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:#94a3b8;font-size:13px;background:#10131a;z-index:5;}
+@media(max-width:640px){.controls{grid-template-columns:1fr}.floor-tabs{width:max-content}.legend{grid-template-columns:1fr;bottom:106px}.info{left:12px;right:12px;bottom:12px;width:auto}.sub{max-width:260px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a href="more.html" class="back-btn"><i class="ti ti-chevron-left"></i></a>
+  <div class="title-wrap">
+    <div class="title">Hostel 3D Map</div>
+    <div class="sub">Ajanta Hostel No. 3 - rooms 1 to 169</div>
+  </div>
+</div>
+
+<main class="map-shell">
+  <div id="loading" class="loading">Building hostel map...</div>
+  <canvas id="hostel-canvas"></canvas>
+  <div class="controls">
+    <label class="search-box">
+      <i class="ti ti-search"></i>
+      <input id="room-search" inputmode="numeric" placeholder="Search room number"/>
+    </label>
+    <div class="floor-tabs">
+      <button class="on" data-floor="all">All</button>
+      <button data-floor="0">G</button>
+      <button data-floor="1">1st</button>
+      <button data-floor="2">2nd</button>
+    </div>
+  </div>
+  <div class="legend">
+    <span class="leg"><span class="dot" style="background:#f6d365"></span>Hostel block</span>
+    <span class="leg"><span class="dot" style="background:#86efac"></span>Mess block</span>
+    <span class="leg"><span class="dot" style="background:#c084fc"></span>Bathrooms</span>
+    <span class="leg"><span class="dot" style="background:#67e8f9"></span>Connector</span>
+    <span class="leg"><span class="dot" style="background:#111827"></span>Main entry</span>
+    <span class="leg"><span class="dot" style="background:#ef4444"></span>Boundary</span>
+  </div>
+  <div class="info">
+    <div class="info-title">Legacy hostel layout</div>
+    <div class="info-copy">Drag to rotate, pinch or scroll to zoom. Rooms increase around the central corridor. The mess-side center gap and ground-floor second entry are marked.</div>
+    <div class="room-result" id="room-result"></div>
+  </div>
+</main>
+
+<nav class="nav-bar">
+  <a href="index.html" class="nav-item"><i class="ti ti-home"></i><span>Home</span></a>
+  <a href="whisper.html" class="nav-item"><i class="ti ti-ghost"></i><span>Ghost Box</span></a>
+  <a href="post.html" class="nav-fab"><i class="ti ti-plus"></i></a>
+  <a href="more.html" class="nav-item on"><i class="ti ti-layout-grid"></i><span>More</span></a>
+  <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
+</nav>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+onAuthStateChanged(auth, user => { if(!user) window.location.href='login.html'; });
+
+const canvas = document.getElementById('hostel-canvas');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x10131a);
+scene.fog = new THREE.Fog(0x10131a, 42, 92);
+
+const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 160);
+camera.position.set(27, 23, 31);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.target.set(0, 4.5, 0);
+controls.maxPolarAngle = Math.PI * 0.48;
+controls.minDistance = 18;
+controls.maxDistance = 72;
+
+const hemi = new THREE.HemisphereLight(0xdbeafe, 0x31221b, 2.4);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff2d0, 3.2);
+sun.position.set(-16, 24, 12);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+scene.add(sun);
+
+const mats = {
+  ground: new THREE.MeshStandardMaterial({color:0x202838, roughness:.82}),
+  brick: new THREE.MeshStandardMaterial({color:0x7b5547, roughness:.9}),
+  concrete: new THREE.MeshStandardMaterial({color:0xc5b59f, roughness:.78}),
+  room: new THREE.MeshStandardMaterial({color:0x8a604f, roughness:.86}),
+  roomDim: new THREE.MeshStandardMaterial({color:0x51413e, roughness:.92}),
+  highlight: new THREE.MeshStandardMaterial({color:0xffcf4a, emissive:0xf59e0b, emissiveIntensity:.55, roughness:.5}),
+  corridor: new THREE.MeshStandardMaterial({color:0x67e8f9, transparent:true, opacity:.44, roughness:.35}),
+  mess: new THREE.MeshStandardMaterial({color:0x86efac, roughness:.8}),
+  bath: new THREE.MeshStandardMaterial({color:0xc084fc, roughness:.68}),
+  entry: new THREE.MeshStandardMaterial({color:0x111827, roughness:.72}),
+  boundary: new THREE.LineBasicMaterial({color:0xef4444}),
+  grill: new THREE.MeshStandardMaterial({color:0x1f2937, roughness:.55}),
+  glass: new THREE.MeshStandardMaterial({color:0x6ea1a8, emissive:0x17353b, emissiveIntensity:.12, roughness:.35})
+};
+
+const root = new THREE.Group();
+scene.add(root);
+const roomMeshes = new Map();
+const labelSprites = new Map();
+let selectedRoom = null;
+let activeFloor = 'all';
+
+function box(name, size, pos, mat, parent=root){
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(size[0], size[1], size[2]), mat);
+  mesh.name = name;
+  mesh.position.set(pos[0], pos[1], pos[2]);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  parent.add(mesh);
+  return mesh;
+}
+
+function line(points, mat=mats.boundary){
+  const geo = new THREE.BufferGeometry().setFromPoints(points.map(p=>new THREE.Vector3(p[0], p[1], p[2])));
+  const obj = new THREE.LineLoop(geo, mat);
+  root.add(obj);
+  return obj;
+}
+
+function label(text, pos, color='#f8fafc', size=64){
+  const c = document.createElement('canvas');
+  c.width = 256; c.height = 128;
+  const ctx = c.getContext('2d');
+  ctx.font = `800 ${size}px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.lineWidth = 9;
+  ctx.strokeStyle = 'rgba(15,23,42,.9)';
+  ctx.strokeText(text, 128, 64);
+  ctx.fillStyle = color;
+  ctx.fillText(text, 128, 64);
+  const tex = new THREE.CanvasTexture(c);
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthTest:false}));
+  sprite.position.set(pos[0], pos[1], pos[2]);
+  sprite.scale.set(1.42, .7, 1);
+  root.add(sprite);
+  return sprite;
+}
+
+function floorName(f){ return f===0 ? 'Ground' : f===1 ? '1st floor' : '2nd floor'; }
+
+function addRoom(roomNo, floor, x, z, side){
+  const y = .62 + floor * 2.35;
+  const mesh = box(`Room ${roomNo}`,[.82,.82,.58],[x,y,z],mats.room);
+  mesh.userData = {roomNo, floor, original:mats.room, side};
+  roomMeshes.set(roomNo, mesh);
+  const labelZ = z + (z > 0 ? .48 : -.48);
+  const sprite = label(String(roomNo), [x, y+.72, labelZ], '#fef3c7', 44);
+  sprite.userData = {roomNo, floor};
+  labelSprites.set(roomNo, sprite);
+  return mesh;
+}
+
+function addRoomsForFloor(floor, start, end){
+  const total = end - start + 1;
+  const backCount = Math.ceil(total * .48);
+  const sideCount = 3;
+  const frontCount = total - backCount - sideCount;
+  const y = .28 + floor * 2.35;
+  box(`${floorName(floor)} slab`,[35.2,.18,8.8],[0,y,0],mats.concrete);
+  box(`${floorName(floor)} corridor`,[32,.06,1.18],[0,y+.5,0],mats.corridor);
+  box(`${floorName(floor)} front wall`,[35,.72,.25],[0,y+.55,4.05],mats.brick);
+  box(`${floorName(floor)} back wall`,[35,.72,.25],[0,y+.55,-4.05],mats.brick);
+  box(`${floorName(floor)} left grill`,[.16,1.2,8.5],[-17.7,y+.82,0],mats.grill);
+  box(`${floorName(floor)} right grill`,[.16,1.2,8.5],[17.7,y+.82,0],mats.grill);
+
+  let no = start;
+  for(let i=0;i<backCount;i++){
+    const x = -15.6 + i * (31.2/(backCount-1 || 1));
+    addRoom(no++, floor, x, -3.72, 'back');
+  }
+  for(let i=0;i<sideCount;i++){
+    addRoom(no++, floor, 16.8, -1.9 + i*1.9, 'end');
+  }
+  const leftSlots = Math.floor(frontCount/2);
+  const rightSlots = frontCount - leftSlots;
+  for(let i=0;i<rightSlots;i++){
+    const x = 15.2 - i * (11.5/(rightSlots-1 || 1));
+    addRoom(no++, floor, x, 3.72, 'mess-right');
+  }
+  box(`${floorName(floor)} mess-side open space`,[3.0,.08,1.0],[-1.4,y+.54,3.88],mats.corridor);
+  label(floor===0 ? '2nd entry' : 'open space', [-1.4,y+1.18,5.05], '#67e8f9', 34);
+  for(let i=0;i<leftSlots;i++){
+    const x = -4.2 - i * (11.6/(leftSlots-1 || 1));
+    addRoom(no++, floor, x, 3.72, 'mess-left');
+  }
+}
+
+function buildScene(){
+  box('site ground',[48,.16,30],[0,-.1,0],mats.ground);
+  line([[-22,.03,-12],[22,.03,-10],[22,.03,12],[-20,.03,13]],mats.boundary);
+  label('Hostel boundary', [-12,.25,12.8], '#fecaca', 34);
+
+  box('main entry sign beam',[13,.35,.55],[-15,1.5,7.4],mats.concrete);
+  box('entry pillar left',[.6,1.8,.6],[-21,.78,7.4],mats.brick);
+  box('entry pillar right',[.6,1.8,.6],[-9,.78,7.4],mats.brick);
+  label('AJANTA HOSTEL NO. 3 P.G.', [-15,2.05,7.78], '#111827', 30);
+
+  box('mess and canteen block',[9,1.4,7],[-10,.7,12.2],mats.mess);
+  box('mess roof',[9.4,.2,7.4],[-10,1.5,12.2],mats.concrete);
+  label('Mess / Canteen / Common room', [-10,2.25,12.2], '#bbf7d0', 32);
+  box('connector corridor',[4,.18,1.55],[-5.2,.16,6.2],mats.corridor);
+  label('connector corridor', [-5.2,.72,6.2], '#67e8f9', 28);
+
+  for(let floor=0; floor<3; floor++){
+    const ranges = [[1,55],[56,112],[113,169]][floor];
+    addRoomsForFloor(floor, ranges[0], ranges[1]);
+    box(`bathroom left ${floor}`,[2.4,1.25,1.9],[-6,1.05+floor*2.35,-6.7],mats.bath);
+    box(`bathroom right ${floor}`,[2.4,1.25,1.9],[8.7,1.05+floor*2.35,-6.7],mats.bath);
+    label(`Bathrooms ${floorName(floor)}`, [-6,1.95+floor*2.35,-7.9], '#e9d5ff', 28);
+    label('Bathrooms', [8.7,1.95+floor*2.35,-7.9], '#e9d5ff', 28);
+  }
+
+  box('long concrete roof',[35.8,.28,9.2],[0,7.25,0],mats.concrete);
+  for(let i=0;i<14;i++){
+    const x = -15.8 + i*2.45;
+    box('legacy balcony fin',[.42,5.9,.72],[x,3.65,4.62],mats.concrete);
+    box('window stack',[.42,4.8,.08],[x+.62,3.55,4.18],mats.glass);
+  }
+  for(let i=0;i<10;i++){
+    const x = -20 + Math.random()*40;
+    const z = -11 + Math.random()*23;
+    if(z > 5 && x > -15 && x < -4) continue;
+    box('tree trunk',[.26,1.9,.26],[x,.9,z],new THREE.MeshStandardMaterial({color:0x4a3228, roughness:.9}));
+    const crown = new THREE.Mesh(new THREE.SphereGeometry(1.25,14,10), new THREE.MeshStandardMaterial({color:0x1f6f4a, roughness:.9}));
+    crown.position.set(x,2.25,z);
+    crown.castShadow = true;
+    root.add(crown);
+  }
+}
+
+function setFloor(floor){
+  activeFloor = floor;
+  const showAll = floor === 'all';
+  roomMeshes.forEach(mesh => {
+    const visible = showAll || mesh.userData.floor === Number(floor);
+    mesh.visible = visible;
+  });
+  labelSprites.forEach(sprite => {
+    const visible = showAll || sprite.userData.floor === Number(floor);
+    sprite.visible = visible;
+  });
+  document.querySelectorAll('.floor-tabs button').forEach(btn => btn.classList.toggle('on', btn.dataset.floor === floor));
+}
+
+function selectRoom(value){
+  const no = Number(value);
+  const result = document.getElementById('room-result');
+  if(selectedRoom && roomMeshes.has(selectedRoom)){
+    roomMeshes.get(selectedRoom).material = roomMeshes.get(selectedRoom).userData.original;
+  }
+  selectedRoom = null;
+  if(!Number.isInteger(no) || no < 1 || no > 169){
+    result.textContent = value ? 'Room not found. Use 1-169.' : '';
+    return;
+  }
+  const mesh = roomMeshes.get(no);
+  if(!mesh) return;
+  selectedRoom = no;
+  mesh.material = mats.highlight;
+  const floor = mesh.userData.floor;
+  setFloor(String(floor));
+  result.textContent = `Room ${no} - ${floorName(floor)} (${mesh.userData.side.replace('-', ' ')})`;
+  const target = mesh.position.clone();
+  controls.target.lerp(target, .85);
+  camera.position.lerp(new THREE.Vector3(target.x + 8, target.y + 7, target.z + 9), .55);
+}
+
+function resize(){
+  const rect = canvas.parentElement.getBoundingClientRect();
+  renderer.setSize(rect.width, rect.height, false);
+  camera.aspect = rect.width / rect.height;
+  camera.updateProjectionMatrix();
+}
+
+buildScene();
+resize();
+document.getElementById('loading').style.display='none';
+window.addEventListener('resize', resize);
+document.getElementById('room-search').addEventListener('input', e => selectRoom(e.target.value.trim()));
+document.querySelectorAll('.floor-tabs button').forEach(btn => btn.addEventListener('click', () => setFloor(btn.dataset.floor)));
+
+function tick(){
+  controls.update();
+  const t = performance.now() * .001;
+  if(selectedRoom && roomMeshes.has(selectedRoom)){
+    roomMeshes.get(selectedRoom).scale.y = 1 + Math.sin(t*5) * .08;
+  }
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+tick();
+</script>
+</body>
+</html>
