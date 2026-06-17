@@ -1,0 +1,16 @@
+{
+  "name": "dormic",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dormic static web app for Ajanta Hostel No. 3.",
+  "scripts": {
+    "start": "npx serve .",
+    "deploy:vercel": "vercel --prod",
+    "deploy:firebase": "firebase deploy",
+    "deploy:firebase:rules": "firebase deploy --only firestore:rules",
+    "deploy:firebase:hosting": "firebase deploy --only hosting"
+  },
+  "devDependencies": {
+    "serve": "^14.2.5"
+  }
+}
