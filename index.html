@@ -68,26 +68,18 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .notify-txt{font-size:12px;color:#555;line-height:1.4;}
 .notify-btn{font-size:12px;font-weight:600;background:linear-gradient(90deg,#F47B33,#EE4654);color:#fff;border:none;border-radius:20px;padding:5px 14px;cursor:pointer;white-space:nowrap;}
 
-.loading-logo{width:54px;height:54px;margin:0 auto 10px;animation:logoFloat 1.35s ease-in-out infinite}.loading-dots{display:flex;justify-content:center;gap:5px}.loading-dots i{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#F47B33,#B65CE0);animation:dotBounce 1s infinite}.loading-dots i:nth-child(2){animation-delay:.14s}.loading-dots i:nth-child(3){animation-delay:.28s}.card.posted-in{animation:postSlide .48s cubic-bezier(.2,.8,.2,1)}.empty-motion{font-size:48px;margin-bottom:13px;color:#B65CE0;display:inline-block}.empty-motion.searching{animation:searchMove 1.8s ease-in-out infinite}.empty-motion.bus{animation:busMove 2s ease-in-out infinite}.empty-motion.box{animation:boxBob 1.8s ease-in-out infinite}.feed-toast{position:fixed;left:50%;bottom:76px;transform:translate(-50%,18px);background:#262626;color:#fff;padding:10px 16px;border-radius:22px;font-size:13px;opacity:0;z-index:300;transition:.25s}.feed-toast.show{opacity:1;transform:translate(-50%,0)}
-@keyframes logoFloat{50%{transform:translateY(-5px) rotate(-2deg)}}@keyframes dotBounce{50%{transform:translateY(-6px);opacity:.55}}@keyframes postSlide{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}@keyframes searchMove{50%{transform:translateX(8px) rotate(8deg)}}@keyframes busMove{0%,100%{transform:translateX(-8px)}50%{transform:translateX(8px)}}@keyframes boxBob{50%{transform:translateY(-6px)}}
-
-
-
-
-
-/* Unified bottom navigation + subtle Ghost Mode transition */
-.nav-bar{height:60px!important;padding:0 6px env(safe-area-inset-bottom)!important;box-sizing:content-box!important;justify-content:center!important;align-items:center!important;}
-.nav-bar>.nav-item,.nav-bar>.nav-fab{width:20%!important;min-width:0!important;height:60px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;}
-.nav-bar>.nav-item{flex-direction:column!important;gap:2px!important;font-size:22px!important;}
-.nav-bar>.nav-item span{font-size:10px!important;line-height:1!important;}
-.nav-bar>.nav-fab{border-radius:0!important;background:none!important;font-size:20px!important;}
-.nav-bar>.nav-fab i{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#F47B33,#EE4654);display:grid;place-items:center;color:#fff;}
-body{transition:opacity .22s ease,transform .22s ease,filter .22s ease;transform-origin:center bottom;}
-body.ghost-leave{opacity:.42;transform:translateY(5px) scale(.992);filter:saturate(.72) brightness(.9);}
-body.ghost-arrive{animation:lightReturn .30s cubic-bezier(.2,.8,.2,1);}
-@keyframes lightReturn{from{opacity:.35;transform:translateY(5px) scale(.992);filter:saturate(.75)}to{opacity:1;transform:none;filter:none}}
-@media(prefers-reduced-motion:reduce){body{transition:none!important}body.ghost-arrive{animation:none!important}}
-
+.loading{display:flex;flex-direction:column;align-items:center;gap:9px;}
+.feed-skeleton{padding:14px 12px 24px;background:#f7f7f7}.feed-refresh-label{font-size:12px;color:#9a9a9a;text-align:center;margin:2px 0 12px;display:flex;justify-content:center;align-items:center;gap:8px}.feed-refresh-label .mini-dots{display:flex;gap:4px}.feed-refresh-label .mini-dots i{width:5px;height:5px;border-radius:50%;background:linear-gradient(135deg,#F47B33,#B65CE0,#6B7BFA);animation:feedDotTravel .85s ease-in-out infinite}.feed-refresh-label .mini-dots i:nth-child(2){animation-delay:.13s}.feed-refresh-label .mini-dots i:nth-child(3){animation-delay:.26s}.skeleton-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,.025);overflow:hidden}.sk-row{display:flex;align-items:center;gap:10px}.sk-avatar{width:35px;height:35px;border-radius:50%;flex:0 0 auto}.sk-lines{flex:1}.sk-line{height:9px;border-radius:9px;margin:7px 0}.sk-line.short{width:35%}.sk-line.medium{width:62%}.sk-line.long{width:92%}.sk-block{height:72px;border-radius:10px;margin-top:12px}.sk-avatar,.sk-line,.sk-block{background:linear-gradient(90deg,#f0f0f0 20%,#fafafa 45%,#f0f0f0 70%);background-size:220% 100%;animation:skeletonShimmer 1.25s linear infinite}.feed.is-refreshing{opacity:.72;transition:opacity .18s ease}.feed-mini-loader{position:sticky;top:116px;z-index:20;width:max-content;margin:8px auto -2px;padding:7px 12px;border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 7px 20px rgba(0,0,0,.08);font-size:11px;color:#8e8e8e;display:flex;align-items:center;gap:7px}.feed-mini-loader i{font-size:16px;color:#EE4654;animation:refreshTilt .75s ease-in-out infinite}.card.feed-arrive{animation:feedCardArrive .42s cubic-bezier(.2,.8,.2,1) both}.card.new-post-card{animation:newPostSlide .6s cubic-bezier(.2,.8,.2,1)}
+.empty-anim{font-size:48px;color:#B65CE0;margin-bottom:14px;display:inline-block}.empty-anim.search{animation:emptySearch 1.8s ease-in-out infinite}.empty-anim.bus{animation:emptyBus 2s ease-in-out infinite}.empty-anim.float{animation:emptyFloat 1.8s ease-in-out infinite}.empty-img{animation:emptyFloat 2.2s ease-in-out infinite}
+@keyframes skeletonShimmer{from{background-position:200% 0}to{background-position:-20% 0}}
+@keyframes feedDotTravel{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-4px);opacity:1}}
+@keyframes refreshTilt{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(12deg)}}
+@keyframes feedCardArrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes newPostSlide{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
+@keyframes emptySearch{50%{transform:translate(6px,-4px) rotate(-8deg)}}
+@keyframes emptyBus{50%{transform:translateX(18px)}}
+@keyframes emptyFloat{50%{transform:translateY(-7px)}}
+@media(prefers-reduced-motion:reduce){.sk-avatar,.sk-line,.sk-block,.feed-refresh-label .mini-dots i,.feed-mini-loader i,.card.feed-arrive{animation:none!important}}
 </style>
 </head>
 <body>
@@ -132,10 +124,14 @@ body.ghost-arrive{animation:lightReturn .30s cubic-bezier(.2,.8,.2,1);}
 </div>
 
 <div class="feed" id="feed">
-  <div class="loading"><img src="icon.png" class="loading-logo" alt="Dormic"/><div>Refreshing hostel feed</div><div class="loading-dots"><i></i><i></i><i></i></div></div>
+  <div class="feed-skeleton" aria-label="Refreshing hostel feed">
+    <div class="feed-refresh-label">Refreshing hostel feed <span class="mini-dots"><i></i><i></i><i></i></span></div>
+    <div class="skeleton-card"><div class="sk-row"><div class="sk-avatar"></div><div class="sk-lines"><div class="sk-line medium"></div><div class="sk-line short"></div></div></div><div class="sk-line long"></div><div class="sk-line medium"></div></div>
+    <div class="skeleton-card"><div class="sk-row"><div class="sk-avatar"></div><div class="sk-lines"><div class="sk-line medium"></div><div class="sk-line short"></div></div></div><div class="sk-block"></div><div class="sk-line medium"></div></div>
+    <div class="skeleton-card"><div class="sk-row"><div class="sk-avatar"></div><div class="sk-lines"><div class="sk-line medium"></div><div class="sk-line short"></div></div></div><div class="sk-line long"></div><div class="sk-line long"></div></div>
+  </div>
 </div>
 
-<div class="feed-toast" id="feed-toast">Posted to the hostel</div>
 <nav class="nav-bar">
   <a href="index.html" class="nav-item on"><i class="ti ti-home"></i><span>Home</span></a>
   <a href="whisper.html" class="nav-item"><i class="ti ti-ghost"></i><span>Ghost Box</span></a>
@@ -144,33 +140,10 @@ body.ghost-arrive{animation:lightReturn .30s cubic-bezier(.2,.8,.2,1);}
   <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
 </nav>
 
-
-<script>
-(function(){
-  if(sessionStorage.getItem('dormicThemeTransition')==='from-dark'){
-    document.body.classList.add('ghost-arrive');
-    sessionStorage.removeItem('dormicThemeTransition');
-    setTimeout(()=>document.body.classList.remove('ghost-arrive'),360);
-  }
-  window.DormicNavigate=function(href){
-    document.body.classList.add('ghost-leave');
-    sessionStorage.setItem('dormicThemeTransition','to-dark');
-    setTimeout(()=>location.href=href,220);
-  };
-  document.addEventListener('click',e=>{
-    const a=e.target.closest('a[href]');
-    if(!a||e.defaultPrevented||a.target==='_blank')return;
-    const h=a.getAttribute('href');
-    if(!h||!h.endsWith('whisper.html'))return;
-    e.preventDefault(); window.DormicNavigate(a.href);
-  },true);
-})();
-</script>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc, setDoc, deleteDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, getDoc, setDoc, deleteDoc, getDocs, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
@@ -180,6 +153,7 @@ const db = getFirestore(app);
 let currentUser = null;
 let allPosts = [];
 let currentFilter = 'all';
+let feedHasRendered = false;
 
 const avatarBgs = ['','linear-gradient(135deg,#F47B33,#EE4654)','linear-gradient(135deg,#E8398A,#F97316)','linear-gradient(135deg,#F97316,#FBBF24)','linear-gradient(135deg,#3B82F6,#6C3BE8)','linear-gradient(135deg,#10B981,#3B82F6)','linear-gradient(135deg,#EF4444,#E8398A)','linear-gradient(135deg,#8B5CF6,#EC4899)','linear-gradient(135deg,#06B6D4,#3B82F6)','linear-gradient(135deg,#F59E0B,#EF4444)','linear-gradient(135deg,#10B981,#6C3BE8)','linear-gradient(135deg,#EC4899,#F97316)','linear-gradient(135deg,#6366F1,#8B5CF6)','linear-gradient(135deg,#14B8A6,#10B981)','linear-gradient(135deg,#F97316,#6C3BE8)','linear-gradient(135deg,#EF4444,#F97316)','linear-gradient(135deg,#3B82F6,#10B981)','linear-gradient(135deg,#A855F7,#3B82F6)','linear-gradient(135deg,#F43F5E,#6366F1)','linear-gradient(135deg,#0EA5E9,#6C3BE8)','linear-gradient(135deg,#84CC16,#10B981)'];
 const avatarSymbols = ['','⚽','🏏','🎮','🏆','🔑','📚','🎯','💡','🌍','🚗','✈️','🎸','🏋️','🧪','🔬','💻','🎲','🏠','⚡','🔥'];
@@ -254,8 +228,16 @@ onAuthStateChanged(auth, async user => {
 
 const q = query(collection(db,'posts'), orderBy('createdAt','desc'));
 onSnapshot(q, snap => {
-  allPosts = snap.docs.map(d => ({id: d.id, ...d.data()}));
-  renderFeed();
+  const feed=document.getElementById('feed');
+  if(feedHasRendered){
+    feed.classList.add('is-refreshing');
+    const loader=document.createElement('div');loader.className='feed-mini-loader';loader.innerHTML='<i class="ti ti-refresh"></i> Refreshing hostel feed';feed.before(loader);
+    setTimeout(()=>{allPosts = snap.docs.map(d => ({id: d.id, ...d.data()}));renderFeed();feed.classList.remove('is-refreshing');loader.remove()},180);
+  }else{
+    allPosts = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    renderFeed();
+    feedHasRendered=true;
+  }
 });
 
 document.querySelectorAll('.pill').forEach(pill => {
@@ -267,9 +249,27 @@ document.querySelectorAll('.pill').forEach(pill => {
   });
 });
 
+const RESOLVED_FEED_LIFETIME_MS = 3 * 24 * 60 * 60 * 1000;
+
+function timestampToMillis(value){
+  if(!value) return null;
+  if(typeof value.toMillis === 'function') return value.toMillis();
+  if(typeof value.seconds === 'number') return value.seconds * 1000;
+  const parsed = new Date(value).getTime();
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function shouldShowInPublicFeed(post){
+  if(post.status !== 'resolved') return true;
+  const resolvedTime = timestampToMillis(post.resolvedAt);
+  // Older resolved posts without a timestamp stay visible for compatibility.
+  if(!resolvedTime) return true;
+  return Date.now() - resolvedTime < RESOLVED_FEED_LIFETIME_MS;
+}
+
 function renderFeed() {
   const feed = document.getElementById('feed');
-  let posts = allPosts;
+  let posts = allPosts.filter(shouldShowInPublicFeed);
   if(currentFilter === 'lost-found') posts = posts.filter(p => ['lost','found'].includes(p.type));
   else if(currentFilter === 'donate-need') posts = posts.filter(p => ['have','donate','need'].includes(p.type));
   else if(currentFilter === 'sell-buy') posts = posts.filter(p => ['sell','buy'].includes(p.type));
@@ -279,7 +279,16 @@ function renderFeed() {
   const resolved = posts.filter(p => p.status === 'resolved');
 
   if(posts.length === 0) {
-    const emptyByFilter={'lost-found':['ti-search','searching','Nothing lost or found yet'],'travel':['ti-bus','bus','No travel updates yet'],'sell-buy':['ti-shopping-bag','box','No buy or sell posts yet'],'donate-need':['ti-package','box','No donate or need posts yet'],'all':['ti-home-heart','box','No hostel posts yet']};const e=emptyByFilter[currentFilter]||emptyByFilter.all;feed.innerHTML=`<div class="empty-state"><i class="ti ${e[0]} empty-motion ${e[1]}"></i><div class="empty-title">${e[2]}</div><div class="empty-sub">Be the first to post something</div></div>`;
+    const emptyByFilter={
+      'lost-found':['ti-search','search','Nothing lost or found yet','Be the first to help the hostel find something.'],
+      'sell-buy':['ti-tag','float','No marketplace posts yet','Buy or sell something within the hostel.'],
+      'donate-need':['ti-package','float','No donate or need posts yet','Ask the hostel or pass something useful forward.'],
+      'travel':['ti-bus','bus','No travel posts yet','Add a route, parcel, or travel request.']
+    };
+    const e=emptyByFilter[currentFilter];
+    feed.innerHTML=e
+      ? `<div class="empty-state"><i class="ti ${e[0]} empty-anim ${e[1]}"></i><div class="empty-title">${e[2]}</div><div class="empty-sub">${e[3]}</div></div>`
+      : `<div class="empty-state"><img src="ajanta-illustration.png" class="empty-img" alt="Ajanta Hostel No. 3"/><div class="empty-title">No posts yet</div><div class="empty-sub">Be the first to post something</div></div>`;
     return;
   }
 
@@ -289,7 +298,13 @@ function renderFeed() {
     html += `<div class="resolved-label">Resolved</div>`;
     resolved.forEach(p => { html += buildCard(p, true); });
   }
-  feed.innerHTML = html;if(sessionStorage.getItem('dormic_post_just_added')==='1'){sessionStorage.removeItem('dormic_post_just_added');const first=feed.querySelector('.card');first?.classList.add('posted-in');const toast=document.getElementById('feed-toast');toast?.classList.add('show');setTimeout(()=>toast?.classList.remove('show'),1800);}
+  feed.innerHTML = html;
+  feed.querySelectorAll('.card').forEach((card,i)=>{card.classList.add('feed-arrive');card.style.animationDelay=`${Math.min(i,5)*45}ms`;setTimeout(()=>{card.classList.remove('feed-arrive');card.style.animationDelay=''},650)});
+  if(sessionStorage.getItem('dormic_post_just_added')){
+    const firstCard=feed.querySelector('.card:not(.resolved-section)');
+    if(firstCard){firstCard.classList.add('new-post-card');setTimeout(()=>firstCard.classList.remove('new-post-card'),700);}
+    sessionStorage.removeItem('dormic_post_just_added');
+  }
 }
 
 function buildCard(p, isResolved) {
@@ -369,7 +384,7 @@ function buildCard(p, isResolved) {
 }
 
 window.resolvePost = async function(id) {
-  await updateDoc(doc(db,'posts',id), {status:'resolved'});
+  await updateDoc(doc(db,'posts',id), {status:'resolved', resolvedAt:serverTimestamp()});
 };
 
 window.requestNotify = function() {
@@ -494,7 +509,5 @@ function timeAgo(ms) {
   return new Date(ms).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
 }
 </script>
-
-
 </body>
 </html>
