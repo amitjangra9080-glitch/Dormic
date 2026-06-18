@@ -223,16 +223,16 @@ function renderMessages(msgs, all, newIds=[]){
   const feed = document.getElementById('chat-feed');
   const atBottom = feed.scrollHeight - feed.scrollTop - feed.clientHeight < 100;
   if(!msgs.length){
-    feed.innerHTML=`<div class="ghost-sample-note">Examples - shown only until Ghost Box has real messages</div>
+    feed.innerHTML=`<div class="ghost-sample-note">Your Ghost Box messages look like this until real messages arrive</div>
       <div class="msg-wrap">
         <div class="bubble">
-          <div class="bhead"><span class="bid">Ghost 204</span><span class="btime">Example</span></div>
+          <div class="bhead"><span class="bid">Anonymous name</span><span class="btime">Sample</span></div>
           <div class="btxt">Mess chai saved my evening today.</div>
         </div>
       </div>
       <div class="msg-wrap">
         <div class="bubble">
-          <div class="bhead"><span class="bid">Ghost 117</span><span class="btime">Example</span></div>
+          <div class="bhead"><span class="bid">Anonymous name</span><span class="btime">Sample</span></div>
           <div class="btxt">Whoever fixed the corridor light, respect.</div>
         </div>
       </div>`;
