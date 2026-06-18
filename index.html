@@ -50,6 +50,7 @@ body{background:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .card-actions{display:flex;align-items:center;justify-content:space-between;padding:9px 14px 4px;border-top:0.5px solid #f7f7f7;margin-top:6px;}
 .status-btn{font-size:12px;font-weight:500;color:#B65CE0;border:0.5px solid #c4b5fd;border-radius:20px;padding:5px 13px;background:#ede9fe;cursor:pointer;}
 .wa-btn{font-size:13px;font-weight:500;color:#25D366;display:flex;align-items:center;gap:5px;text-decoration:none;}
+.sample-note{font-size:12px;font-weight:600;color:#8e8e8e;background:#f7f7f7;border-radius:20px;padding:5px 12px;}
 .time-line{padding:3px 14px 10px;font-size:12px;color:#bbb;letter-spacing:0.2px;}
 .empty-state{text-align:center;padding:48px 24px;}
 .empty-img{width:200px;opacity:0.7;margin-bottom:16px;}
@@ -287,16 +288,7 @@ function renderFeed() {
   const resolved = posts.filter(p => p.status === 'resolved');
 
   if(posts.length === 0) {
-    const emptyByFilter={
-      'lost-found':['ti-search','search','Nothing lost or found yet','Be the first to help the hostel find something.'],
-      'sell-buy':['ti-tag','float','No marketplace posts yet','Buy or sell something within the hostel.'],
-      'donate-need':['ti-package','float','No donate or need posts yet','Ask the hostel or pass something useful forward.'],
-      'travel':['ti-bus','bus','No travel posts yet','Add a route, parcel, or travel request.']
-    };
-    const e=emptyByFilter[currentFilter];
-    feed.innerHTML=e
-      ? `<div class="empty-state"><i class="ti ${e[0]} empty-anim ${e[1]}"></i><div class="empty-title">${e[2]}</div><div class="empty-sub">${e[3]}</div></div>`
-      : `<div class="empty-state"><img src="ajanta-illustration.png" class="empty-img" alt="Ajanta Hostel No. 3"/><div class="empty-title">No posts yet</div><div class="empty-sub">Be the first to post something</div></div>`;
+    feed.innerHTML = samplePostsForFilter(currentFilter).map(p => buildCard(p, false)).join('');
     return;
   }
 
@@ -316,12 +308,12 @@ function renderFeed() {
 }
 
 function buildCard(p, isResolved) {
-  const time = p.createdAt ? timeAgo(p.createdAt.seconds * 1000) : 'Just now';
+  const time = p.sample ? 'Example' : (p.createdAt ? timeAgo(p.createdAt.seconds * 1000) : 'Just now');
   const avBg = avatarBgs[p.posterAvatarId || 1];
   const avSymbol = avatarSymbols[p.posterAvatarId || 1] || (p.posterName||'?')[0].toUpperCase();
   const isOwner = currentUser && currentUser.uid === p.posterUid;
   const waLink = `https://wa.me/91${p.posterPhone}?text=Hi%20${encodeURIComponent(p.posterName)}%2C%20I%20saw%20your%20post%20on%20Dormic`;
-  const waBtn = isOwner ? '' : `<a href="${waLink}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a>`;
+  const waBtn = p.sample ? '<span class="sample-note">Example</span>' : (isOwner ? '' : `<a href="${waLink}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a>`);
   const typeBadge = p.type === 'have' ? 'donate' : p.type;
   const typeLabel = p.type === 'have' ? 'Donate' : (p.type.charAt(0).toUpperCase()+p.type.slice(1));
 
@@ -389,6 +381,30 @@ function buildCard(p, isResolved) {
     <div class="card-actions">${statusBtn||'<span></span>'}${waBtn}</div>
     <div class="time-line">${time}</div>
   </div>`;
+}
+
+function samplePostsForFilter(filter){
+  const base = {
+    posterName:'Dormic Guide',
+    posterUid:'sample',
+    posterRoom:'19',
+    posterPhone:'',
+    posterAvatarId:8,
+    sample:true
+  };
+  const samples = [
+    {...base,id:'sample-lost',type:'lost',location:'Ground Floor - Corridor',itemType:'ID Card / Documents',itemName:'Lost my ID card',description:'If you find it near the entrance or corridor, please message me.'},
+    {...base,id:'sample-sell',type:'sell',location:'Room 42',itemType:'Books / Notes',itemName:'Selling 1st year notes',description:'Clean notes, useful for quick revision before exams.',posterAvatarId:3},
+    {...base,id:'sample-buy',type:'buy',location:'Room 61',itemType:'Lab coat',itemName:'Need to buy a lab coat',description:'Looking for a used lab coat in good condition.',posterAvatarId:16},
+    {...base,id:'sample-need',type:'need',location:'Room 88',itemType:'Cycle / Scooty',itemName:'Need a cycle for evening',description:'Need it for a short campus round, will return carefully.',posterAvatarId:19},
+    {...base,id:'sample-found',type:'found',location:'Near Mess',itemType:'Bottle / Tiffin',itemName:'Found a steel bottle',description:'Kept safely with me. Tell the color and brand to collect it.',posterAvatarId:5},
+    {...base,id:'sample-donate',type:'have',location:'Room 107',itemType:'Stationery',itemName:'Extra practical file pages',description:'Anyone who needs them can take a few.',posterAvatarId:13}
+  ];
+  if(filter === 'lost-found') return samples.filter(p => ['lost','found'].includes(p.type));
+  if(filter === 'sell-buy') return samples.filter(p => ['sell','buy'].includes(p.type));
+  if(filter === 'donate-need') return samples.filter(p => ['have','donate','need'].includes(p.type));
+  if(filter === 'travel') return [{...base,id:'sample-travel',type:'travel',travelType:'going',from:'Hisar',to:'Jind',travelDate:'2026-06-18',travelTime:'17:30',itemDesc:'Can carry a small parcel.',posterAvatarId:11}];
+  return samples.slice(0,3);
 }
 
 window.resolvePost = async function(id) {
