@@ -71,7 +71,7 @@ body{background:#0f0f1e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .nav-item span{font-size:11px;color:#374151;}
 .nav-item.on{color:#a78bfa;}
 .nav-item.on span{color:#a78bfa;}
-.nav-fab{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#6C3BE8,#E8398A);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
+.nav-fab{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#F47B33,#EE4654);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;text-decoration:none;}
 .loading{text-align:center;padding:60px 20px;color:#4b5563;font-size:14px;}
 .ghost-loader{min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#8b8fa8;}
 .ghost-loader-mark{width:72px;height:72px;border-radius:24px;background:linear-gradient(145deg,#1e1e35,#111124);border:1px solid #302654;display:grid;place-items:center;box-shadow:0 18px 45px rgba(0,0,0,.26),0 0 32px rgba(124,58,237,.14);position:relative;overflow:hidden;animation:ghostLoaderFloat 1.65s ease-in-out infinite;}
@@ -86,21 +86,21 @@ body{background:#0f0f1e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 .msg-wrap{animation:msgIn .32s ease}.bubble,.reply-bubble{transition:transform .2s}.reaction-pop{animation:reactionPop .32s ease}.loading .ti-ghost{display:block;font-size:42px;margin-bottom:10px;color:#a78bfa;animation:ghostFloat 1.8s ease-in-out infinite}@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@keyframes reactionPop{50%{transform:scale(1.22)}}@keyframes ghostFloat{50%{transform:translateY(-7px) rotate(3deg)}}@keyframes ghostLoaderFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.02)}}@keyframes ghostLoaderScan{0%,100%{opacity:.35;transform:translateY(9px) skewY(-12deg)}50%{opacity:1;transform:translateY(-8px) skewY(-12deg)}}@keyframes ghostLinePulse{0%,100%{opacity:.22;transform:scaleX(.72)}50%{opacity:.92;transform:scaleX(1)}}
 
-/* Atmospheric Ghost Box motion */
-.ghost-entry-veil{position:fixed;inset:0;z-index:9999;pointer-events:none;background:linear-gradient(180deg,rgba(15,15,30,.12),rgba(8,8,20,.92));display:grid;place-items:center;animation:ghostVeilOut .62s cubic-bezier(.2,.8,.2,1) forwards;transform-origin:50% 100%;}.ghost-entry-copy{display:flex;flex-direction:column;align-items:center;gap:9px;color:#c4b5fd;font-size:13px;letter-spacing:.2px;animation:ghostEntryFloat .52s cubic-bezier(.2,.8,.2,1) both}.ghost-entry-copy i{width:64px;height:64px;border-radius:22px;background:#1a1a2e;border:1px solid #302654;display:grid;place-items:center;font-size:34px;color:#a78bfa;box-shadow:0 18px 50px rgba(0,0,0,.32),0 0 26px rgba(139,92,246,.18);filter:drop-shadow(0 8px 18px rgba(139,92,246,.3))}.ghost-entry-copy span{color:#aeb3d3;}.ghost-page-ready>*:not(.ghost-entry-veil){animation:ghostContentIn .42s cubic-bezier(.2,.8,.2,1) both}.ghost-page-leave{animation:ghostPageLeave .30s ease forwards!important}.msg-wrap.new-whisper .bubble{animation:newWhisperGlow .62s ease}.send-btn.send-pop{animation:sendCompress .34s ease}.send-particle{position:fixed;width:6px;height:6px;border-radius:50%;z-index:1000;pointer-events:none;background:linear-gradient(135deg,#8B5CF6,#E8398A,#60A5FA);animation:sendParticle .56s cubic-bezier(.2,.8,.2,1) forwards}
-@keyframes ghostVeilOut{0%{opacity:1;backdrop-filter:blur(9px);transform:translateY(12px)}68%{opacity:.42;backdrop-filter:blur(3px)}100%{opacity:0;visibility:hidden;backdrop-filter:blur(0);transform:translateY(-8px)}}
-@keyframes ghostEntryFloat{from{opacity:0;transform:translateY(72px) scale(.9)}72%{opacity:1;transform:translateY(-8px) scale(1.02)}to{opacity:1;transform:translateY(-4px) scale(1)}}
-@keyframes ghostContentIn{from{opacity:.2;filter:blur(5px);transform:translateY(5px)}to{opacity:1;filter:none;transform:none}}
-@keyframes ghostPageLeave{to{opacity:.16;filter:blur(5px);transform:translateY(5px) scale(.995)}}
+/* Ghost Box motion */
+.msg-wrap.new-whisper .bubble{animation:newWhisperGlow .62s ease}.send-btn.send-pop{animation:sendCompress .34s ease}.send-particle{position:fixed;width:6px;height:6px;border-radius:50%;z-index:1000;pointer-events:none;background:linear-gradient(135deg,#8B5CF6,#E8398A,#60A5FA);animation:sendParticle .56s cubic-bezier(.2,.8,.2,1) forwards}
 @keyframes newWhisperGlow{0%{opacity:0;transform:translateY(8px);box-shadow:0 0 0 rgba(139,92,246,0)}55%{opacity:1;box-shadow:0 0 22px rgba(139,92,246,.2)}100%{transform:none;box-shadow:none}}
 @keyframes sendCompress{0%{transform:scale(1)}40%{transform:scale(.86)}75%{transform:scale(1.08)}100%{transform:scale(1)}}
 @keyframes sendParticle{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(.25)}}
-@media(prefers-reduced-motion:reduce){.ghost-entry-veil,.ghost-entry-copy,.ghost-page-ready>*:not(.ghost-entry-veil),.ghost-page-leave,.msg-wrap.new-whisper .bubble,.send-btn.send-pop,.send-particle,.ghost-loader-mark,.ghost-loader-mark::before,.ghost-loader-lines span{animation:none!important}.ghost-entry-veil{display:none}}
+.nav-bar{height:60px!important;padding:0 6px env(safe-area-inset-bottom)!important;box-sizing:content-box!important;justify-content:center!important;align-items:center!important;}
+.nav-bar>.nav-item,.nav-bar>.nav-fab{width:20%!important;min-width:0!important;height:60px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;}
+.nav-bar>.nav-item{flex-direction:column!important;gap:2px!important;font-size:22px!important;}
+.nav-bar>.nav-item span{font-size:10px!important;line-height:1!important;}
+.nav-bar>.nav-fab{border-radius:0!important;background:none!important;font-size:20px!important;}
+.nav-bar>.nav-fab i{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#F47B33,#EE4654)!important;display:grid;place-items:center;color:#fff;}
+@media(prefers-reduced-motion:reduce){.msg-wrap.new-whisper .bubble,.send-btn.send-pop,.send-particle,.ghost-loader-mark,.ghost-loader-mark::before,.ghost-loader-lines span{animation:none!important}}
 </style>
 </head>
 <body>
-<div class="ghost-entry-veil" id="ghost-entry-veil"><div class="ghost-entry-copy"><i class="ti ti-ghost"></i><span>Opening Ghost Box</span></div></div>
-
 <div class="top-bar">
   <span class="top-title"><i class="ti ti-ghost"></i> Ghost Box</span>
   <span class="online"><span class="online-dot"></span><span id="online-count">4</span> online</span>
@@ -146,12 +146,6 @@ body{background:#0f0f1e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <a href="more.html" class="nav-item"><i class="ti ti-layout-grid"></i><span>More</span></a>
   <a href="profile.html" class="nav-item"><i class="ti ti-user"></i><span>Profile</span></a>
 </nav>
-
-<script>
-requestAnimationFrame(()=>document.body.classList.add('ghost-page-ready'));
-setTimeout(()=>document.getElementById('ghost-entry-veil')?.remove(),620);
-document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a||e.defaultPrevented||a.target==='_blank')return;const href=a.getAttribute('href');if(!href||href.startsWith('#')||href.endsWith('whisper.html'))return;e.preventDefault();sessionStorage.setItem('dormicThemeTransition','from-dark');document.body.classList.add('ghost-page-leave');setTimeout(()=>location.href=a.href,280)},true);
-</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
