@@ -294,6 +294,7 @@ window.saveDay = async function(){
       savedAt: new Date()
     });
     clearDraft();
+    window.DormicUnsaved?.markSaved();
     document.getElementById('saved-badge').style.display='block';
     btn.textContent = 'Saved!';
     setTimeout(()=>{ btn.textContent='Save today\'s tab'; btn.disabled=false; document.getElementById('saved-badge').style.display='none'; }, 2000);
