@@ -1,0 +1,77 @@
+:root {
+  --dormic-orange: #F47B33;
+  --dormic-red: #EE4654;
+  --dormic-pink: #B65CE0;
+  --dormic-blue: #6B7BFA;
+  --dormic-nav-height: 60px;
+  --dormic-bg: #f7f7f7;
+  --dormic-card: #fff;
+  --dormic-text: #262626;
+  --dormic-muted: #8e8e8e;
+  --dormic-border: #f0f0f0;
+  --dormic-accent: #B65CE0;
+  --dormic-post-gradient: linear-gradient(135deg, #F47B33, #EE4654);
+}
+
+body.dormic-ghost-theme {
+  --dormic-bg: #0f0f1e;
+  --dormic-card: #1a1a2e;
+  --dormic-text: #f8fafc;
+  --dormic-muted: #6b7280;
+  --dormic-border: #2a2a42;
+  --dormic-accent: #a78bfa;
+}
+
+.nav-bar {
+  height: var(--dormic-nav-height) !important;
+  padding: 0 6px env(safe-area-inset-bottom) !important;
+  box-sizing: content-box !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.nav-bar > .nav-item,
+.nav-bar > .nav-fab {
+  width: 20% !important;
+  min-width: 0 !important;
+  height: var(--dormic-nav-height) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+.nav-bar > .nav-item {
+  flex-direction: column !important;
+  gap: 2px !important;
+  font-size: 22px !important;
+}
+
+.nav-bar > .nav-item span {
+  font-size: 10px !important;
+  line-height: 1 !important;
+}
+
+.nav-bar > .nav-fab {
+  border-radius: 0 !important;
+  background: none !important;
+  font-size: 20px !important;
+}
+
+.nav-bar > .nav-fab i {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--dormic-post-gradient) !important;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}
