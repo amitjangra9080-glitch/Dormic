@@ -453,6 +453,7 @@ window.submitPost = async function(){
         createdAt:serverTimestamp()
       });
     }
+    window.DormicUnsaved?.markSaved();
     window.location.href='index.html';
   }catch(e){
     msg.className='msg error';msg.textContent='Error: '+e.message;
