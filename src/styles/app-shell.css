@@ -4,13 +4,19 @@
   --dormic-pink: #B65CE0;
   --dormic-blue: #6B7BFA;
   --dormic-nav-height: 60px;
-  --dormic-bg: #f7f7f7;
-  --dormic-card: #fff;
+  --dormic-bg: #f4f0fb;
+  --dormic-card: #fff8fb;
   --dormic-text: #262626;
-  --dormic-muted: #8e8e8e;
-  --dormic-border: #f0f0f0;
+  --dormic-muted: #8f8494;
+  --dormic-border: rgba(255, 255, 255, .62);
   --dormic-accent: #B65CE0;
   --dormic-post-gradient: linear-gradient(135deg, #F47B33, #EE4654);
+  --clay-bg: linear-gradient(145deg, #fff7fb 0%, #f2edff 48%, #fff4ee 100%);
+  --clay-surface: linear-gradient(145deg, rgba(255,255,255,.94), rgba(255,245,250,.88));
+  --clay-raised: 10px 12px 24px rgba(121, 83, 112, .14), -8px -8px 20px rgba(255, 255, 255, .92), inset 1px 1px 0 rgba(255, 255, 255, .8);
+  --clay-soft: 6px 8px 18px rgba(121, 83, 112, .1), -5px -5px 14px rgba(255, 255, 255, .82);
+  --clay-pressed: inset 5px 5px 11px rgba(121, 83, 112, .12), inset -5px -5px 12px rgba(255, 255, 255, .86);
+  --clay-radius: 22px;
 }
 
 body.dormic-ghost-theme {
@@ -20,6 +26,228 @@ body.dormic-ghost-theme {
   --dormic-muted: #6b7280;
   --dormic-border: #2a2a42;
   --dormic-accent: #a78bfa;
+}
+
+body {
+  background: var(--clay-bg) !important;
+  color: var(--dormic-text);
+}
+
+body:has(.chat-feed) {
+  --dormic-bg: #111124;
+  --dormic-card: #1b1a31;
+  --dormic-muted: #8b8fa8;
+  --dormic-border: rgba(167,139,250,.13);
+  --clay-bg: radial-gradient(circle at top left, rgba(124,58,237,.18), transparent 34%), linear-gradient(145deg, #111124, #0d0d1b 56%, #171229);
+  --clay-surface: linear-gradient(145deg, rgba(32,30,55,.94), rgba(20,20,38,.9));
+  --clay-raised: 10px 12px 26px rgba(0,0,0,.35), -7px -7px 18px rgba(90,76,139,.12), inset 1px 1px 0 rgba(255,255,255,.04);
+  --clay-soft: 6px 8px 18px rgba(0,0,0,.28), -5px -5px 14px rgba(90,76,139,.1);
+  --clay-pressed: inset 5px 5px 12px rgba(0,0,0,.32), inset -5px -5px 12px rgba(90,76,139,.1);
+}
+
+body:has(#scene-container) {
+  --clay-bg: linear-gradient(145deg, #111827, #10131a);
+}
+
+.top-bar,
+.id-banner,
+.desc-bar,
+.pills-wrap,
+.notify-bar,
+.input-bar,
+.nav-bar,
+.sheet,
+.discard-card,
+.modal,
+[class*="modal"] > div,
+.summary-card,
+.goal,
+.card,
+.row,
+.em-row,
+.bubble,
+.reply-bubble,
+.route-box,
+.empty-state,
+.photo-box,
+.time-note,
+.history-row,
+.day-edit-row,
+.profile-card,
+.form-card,
+.login-card,
+.admin-card {
+  background: var(--clay-surface) !important;
+  border-color: var(--dormic-border) !important;
+  box-shadow: var(--clay-raised) !important;
+}
+
+.top-bar,
+.pills-wrap,
+.id-banner,
+.desc-bar,
+.input-bar,
+.nav-bar {
+  border-bottom-color: transparent !important;
+  border-top-color: transparent !important;
+}
+
+.main,
+.feed,
+.chat-feed {
+  background: transparent !important;
+}
+
+.card,
+.row,
+.em-row,
+.bubble,
+.reply-bubble,
+.summary-card,
+.goal,
+.empty-state,
+.photo-box,
+.time-note,
+.history-row,
+.day-edit-row,
+.notify-bar,
+.route-box {
+  border-radius: var(--clay-radius) !important;
+}
+
+.row,
+.em-row,
+.card,
+.bubble,
+.reply-bubble,
+.summary-card,
+.goal,
+.history-row {
+  margin: 10px 12px !important;
+  border: 1px solid var(--dormic-border) !important;
+  overflow: hidden;
+}
+
+.top-bar {
+  margin: 10px 12px 8px !important;
+  border-radius: 0 0 22px 22px !important;
+}
+
+.pills-wrap {
+  margin: 0 12px 10px !important;
+  border-radius: 22px !important;
+  box-shadow: var(--clay-soft) !important;
+}
+
+.pill,
+.chip,
+.group-chip,
+.sub-chip,
+.type,
+.day,
+.cal-day,
+.floor-tabs button,
+.status-btn,
+.react-btn,
+.reply-react,
+.done-btn,
+.edit-day,
+.notify-btn,
+.save,
+.save-btn,
+.progress-save,
+.discard-keep,
+.discard-leave,
+.add-btn,
+.nav-fab i,
+button:not(.icon-btn):not(.report-btn):not(.reply-btn) {
+  border: 1px solid rgba(255,255,255,.62) !important;
+  border-radius: 18px !important;
+  box-shadow: var(--clay-soft) !important;
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+
+.pill.on,
+.chip.on,
+.group-chip.on,
+.sub-chip.on,
+.type.on,
+.day.on,
+.cal-day.on,
+.floor-tabs button.on,
+.status-btn,
+.save,
+.save-btn,
+.progress-save,
+.notify-btn,
+.discard-leave {
+  background: linear-gradient(135deg, var(--dormic-orange), var(--dormic-red), var(--dormic-pink)) !important;
+  color: #fff !important;
+  box-shadow: 8px 10px 18px rgba(238,70,84,.22), inset 1px 1px 0 rgba(255,255,255,.32) !important;
+}
+
+.pill:active,
+.chip:active,
+.group-chip:active,
+.sub-chip:active,
+.type:active,
+.day:active,
+.cal-day:active,
+button:active,
+.row:active,
+.em-row:active,
+.nav-item:active,
+.nav-fab:active {
+  transform: translateY(1px) scale(.985);
+  box-shadow: var(--clay-pressed) !important;
+}
+
+.inp,
+input,
+textarea,
+select,
+.msg-input {
+  background: rgba(255,255,255,.62) !important;
+  border: 1px solid rgba(255,255,255,.7) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--clay-pressed) !important;
+}
+
+body:has(.chat-feed) .msg-input,
+body:has(.chat-feed) input,
+body:has(.chat-feed) textarea {
+  background: rgba(12,12,27,.72) !important;
+  border-color: rgba(167,139,250,.16) !important;
+}
+
+.ric,
+.em-ric,
+.av,
+.goal-icon,
+.time-icon,
+.discard-icon,
+.home-loader-mark,
+.ghost-loader-mark {
+  border-radius: 20px !important;
+  box-shadow: 8px 10px 20px rgba(121,83,112,.16), inset 1px 1px 0 rgba(255,255,255,.38) !important;
+}
+
+.nav-bar {
+  margin: 0 10px 10px !important;
+  left: 0 !important;
+  right: 0 !important;
+  border-radius: 24px !important;
+}
+
+.nav-item.on,
+.nav-item.on span {
+  color: var(--dormic-accent) !important;
+}
+
+.feed-skeleton,
+.loading,
+.empty {
+  background: transparent !important;
 }
 
 .nav-bar {
