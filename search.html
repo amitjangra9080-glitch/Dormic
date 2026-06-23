@@ -108,27 +108,54 @@ window.doSearch = function() {
     p.from?.toLowerCase().includes(term) ||
     p.to?.toLowerCase().includes(term)
   );
-  if(!found.length) { el.innerHTML = '<div class="empty">No results for "' + term + '"</div>'; return; }
+  if(!found.length) { el.innerHTML = '<div class="empty">No results for "' + escHtml(term) + '"</div>'; return; }
   const icons = {lost:'ti-search-off',found:'ti-search',have:'ti-package',need:'ti-package-import',sell:'ti-tag',buy:'ti-shopping-cart',travel:'ti-bus'};
-  el.innerHTML = found.map(p => `
+  el.innerHTML = found.map(p => {
+    const phone = phoneDigits(p.posterPhone);
+    return `
     <div class="gap"></div>
     <div class="card">
       <div class="card-head">
-        <div class="av">${(p.posterName||'?')[0].toUpperCase()}</div>
-        <div><div class="uname">${p.posterName||''}</div><div class="uloc">${p.location||p.from||''}</div></div>
-        <span class="badge b-${p.type}">${p.type.charAt(0).toUpperCase()+p.type.slice(1)}</span>
+        <div class="av">${escHtml((p.posterName||'?')[0].toUpperCase())}</div>
+        <div><div class="uname">${escHtml(p.posterName||'')}</div><div class="uloc">${escHtml(p.location||p.from||'')}</div></div>
+        <span class="badge b-${safeBadge(p.type)}">${escHtml(labelForType(p.type))}</span>
       </div>
       <div class="card-body">
-        <div class="cat"><i class="ti ${icons[p.type]||'ti-circle'}"></i> ${p.itemType||p.type}</div>
-        <div class="iname">${p.itemName||p.from+' → '+p.to||''}</div>
-        <div class="desc">${p.description||p.itemDesc||''}</div>
+        <div class="cat"><i class="ti ${icons[p.type]||'ti-circle'}"></i> ${escHtml(p.itemType||p.type)}</div>
+        <div class="iname">${escHtml(p.itemName||(p.from && p.to ? p.from+' -> '+p.to : ''))}</div>
+        <div class="desc">${escHtml(p.description||p.itemDesc||'')}</div>
       </div>
       <div class="card-actions">
-        <a href="https://wa.me/91${p.posterPhone}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a>
+        ${phone ? `<a href="https://wa.me/91${phone}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a>` : ''}
       </div>
       <div class="time">${p.createdAt ? new Date(p.createdAt.seconds*1000).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : ''}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 };
+
+function labelForType(type){
+  const clean = String(type || '');
+  return clean ? clean.charAt(0).toUpperCase() + clean.slice(1) : 'Post';
+}
+
+function safeBadge(type){
+  const clean = String(type || '');
+  return ['lost','found','have','need','sell','buy','travel'].includes(clean) ? clean : 'need';
+}
+
+function escHtml(value){
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[ch]));
+}
+
+function phoneDigits(value){
+  return String(value || '').replace(/\D/g,'');
+}
 </script>
 </body>
 </html>

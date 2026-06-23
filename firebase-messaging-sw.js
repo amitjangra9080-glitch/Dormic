@@ -3,12 +3,12 @@ importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
 firebase.initializeApp({
-  apiKey: "AIzaSyBHDi6JIDOLLF_TBcdMV0lf7CIIb1QYxIA",
+  apiKey: "AIzaSyCDwXIwC-r4rSWvxH2xAmbaQdzaUTev6P8",
   authDomain: "hostel-lost-found.firebaseapp.com",
   projectId: "hostel-lost-found",
   storageBucket: "hostel-lost-found.firebasestorage.app",
-  messagingSenderId: "907770215033",
-  appId: "1:907770215033:web:0d20a35ee7ca9d0a3e3a25"
+  messagingSenderId: "283586453029",
+  appId: "1:283586453029:web:a09be8f2680ba94dbbe9cc"
 });
 
 const messaging = firebase.messaging();

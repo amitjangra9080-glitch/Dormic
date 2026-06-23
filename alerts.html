@@ -117,20 +117,30 @@ function renderAlerts(snap){
   feed.innerHTML = snap.docs.map(doc=>{
     const a = doc.data();
     const avBg = avatarBgs[a.posterAvatarId||1];
-    const avSymbol = avatarSymbols[a.posterAvatarId||1]||(a.posterName||'?')[0].toUpperCase();
+    const avSymbol = escHtml(avatarSymbols[a.posterAvatarId||1]||(a.posterName||'?')[0].toUpperCase());
     const time = a.createdAt?.toDate ? timeAgo(a.createdAt.toDate()) : '';
     return `<div class="alert-card">
       <div class="ac-head">
         <div class="ac-av" style="background:${avBg}">${avSymbol}</div>
         <div>
-          <div class="ac-name">${a.posterName||''}</div>
-          <div class="ac-room">Room ${a.posterRoom||''}</div>
+          <div class="ac-name">${escHtml(a.posterName||'')}</div>
+          <div class="ac-room">Room ${escHtml(a.posterRoom||'')}</div>
         </div>
         <span class="ac-time">${time}</span>
       </div>
-      <div class="ac-body">${a.text}</div>
+      <div class="ac-body">${escHtml(a.text||'')}</div>
     </div>`;
   }).join('');
+}
+
+function escHtml(value){
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[ch]));
 }
 
 onAuthStateChanged(auth, async user => {

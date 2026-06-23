@@ -25,5 +25,5 @@ jobs:
         with:
           credentials_json: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_HOSTEL_LOST_FOUND }}"
 
-      - name: Deploy Firebase Hosting and Firestore rules
-        run: firebase deploy --project hostel-lost-found --only hosting,firestore:rules --non-interactive
+      - name: Deploy Firebase Hosting, Firestore rules, and Storage rules
+        run: firebase deploy --project hostel-lost-found --only hosting,firestore:rules,storage --non-interactive

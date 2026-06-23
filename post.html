@@ -207,11 +207,13 @@ document.getElementById('discard-keep').onclick=()=>{const hist=pending?.type===
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref as storageRef, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 let currentUser = null;
 let currentCat = null;
 let currentTT = 'going';
@@ -393,6 +395,14 @@ function clearErrors(){
   document.querySelectorAll('.inp.error').forEach(el=>el.classList.remove('error'));
 }
 
+async function uploadPostPhoto(){
+  if(!photoBase64) return null;
+  const path = `post-images/${currentUser.uid}/${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
+  const imgRef = storageRef(storage, path);
+  await uploadString(imgRef, photoBase64, 'data_url', {contentType:'image/jpeg'});
+  return getDownloadURL(imgRef);
+}
+
 window.submitPost = async function(){
   const msg = document.getElementById('post-msg');
   const btn = document.getElementById('submit-btn');
@@ -440,12 +450,13 @@ window.submitPost = async function(){
       if(hasError){msg.className='msg error';msg.textContent='Please fill the highlighted fields.';return;}
       btn.disabled=true;btn.textContent='Posting...';
       const roomNo = document.getElementById('room-no')?.value.trim()||null;
+      const imageUrl = await uploadPostPhoto();
       await addDoc(collection(db,'posts'),{
         type:currentCat,itemType:itemType||'',itemName,
         description:itemDesc,
         location:location||'',
         roomNo,
-        imageUrl:photoBase64||null,
+        imageUrl,
         posterName:u.name,posterPhone:u.phone,
         posterAdmission:u.admissionNo,posterUid:currentUser.uid,
         posterAvatarId:u.avatarId||1,

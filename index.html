@@ -311,11 +311,13 @@ function renderFeed() {
 function buildCard(p, isResolved) {
   const time = p.sample ? 'Your post looks like this' : (p.createdAt ? timeAgo(p.createdAt.seconds * 1000) : 'Just now');
   const avBg = avatarBgs[p.posterAvatarId || 1];
-  const avSymbol = avatarSymbols[p.posterAvatarId || 1] || (p.posterName||'?')[0].toUpperCase();
+  const avSymbol = escHtml(avatarSymbols[p.posterAvatarId || 1] || (p.posterName||'?')[0].toUpperCase());
   const isOwner = currentUser && currentUser.uid === p.posterUid;
-  const waLink = `https://wa.me/91${p.posterPhone}?text=Hi%20${encodeURIComponent(p.posterName)}%2C%20I%20saw%20your%20post%20on%20Dormic`;
-  const waBtn = p.sample ? '<span class="sample-wa"><i class="ti ti-brand-whatsapp"></i> Message</span>' : (isOwner ? '' : `<a href="${waLink}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a>`);
+  const phone = phoneDigits(p.posterPhone);
+  const waLink = `https://wa.me/91${phone}?text=Hi%20${encodeURIComponent(p.posterName||'')}%2C%20I%20saw%20your%20post%20on%20Dormic`;
+  const waBtn = p.sample ? '<span class="sample-wa"><i class="ti ti-brand-whatsapp"></i> Message</span>' : (isOwner || !phone ? '' : `<a href="${escAttr(waLink)}" target="_blank" class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Message</a>`);
   const typeBadge = p.type === 'have' ? 'donate' : p.type;
+  const safeTypeBadge = ['lost','found','donate','need','sell','buy'].includes(typeBadge) ? typeBadge : 'need';
   const typeLabel = p.type === 'have' ? 'Donate' : (p.type.charAt(0).toUpperCase()+p.type.slice(1));
   const showSampleRoom = p.sample && ['sell','buy','have','donate','need'].includes(p.type);
   const locationLine = showSampleRoom ? `Room ${p.posterRoom||''}` : (p.location||'');
@@ -348,21 +350,23 @@ function buildCard(p, isResolved) {
       displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
     const displayTime = p.travelTime || '';
+    const safeTravelType = p.travelType === 'going' ? 'going' : 'need-travel';
+    const safeTravelLabel = p.travelType === 'going' ? 'Going' : 'Need';
     return `<div class="gap"></div><div class="card ${showResolved?'resolved-section':''}">
       <div class="card-head">
         <div class="av" style="background:${avBg}">${avSymbol}</div>
-        <div><div class="uname">${p.posterName||''}</div><div class="uloc">Room ${p.posterRoom||''}</div></div>
-        <span class="badge b-${p.travelType==='going'?'going':'need-travel'}">${p.travelType==='going'?'Going':'Need'}</span>
+        <div><div class="uname">${escHtml(p.posterName||'')}</div><div class="uloc">Room ${escHtml(p.posterRoom||'')}</div></div>
+        <span class="badge b-${safeTravelType}">${safeTravelLabel}</span>
         ${showResolved?`<span class="badge b-resolved" style="margin-left:4px;"><i class="ti ti-check"></i></span>`:''}
       </div>
       <div class="card-body">
         <div class="route-box">
-          <span class="city">${p.from||''}</span>
+          <span class="city">${escHtml(p.from||'')}</span>
           <i class="ti ti-arrow-right" style="color:#aaa;font-size:16px;"></i>
-          <span class="city">${p.to||''}</span>
-          <span class="r-date"><i class="ti ti-calendar" style="font-size:13px;"></i> ${displayDate}${displayTime?' · '+displayTime:''}</span>
+          <span class="city">${escHtml(p.to||'')}</span>
+          <span class="r-date"><i class="ti ti-calendar" style="font-size:13px;"></i> ${escHtml(displayDate)}${displayTime?' · '+escHtml(displayTime):''}</span>
         </div>
-        ${p.itemDesc?`<div class="item-desc">${p.itemDesc}</div>`:''}
+        ${p.itemDesc?`<div class="item-desc">${escHtml(p.itemDesc)}</div>`:''}
       </div>
       <div class="card-actions">${statusBtn||'<span></span>'}${waBtn}</div>
       <div class="time-line">${time}</div>
@@ -373,15 +377,15 @@ function buildCard(p, isResolved) {
   return `<div class="gap"></div><div class="card ${showResolved?'resolved-section':''}">
     <div class="card-head">
       <div class="av" style="background:${avBg}">${avSymbol}</div>
-      <div><div class="uname">${p.posterName||''}</div><div class="uloc">${locationLine}</div></div>
-      <span class="badge b-${typeBadge}">${typeLabel}</span>
+      <div><div class="uname">${escHtml(p.posterName||'')}</div><div class="uloc">${escHtml(locationLine)}</div></div>
+      <span class="badge b-${safeTypeBadge}">${escHtml(typeLabel)}</span>
       ${showResolved?`<span class="badge b-resolved" style="margin-left:4px;"><i class="ti ti-check"></i></span>`:''}
     </div>
     <div class="card-body">
-      <div class="cat-line"><i class="ti ${catIcons[p.type]||'ti-circle'}"></i> ${p.itemType||''}</div>
-      <div class="item-name">${p.itemName||''}</div>
-      <div class="item-desc">${p.description||''}</div>
-      ${p.imageUrl?`<img src="${p.imageUrl}" style="width:100%;border-radius:10px;margin-top:8px;max-height:200px;object-fit:cover;"/>`:''}
+      <div class="cat-line"><i class="ti ${catIcons[p.type]||'ti-circle'}"></i> ${escHtml(p.itemType||'')}</div>
+      <div class="item-name">${escHtml(p.itemName||'')}</div>
+      <div class="item-desc">${escHtml(p.description||'')}</div>
+      ${p.imageUrl?`<img src="${escAttr(p.imageUrl)}" style="width:100%;border-radius:10px;margin-top:8px;max-height:200px;object-fit:cover;"/>`:''}
     </div>
     <div class="card-actions">${statusBtn||'<span></span>'}${waBtn}</div>
     <div class="time-line">${time}</div>
@@ -411,6 +415,24 @@ function samplePostsForFilter(filter){
   if(filter === 'donate-need') return samples.filter(p => ['have','donate','need'].includes(p.type));
   if(filter === 'travel') return [{...base,id:'sample-travel',type:'travel',travelType:'going',from:'Hisar',to:'Jind',travelDate:tomorrow,travelTime:'17:30',itemDesc:'Can carry a small parcel.',posterAvatarId:11}];
   return samples.slice(0,3);
+}
+
+function escHtml(value){
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[ch]));
+}
+
+function escAttr(value){
+  return escHtml(value).replace(/`/g,'&#96;');
+}
+
+function phoneDigits(value){
+  return String(value || '').replace(/\D/g,'');
 }
 
 window.resolvePost = async function(id) {
